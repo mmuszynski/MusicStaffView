@@ -7,16 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		273F2A581EA68A9100017A7C /* MusicStaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F2A571EA68A9100017A7C /* MusicStaffView.swift */; };
 		27827BD71EA53FCF00D6908C /* MusicStaffView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27827BCD1EA53FCF00D6908C /* MusicStaffView.framework */; };
 		27827BDE1EA53FCF00D6908C /* MusicStaffView.h in Headers */ = {isa = PBXBuildFile; fileRef = 27827BD01EA53FCF00D6908C /* MusicStaffView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27827BFD1EA5420600D6908C /* Music.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27827BFC1EA5420600D6908C /* Music.framework */; };
-		27827C041EA543AF00D6908C /* MusicStaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27827BFE1EA543AF00D6908C /* MusicStaffView.swift */; };
-		27827C051EA543AF00D6908C /* MusicStaffViewElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27827BFF1EA543AF00D6908C /* MusicStaffViewElement.swift */; };
-		27827C061EA543AF00D6908C /* MusicStaffViewElementLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27827C001EA543AF00D6908C /* MusicStaffViewElementLayer.swift */; };
-		27827C091EA543AF00D6908C /* MusicStaffViewStaffLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27827C031EA543AF00D6908C /* MusicStaffViewStaffLayer.swift */; };
-		27827C0B1EA543E600D6908C /* MusicStaffViewDrawable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27827C0A1EA543E600D6908C /* MusicStaffViewDrawable.swift */; };
-		27827C0E1EA554DC00D6908C /* MusicNote+Drawable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27827C0D1EA554DC00D6908C /* MusicNote+Drawable.swift */; };
-		27827C101EA555F700D6908C /* MusicClef+Drawable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27827C0F1EA555F700D6908C /* MusicClef+Drawable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,19 +24,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		273F2A561EA681FC00017A7C /* StaffViewTestPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = StaffViewTestPlayground.playground; path = ../../Playgrounds/StaffViewTestPlayground.playground; sourceTree = "<group>"; };
+		273F2A571EA68A9100017A7C /* MusicStaffView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffView.swift; sourceTree = "<group>"; };
 		27827BCD1EA53FCF00D6908C /* MusicStaffView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicStaffView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		27827BD01EA53FCF00D6908C /* MusicStaffView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicStaffView.h; sourceTree = "<group>"; };
 		27827BD11EA53FCF00D6908C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27827BD61EA53FCF00D6908C /* MusicStaffViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MusicStaffViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		27827BDD1EA53FCF00D6908C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27827BFC1EA5420600D6908C /* Music.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Music.framework; path = "../music/build/Debug-iphoneos/Music.framework"; sourceTree = "<group>"; };
-		27827BFE1EA543AF00D6908C /* MusicStaffView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffView.swift; sourceTree = "<group>"; };
-		27827BFF1EA543AF00D6908C /* MusicStaffViewElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewElement.swift; sourceTree = "<group>"; };
-		27827C001EA543AF00D6908C /* MusicStaffViewElementLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewElementLayer.swift; sourceTree = "<group>"; };
-		27827C031EA543AF00D6908C /* MusicStaffViewStaffLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewStaffLayer.swift; sourceTree = "<group>"; };
-		27827C0A1EA543E600D6908C /* MusicStaffViewDrawable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewDrawable.swift; sourceTree = "<group>"; };
-		27827C0D1EA554DC00D6908C /* MusicNote+Drawable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MusicNote+Drawable.swift"; sourceTree = "<group>"; };
-		27827C0F1EA555F700D6908C /* MusicClef+Drawable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MusicClef+Drawable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,11 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				27827BD01EA53FCF00D6908C /* MusicStaffView.h */,
-				27827C0C1EA543EC00D6908C /* Protocols */,
-				27827BFE1EA543AF00D6908C /* MusicStaffView.swift */,
-				27827BFF1EA543AF00D6908C /* MusicStaffViewElement.swift */,
-				27827C001EA543AF00D6908C /* MusicStaffViewElementLayer.swift */,
-				27827C031EA543AF00D6908C /* MusicStaffViewStaffLayer.swift */,
+				273F2A571EA68A9100017A7C /* MusicStaffView.swift */,
 				27827BD11EA53FCF00D6908C /* Info.plist */,
 			);
 			path = MusicStaffView;
@@ -109,19 +94,10 @@
 		27827BFB1EA5420600D6908C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				273F2A561EA681FC00017A7C /* StaffViewTestPlayground.playground */,
 				27827BFC1EA5420600D6908C /* Music.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		27827C0C1EA543EC00D6908C /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				27827C0A1EA543E600D6908C /* MusicStaffViewDrawable.swift */,
-				27827C0D1EA554DC00D6908C /* MusicNote+Drawable.swift */,
-				27827C0F1EA555F700D6908C /* MusicClef+Drawable.swift */,
-			);
-			name = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,6 +163,7 @@
 					27827BCC1EA53FCF00D6908C = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = DF288G8ZJ6;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					27827BD51EA53FCF00D6908C = {
@@ -236,13 +213,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27827C0E1EA554DC00D6908C /* MusicNote+Drawable.swift in Sources */,
-				27827C051EA543AF00D6908C /* MusicStaffViewElement.swift in Sources */,
-				27827C101EA555F700D6908C /* MusicClef+Drawable.swift in Sources */,
-				27827C091EA543AF00D6908C /* MusicStaffViewStaffLayer.swift in Sources */,
-				27827C061EA543AF00D6908C /* MusicStaffViewElementLayer.swift in Sources */,
-				27827C041EA543AF00D6908C /* MusicStaffView.swift in Sources */,
-				27827C0B1EA543E600D6908C /* MusicStaffViewDrawable.swift in Sources */,
+				273F2A581EA68A9100017A7C /* MusicStaffView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,6 +339,7 @@
 		27827BE21EA53FCF00D6908C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = DF288G8ZJ6;
@@ -381,6 +353,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mmuszynski.MusicStaffView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -388,6 +361,7 @@
 		27827BE31EA53FCF00D6908C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = DF288G8ZJ6;
