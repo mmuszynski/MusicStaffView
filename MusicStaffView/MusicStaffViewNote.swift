@@ -7,30 +7,21 @@
 //
 
 import UIKit
+import Music
 
-public func +(lhs: MusicStaffViewNote, rhs: Int) -> MusicStaffViewNote {
-    return lhs
-}
-
-public class MusicStaffViewNote: MusicStaffViewElement {
-    
-    public var note: MusicNote
-    public var length : MusicNoteLength = .quarter
+extension MusicNote: MusicStaffViewElement {
+    public var type: MusicStaffViewElementType {
+        return MusicStaffViewElementType.note(self.pitch, self.rhythm)
+    }
 
     public var name: MusicPitchName {
-        return note.name
+        return pitch.name
     }
     public var octave: Int {
-        return note.octave
+        return pitch.octave
     }
     public var accidental: MusicPitchAccidental {
-        return note.accidental
+        return pitch.accidental
     }
-    
-    public required init(note: MusicNote) {
-        self.note = note
-    }
-    
-    
     
 }

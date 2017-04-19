@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import Music
 
 public enum MusicStaffViewElementType {
-    case clef(MusicClefType)
-    case note(MusicPitchName, MusicPitchAccidental, MusicNoteLength)
+    case clef(MusicClef)
+    case note(MusicPitch, MusicRhythm)
     case accidental(MusicPitchAccidental)
     case none
 }
@@ -20,6 +21,6 @@ enum NoteFlagDirection {
     case down
 }
 
-public class MusicStaffViewElement: NSObject {
-   
+public protocol MusicStaffViewElement {
+    var type: MusicStaffViewElementType { get }
 }

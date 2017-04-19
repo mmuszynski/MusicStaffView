@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Music
 
 ///Instructs the `MusicStaffView` to draw notes using the spacing set in `preferredHorizontalSpacing` or to fill all available space by dividing the space for notes into equal parts.
 ///
@@ -31,7 +32,7 @@ public enum MusicStaffViewSpacingType {
     }
     
     ///Private backing array for `noteArray`.
-    private var _noteArray: [MusicStaffViewNote] = [] {
+    private var _noteArray: [MusicNote] = [] {
         didSet {
             setupLayers()
         }
@@ -40,7 +41,7 @@ public enum MusicStaffViewSpacingType {
     ///Provides an array of `MusicStaffViewNote` objects that represent the notes to be displayed in the `MusicStaffView`.
     ///
     ///The notes represented on a the `MusicStaffView` are represented by `MusicStafffViewNote` objects that describe the position and length of each note, along with any accidentals necessary to draw.
-    public var noteArray: [MusicStaffViewNote] {
+    public var noteArray: [MusicNote] {
         get {
             #if TARGET_INTERFACE_BUILDER
                 var testArray = [MusicStaffViewNote]()
@@ -56,7 +57,7 @@ public enum MusicStaffViewSpacingType {
     }
     
     ///The maximum number of ledger lines to be drawn within the `MusicStaffView`.
-    @IBInspectable var maxLedgerLines : Int = 0 {
+    @IBInspectable public var maxLedgerLines : Int = 0 {
         didSet {
             self.setupLayers()
         }
@@ -70,7 +71,7 @@ public enum MusicStaffViewSpacingType {
     }
     
     ///The clef to display, wrapped in an `ClefType` enum.
-    @IBInspectable var displayedClef : MusicClefType = .treble {
+    @IBInspectable var displayedClef : MusicClef = .treble {
         didSet{
             self.setupLayers()
         }
@@ -218,7 +219,7 @@ public enum MusicStaffViewSpacingType {
     ///Draws the clef at the proper position.
     ///
     ///Currently, this is hardcoded to draw the treble clef at the far left of the staff.
-    private func draw(clef type: MusicClefType, atHorizontalPosition xPosition: CGFloat) {
+    private func draw(clef type: MusicClef, atHorizontalPosition xPosition: CGFloat) {
         //FIXME: Allow for the drawing of other clefs
         let clefLayer = MusicStaffViewElementLayer(type: .clef(type))
         clefLayer.height = 6.5 * spaceWidth
@@ -227,7 +228,7 @@ public enum MusicStaffViewSpacingType {
     }
     
     ///Convenience method to adopt Swift 3.0 conventions
-    private func draw(note: MusicStaffViewNote, atHorizontalPosition xPosition: CGFloat, forcedDirection: NoteFlagDirection?) {
+    private func draw(note: MusicNote, atHorizontalPosition xPosition: CGFloat, forcedDirection: NoteFlagDirection?) {
         let noteLayer = self.noteLayerFor(note: note, atHorizontalPosition: xPosition, forcedDirection: forcedDirection)
         staffLayer.addSublayer(noteLayer)
     }
@@ -248,13 +249,11 @@ public enum MusicStaffViewSpacingType {
     ///- parameter length: The length of note to be drawn
     ///- parameter atHorizontalPosition: The horizontal position, in points, at which to draw the left edge of the note
     ///- parameter forcedDirection: The direction, up or down, to force the note (see note above)
-    private func noteLayerFor(note: MusicStaffViewNote, atHorizontalPosition xPosition: CGFloat, forcedDirection: NoteFlagDirection?) -> MusicStaffViewElementLayer {
+    private func noteLayerFor(note: MusicNote, atHorizontalPosition xPosition: CGFloat, forcedDirection: NoteFlagDirection?) -> MusicStaffViewElementLayer {
         let name = note.name
         let octave = note.octave
-        let accidental = note.accidental
-        let length = note.length
         
-        let noteLayer = MusicStaffViewElementLayer(type: .note(name, accidental, length))
+        let noteLayer = MusicStaffViewElementLayer(type: note.type)
         
         noteLayer.height = 4.0 * spaceWidth
         noteLayer.position = CGPoint(x: xPosition + noteLayer.bounds.size.width / 2.0, y: self.bounds.size.height)

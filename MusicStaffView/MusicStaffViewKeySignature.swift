@@ -8,22 +8,3 @@
 
 import UIKit
 
-enum ScaleMode {
-    case major
-    case minor
-    
-    func description() {
-    }
-}
-
-class MusicStaffViewKeySignature: MusicStaffViewElement {
-    
-    var rootNote = MusicPitch(name: .c, accidental: .natural, octave: 0)
-    
-    init(sharps: UInt, mode: ScaleMode) {
-    }
-    
-    init(flats: UInt, mode: ScaleMode) {
-    }
-   
-}

@@ -45,7 +45,7 @@ class MusicStaffViewElementLayer: CAShapeLayer {
             var aspectRatio : CGFloat
             
             switch type {
-            case .note(_, _, let length):
+            case .note(_, let length):
                 if (length == .quarter) {
                     aspectRatio = 39.0 / 90.0
                 } else {
@@ -76,7 +76,7 @@ class MusicStaffViewElementLayer: CAShapeLayer {
                     return trebleClefPath()
                 }
                 
-            case .note(_, _, let length):
+            case .note(_, let length):
                 switch length {
                 case .quarter:
                     return quarterNotePath()
