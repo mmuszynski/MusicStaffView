@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "89C50E18E6E38B5DCF30D29CE3CB1275E8C3885F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "89C50E18E6E38B5DCF30D29CE3CB1275E8C3885F" : 9223372036854775807,
+    "4008E0A7ED7CF3D1479F12C58636DF90392060E4" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "347BC6E9-83A2-496A-ACAB-9770DD59907D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "89C50E18E6E38B5DCF30D29CE3CB1275E8C3885F" : "musicstaffview\/",
+    "4008E0A7ED7CF3D1479F12C58636DF90392060E4" : "music\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MusicStaffView",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MusicStaffView.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "bitbucket.org:mmuszynski\/music.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4008E0A7ED7CF3D1479F12C58636DF90392060E4"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "bitbucket.org:mmuszynski\/musicstaffview.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "89C50E18E6E38B5DCF30D29CE3CB1275E8C3885F"
+    }
+  ]
+}
