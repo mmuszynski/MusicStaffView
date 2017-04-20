@@ -26,7 +26,7 @@ public protocol MusicStaffViewElement {
     /// The type of element to be represented in the view
     ///
     //FIXME: Does this type need to be represented at all?
-    var type: MusicStaffViewElementType { get }
+    //var type: MusicStaffViewElementType { get }
     
     ///The direction that the element should be drawn in a given clef
     func direction(in clef: MusicClef) -> NoteFlagDirection
@@ -38,7 +38,7 @@ public protocol MusicStaffViewElement {
     func offset(in clef: MusicClef) -> Int
     
     /// The path that describes the shape of the element
-    var path: CGPath { get }
+    func path(in frame: CGRect) -> CGPath
     
     /// The ratio of width to height that describes the general shape of the element's bounding box
     ///

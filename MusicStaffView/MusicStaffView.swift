@@ -257,15 +257,12 @@ public enum MusicStaffViewSpacingType {
         
         //let noteLayer = MusicStaffViewElementLayer(type: note.type)
         let noteLayer = CAShapeLayer()
-        noteLayer.path = note.path
         
         let height = note.heightInStaffSpace * spaceWidth
         let width = height * note.aspectRatio
         let bounds = CGRect(x: 0, y: 0, width: width, height: height)
         
         noteLayer.bounds = bounds
-        print("DEBUG: \(bounds)")
-
         noteLayer.position = CGPoint(x: xPosition + noteLayer.bounds.size.width / 2.0, y: self.bounds.size.height)
         noteLayer.anchorPoint = note.anchorPoint
 
@@ -282,6 +279,8 @@ public enum MusicStaffViewSpacingType {
             noteLayer.anchorPoint = CGPoint(x: 0.5, y: 0.62)
             noteLayer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 0, 0, 1.0)
         }
+        
+        noteLayer.path = note.path(in: noteLayer.bounds)
         
         //draw ledger lines if necessary
         var ledgerLines: CALayer?

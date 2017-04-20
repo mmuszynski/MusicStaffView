@@ -12,8 +12,9 @@
 		273F2A5E1EA68E3C00017A7C /* MusicStaffViewElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F2A591EA68E3C00017A7C /* MusicStaffViewElement.swift */; };
 		273F2A5F1EA68E3C00017A7C /* MusicStaffViewElementLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F2A5A1EA68E3C00017A7C /* MusicStaffViewElementLayer.swift */; };
 		273F2A601EA68E3C00017A7C /* MusicStaffViewKeySignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F2A5B1EA68E3C00017A7C /* MusicStaffViewKeySignature.swift */; };
-		273F2A611EA68E3C00017A7C /* MusicStaffViewNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F2A5C1EA68E3C00017A7C /* MusicStaffViewNote.swift */; };
+		273F2A611EA68E3C00017A7C /* MusicNote+Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F2A5C1EA68E3C00017A7C /* MusicNote+Element.swift */; };
 		273F2A621EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F2A5D1EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift */; };
+		27569A671EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27569A661EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift */; };
 		27827BD71EA53FCF00D6908C /* MusicStaffView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27827BCD1EA53FCF00D6908C /* MusicStaffView.framework */; };
 		27827BDE1EA53FCF00D6908C /* MusicStaffView.h in Headers */ = {isa = PBXBuildFile; fileRef = 27827BD01EA53FCF00D6908C /* MusicStaffView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27827BFD1EA5420600D6908C /* Music.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27827BFC1EA5420600D6908C /* Music.framework */; };
@@ -36,8 +37,9 @@
 		273F2A591EA68E3C00017A7C /* MusicStaffViewElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewElement.swift; sourceTree = "<group>"; };
 		273F2A5A1EA68E3C00017A7C /* MusicStaffViewElementLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewElementLayer.swift; sourceTree = "<group>"; };
 		273F2A5B1EA68E3C00017A7C /* MusicStaffViewKeySignature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewKeySignature.swift; sourceTree = "<group>"; };
-		273F2A5C1EA68E3C00017A7C /* MusicStaffViewNote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewNote.swift; sourceTree = "<group>"; };
+		273F2A5C1EA68E3C00017A7C /* MusicNote+Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MusicNote+Element.swift"; sourceTree = "<group>"; };
 		273F2A5D1EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewStaffLayer.swift; sourceTree = "<group>"; };
+		27569A661EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MusicPitchAccidental+StaffViewElement.swift"; sourceTree = "<group>"; };
 		27827BCD1EA53FCF00D6908C /* MusicStaffView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicStaffView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		27827BD01EA53FCF00D6908C /* MusicStaffView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicStaffView.h; sourceTree = "<group>"; };
 		27827BD11EA53FCF00D6908C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,6 +68,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27569A681EA8143700402C1C /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				273F2A591EA68E3C00017A7C /* MusicStaffViewElement.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		27569A691EA8144300402C1C /* Protocol Adoption */ = {
+			isa = PBXGroup;
+			children = (
+				27569A661EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift */,
+				273F2A5C1EA68E3C00017A7C /* MusicNote+Element.swift */,
+			);
+			name = "Protocol Adoption";
+			sourceTree = "<group>";
+		};
 		27827BC31EA53FCF00D6908C = {
 			isa = PBXGroup;
 			children = (
@@ -90,10 +109,10 @@
 			children = (
 				27827BD01EA53FCF00D6908C /* MusicStaffView.h */,
 				273D13621EA807940040B7A7 /* MusicClef+Drawing.swift */,
-				273F2A591EA68E3C00017A7C /* MusicStaffViewElement.swift */,
+				27569A681EA8143700402C1C /* Protocols */,
+				27569A691EA8144300402C1C /* Protocol Adoption */,
 				273F2A5A1EA68E3C00017A7C /* MusicStaffViewElementLayer.swift */,
 				273F2A5B1EA68E3C00017A7C /* MusicStaffViewKeySignature.swift */,
-				273F2A5C1EA68E3C00017A7C /* MusicStaffViewNote.swift */,
 				273F2A5D1EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift */,
 				273F2A571EA68A9100017A7C /* MusicStaffView.swift */,
 				27827BD11EA53FCF00D6908C /* Info.plist */,
@@ -234,10 +253,11 @@
 				273D13631EA807940040B7A7 /* MusicClef+Drawing.swift in Sources */,
 				273F2A601EA68E3C00017A7C /* MusicStaffViewKeySignature.swift in Sources */,
 				273F2A5E1EA68E3C00017A7C /* MusicStaffViewElement.swift in Sources */,
+				27569A671EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift in Sources */,
 				273F2A621EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift in Sources */,
 				273F2A5F1EA68E3C00017A7C /* MusicStaffViewElementLayer.swift in Sources */,
 				273F2A581EA68A9100017A7C /* MusicStaffView.swift in Sources */,
-				273F2A611EA68E3C00017A7C /* MusicStaffViewNote.swift in Sources */,
+				273F2A611EA68E3C00017A7C /* MusicNote+Element.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

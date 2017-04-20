@@ -1,9 +1,9 @@
 //
-//  MusicStaffViewNote.swift
+//  MusicNote+Element.swift
 //  Music
 //
-//  Created by Mike Muszynski on 1/4/15.
-//  Copyright (c) 2015 Mike Muszynski. All rights reserved.
+//  Created by Mike Muszynski on 4/17/17.
+//  Copyright (c) 2017 Mike Muszynski. All rights reserved.
 //
 
 import UIKit
@@ -23,12 +23,12 @@ extension MusicNote: MusicStaffViewElement {
         return clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
     }
     
-    public var path: CGPath {
+    public func path(in frame: CGRect) -> CGPath {
         switch self.rhythm {
         case .quarter, .crotchet:
-            return quarterNotePath()
+            return quarterNotePath(in: frame)
         default:
-            return quarterNotePath()
+            return quarterNotePath(in: frame)
         }
     }
     
@@ -49,9 +49,7 @@ extension MusicNote: MusicStaffViewElement {
         return CGPoint(x: 0.5, y: 0.865)
     }
     
-    func quarterNotePath() -> CGPath {
-        let frame = CGRect(x: 0, y: 0, width: 100 * self.aspectRatio, height: 100)
-        
+    func quarterNotePath(in frame: CGRect) -> CGPath {        
         let quarterNotePath = UIBezierPath()
         quarterNotePath.move(to: CGPoint(x: frame.minX + 0.93974 * frame.width, y: frame.minY + 0.01905 * frame.height))
         quarterNotePath.addLine(to: CGPoint(x: frame.minX + 0.93974 * frame.width, y: frame.minY + 0.81048 * frame.height))
