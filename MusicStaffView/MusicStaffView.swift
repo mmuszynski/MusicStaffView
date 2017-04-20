@@ -223,12 +223,23 @@ public enum MusicStaffViewSpacingType {
     ///Draws the clef at the proper position.
     ///
     ///Currently, this is hardcoded to draw the treble clef at the far left of the staff.
-    private func draw(clef type: MusicClef, atHorizontalPosition xPosition: CGFloat) {
+    private func draw(clef: MusicClef, atHorizontalPosition xPosition: CGFloat) {
         //FIXME: Allow for the drawing of other clefs
-        let clefLayer = MusicStaffViewElementLayer(type: .clef(type))
-        clefLayer.height = 6.5 * spaceWidth
-        clefLayer.position = CGPoint(x: xPosition, y: self.bounds.size.height / 2.0 + spaceWidth)
-        staffLayer.addSublayer(clefLayer)
+//        let clefLayer = MusicStaffViewElementLayer(type: .clef(clef))
+//        clefLayer.height = 6.5 * spaceWidth
+//        clefLayer.position = CGPoint(x: xPosition, y: self.bounds.size.height / 2.0 + spaceWidth)
+//        staffLayer.addSublayer(clefLayer)
+        
+        let element = clef
+        let elementSize = element.size(withSpaceWidth: self.spaceWidth)
+        let elementBounds = CGRect(origin: CGPoint.zero, size: elementSize)
+        let layer = element.layer(in: elementBounds)
+        
+        var elementPosition = CGPoint(x: xPosition + elementSize.width * 0.5, y: self.bounds.size.height / 2.0)
+        let offset = element.offset(in: displayedClef)
+        elementPosition.y += CGFloat(offset) * spaceWidth / 2.0
+        layer.position = elementPosition
+        staffLayer.addSublayer(layer)
     }
     
     ///Convenience method to adopt Swift 3.0 conventions
@@ -255,33 +266,40 @@ public enum MusicStaffViewSpacingType {
     ///- parameter forcedDirection: The direction, up or down, to force the note (see note above)
     private func noteLayerFor(note: MusicNote, atHorizontalPosition xPosition: CGFloat, forcedDirection: NoteFlagDirection?) -> CALayer {
         
-        //let noteLayer = MusicStaffViewElementLayer(type: note.type)
-        let noteLayer = CAShapeLayer()
+        let element = note
+        let elementSize = element.size(withSpaceWidth: self.spaceWidth)
+        let elementBounds = CGRect(origin: CGPoint.zero, size: elementSize)
+        let layer = element.layer(in: elementBounds)
         
+        var elementPosition = CGPoint(x: xPosition + elementSize.width * 0.5, y: self.bounds.size.height / 2.0)
+        let offset = element.offset(in: displayedClef)
+        elementPosition.y += CGFloat(offset) * spaceWidth / 2.0
+        layer.position = elementPosition
+        return layer
+
+        /*
         let height = note.heightInStaffSpace * spaceWidth
         let width = height * note.aspectRatio
-        let bounds = CGRect(x: 0, y: 0, width: width, height: height)
-        
-        noteLayer.bounds = bounds
-        noteLayer.position = CGPoint(x: xPosition + noteLayer.bounds.size.width / 2.0, y: self.bounds.size.height)
-        noteLayer.anchorPoint = note.anchorPoint
+        let elementSize = CGSize(width: width, height: height)
+        var elementPosition = CGPoint(x: xPosition, y: self.bounds.size.height)
 
-        let direction = note.direction(in: displayedClef)
         let offset = note.offset(in: displayedClef)
-        
-        let viewOffset = viewOffsetForStaffOffset(offset)
-        noteLayer.position.y += viewOffset
+        let offsetInView = viewOffsetForStaffOffset(offset)
+        elementPosition.y += offsetInView
+
+        let elementBounds = CGRect(origin: CGPoint.zero, size: elementSize)
+        let noteLayer = note.layer(in: elementBounds)
+        noteLayer.position = elementPosition
         
         //default direction is up
+        let direction = note.direction(in: displayedClef)
         if direction != .up {
             noteLayer.transform = CATransform3DIdentity
         } else {
-            noteLayer.anchorPoint = CGPoint(x: 0.5, y: 0.62)
+            //noteLayer.anchorPoint = CGPoint(x: 0.5, y: 0.62)
             noteLayer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 0, 0, 1.0)
         }
-        
-        noteLayer.path = note.path(in: noteLayer.bounds)
-        
+                
         //draw ledger lines if necessary
         var ledgerLines: CALayer?
 
@@ -314,6 +332,7 @@ public enum MusicStaffViewSpacingType {
         }
         
         return noteLayer
+        */
     }
     
 //    func accidentalLayerFor(note: MusicNote) -> CALayer? {

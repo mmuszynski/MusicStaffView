@@ -11,14 +11,6 @@ import Music
 
 extension MusicPitchAccidental: MusicStaffViewElement {
 
-    public func direction(in clef: MusicClef) -> NoteFlagDirection {
-        return .up
-    }
-
-    public func offset(in clef: MusicClef) -> Int {
-        return clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
-    }
-
     public func path(in frame: CGRect) -> CGPath {
         return naturalPath(in: frame)
     }
@@ -29,10 +21,6 @@ extension MusicPitchAccidental: MusicStaffViewElement {
 
     public var heightInStaffSpace: CGFloat {
         return 0.70 * 4.0
-    }
-
-    public func ledgerLines(in clef: MusicClef) -> (count: Int, centered: Bool) {
-        return (0, true)
     }
 
     public var anchorPoint: CGPoint {

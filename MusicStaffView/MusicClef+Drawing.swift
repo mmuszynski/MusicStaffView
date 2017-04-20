@@ -9,7 +9,7 @@
 import Foundation
 import Music
 
-extension MusicClef {    
+extension MusicClef {
     ///The number of ledger lines necessary for a note at a given staff offset.
     ///
     ///When a note is far enough from the center line of the staff, it will be necessary to draw ledger lines to represent how much outside the staff it lays.
