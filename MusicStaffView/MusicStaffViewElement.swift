@@ -21,7 +21,7 @@ public enum NoteFlagDirection {
     case down
 }
 
-public protocol MusicStaffViewElement {
+protocol MusicStaffViewElement {
     /// The path that describes the shape of the element
     func path(in frame: CGRect) -> CGPath
     func layer(in frame: CGRect) -> CALayer
@@ -40,10 +40,13 @@ public protocol MusicStaffViewElement {
     var anchorPoint: CGPoint { get }
     
     func offset(in clef: MusicClef) -> Int
+    func direction(in clef: MusicClef) -> NoteFlagDirection
+    func requiresLedgerLines(in clef: MusicClef) -> Bool
+    
 }
 
 extension MusicStaffViewElement {
-    public func layer(in frame: CGRect) -> CALayer {
+    func layer(in frame: CGRect) -> CALayer {
         let layer = CAShapeLayer()
         layer.frame = frame
         layer.path = self.path(in: frame)
@@ -57,7 +60,11 @@ extension MusicStaffViewElement {
         return CGSize(width: width, height: height)
     }
     
-    public func offset(in clef: MusicClef) -> Int {
+    func offset(in clef: MusicClef) -> Int {
         return 0
+    }
+    
+    func direction(in clef: MusicClef) -> NoteFlagDirection {
+        return .up
     }
 }

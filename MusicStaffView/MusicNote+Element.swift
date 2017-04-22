@@ -10,20 +10,25 @@ import UIKit
 import Music
 
 extension MusicNote: MusicStaffViewElement {
-    public func direction(in clef: MusicClef) -> NoteFlagDirection {
+
+    func direction(in clef: MusicClef) -> NoteFlagDirection {
         let offset = clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
-        return offset <= 0 ? .up : .down
+        return offset > 0 ? .up : .down
     }
 
-    public var type: MusicStaffViewElementType {
+    var type: MusicStaffViewElementType {
         return MusicStaffViewElementType.note(self.pitch, self.rhythm)
     }
     
-    public func offset(in clef: MusicClef) -> Int {
+    func offset(in clef: MusicClef) -> Int {
         return clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
     }
     
-    public func path(in frame: CGRect) -> CGPath {
+    func requiresLedgerLines(in clef: MusicClef) -> Bool {
+        return abs(offset(in: clef)) > 5
+    }
+    
+    func path(in frame: CGRect) -> CGPath {
         switch self.rhythm {
         case .quarter, .crotchet:
             return quarterNotePath(in: frame)
@@ -32,20 +37,20 @@ extension MusicNote: MusicStaffViewElement {
         }
     }
     
-    public var aspectRatio: CGFloat {
+    var aspectRatio: CGFloat {
         return 39.0 / 90.0
     }
     
-    public var heightInStaffSpace: CGFloat {
+    var heightInStaffSpace: CGFloat {
         return 4.0
     }
     
-    public func ledgerLines(in clef: MusicClef) -> (count: Int, centered: Bool) {
+    func ledgerLines(in clef: MusicClef) -> (count: Int, centered: Bool) {
         let offset = clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
         return clef.ledgerLinesForStaffOffset(offset)
     }
     
-    public var anchorPoint: CGPoint {
+    var anchorPoint: CGPoint {
         return CGPoint(x: 0.5, y: 0.865)
     }
     
@@ -69,7 +74,6 @@ extension MusicNote: MusicStaffViewElement {
         quarterNotePath.close()
         
         return quarterNotePath.cgPath
-        
     }
     
 }

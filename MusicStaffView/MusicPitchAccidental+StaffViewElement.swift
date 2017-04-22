@@ -10,6 +10,9 @@ import Foundation
 import Music
 
 extension MusicPitchAccidental: MusicStaffViewElement {
+    func requiresLedgerLines(in clef: MusicClef) -> Bool {
+        return false
+    }
 
     public func path(in frame: CGRect) -> CGPath {
         return naturalPath(in: frame)

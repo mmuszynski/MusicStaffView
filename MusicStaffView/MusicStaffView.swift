@@ -34,7 +34,6 @@ public enum MusicStaffViewSpacingType {
     ///Private backing array for `noteArray`.
     private var _noteArray: [MusicNote] = [] {
         didSet {
-            print("DEBUG: noteArray")
             setupLayers()
         }
     }
@@ -65,7 +64,7 @@ public enum MusicStaffViewSpacingType {
     }
     
     ///The preferred horizontal spacing, in points, between horizontal staff elements, such as notes, accidentals, clefs and key signatures.
-    @IBInspectable var preferredHorizontalSpacing : CGFloat = 0 {
+    @IBInspectable public var preferredHorizontalSpacing : CGFloat = 0 {
         didSet {
             self.setupLayers()
         }
@@ -81,7 +80,7 @@ public enum MusicStaffViewSpacingType {
     ///Whether or not to draw the frames for each of the elements drawn in the staff.
     ///
     ///When set to true, this will draw bright, semi-transparent boxes in the frames of each of the layers representing a staff element.
-    @IBInspectable var debug : Bool = true {
+    @IBInspectable public var debug : Bool = false {
         didSet{
             self.setupLayers()
         }
@@ -114,21 +113,8 @@ public enum MusicStaffViewSpacingType {
     public var spacing: MusicStaffViewSpacingType = .uniform
     
     //The staff layer that is drawn
-    var staffLayer : MusicStaffViewStaffLayer
-    
-    //Required initializer to make sure the `MusicStaffViewStaffLayer` is defined as it is not an optional.
-    required public init(coder aDecoder: NSCoder) {
-        staffLayer = MusicStaffViewStaffLayer()
-        super.init(coder: aDecoder)!
-    }
-    
-    //Required initializer to make sure the `MusicStaffViewStaffLayer` is defined as it is not an optional. Calls the layer setup function as well.
-    override init(frame: CGRect) {
-        print("DEBUG: init")
-        staffLayer = MusicStaffViewStaffLayer()
-        super.init(frame: frame)
-        self.setupLayers()
-    }
+    var staffLayer = MusicStaffViewStaffLayer()
+    var elementDisplayLayer = CALayer()
     
     ///Redraws all elements of the `MusicStaffView`, first removing them if they are already drawn.
     ///
@@ -141,217 +127,71 @@ public enum MusicStaffViewSpacingType {
     ///2. The clef
     ///3. The individual notes (and the accidentals which are currently attached to the note layer)
     func setupLayers() {
-        print("DEBUG: setupLayers")
+        //remove the element and staff layers and initialize them with new instances
         staffLayer.removeFromSuperlayer()
         staffLayer = MusicStaffViewStaffLayer()
-        self.drawStaff(in: self.bounds)
-        self.draw(clef: displayedClef, atHorizontalPosition: 0.0)
+        staffLayer.frame = self.bounds
         
-        //the layers representing the horizontal elements to be drawn
-        //decoration elements will have to be dealt with at a later date
+        elementDisplayLayer.removeFromSuperlayer()
+        elementDisplayLayer = CALayer()
+        elementDisplayLayer.frame = self.bounds
+        
+        //Get the elements to draw, currently just clef and notes
+        let elements: [MusicStaffViewElement] = [displayedClef] + noteArray
         var elementLayers = [CALayer]()
-        //previously, the notes were drawn sequentially
-        //the staff layer kept up-to-date with where the last element ended and the next should begin
-        //setupLayers() needs to keep up with this now
-        //the current position of the staff after drawing the clef is the first place to draw a note
-        var currentPosition = staffLayer.currentHorizontalPosition
         
-        for i in 0..<noteArray.count {
-            currentPosition += preferredHorizontalSpacing
-            let note = noteArray[i]
-            let noteLayer = self.noteLayerFor(note: note, atHorizontalPosition: currentPosition, forcedDirection: nil)
-//            if let accidentalLayer = self.accidentalLayerFor(noteLayer: noteLayer, type: note.accidental) {
-//                elementLayers.append(accidentalLayer)
-//                currentPosition += accidentalLayer.bounds.width
-//            }
-            elementLayers.append(noteLayer)
-            currentPosition += noteLayer.bounds.width
+        //the current horizontal position begins at zero
+        //MusicStaffView must keep track of the spacing, and likely will to do the magnetic layout
+        var currentPosition: CGFloat = 0.0
+        
+        //iterate through the elements and add its CAShapeLayer to the array of layers to be drawn
+        //move the current position accordingly
+        for element in elements {
+            let layer = self.layer(for: element, atHorizontalPosition: currentPosition)
+            elementLayers.append(layer)
+            currentPosition += (elementLayers.last?.bounds.width ?? 0) + preferredHorizontalSpacing
         }
         
-        //if the spacing is set to uniform, there needs to be a calculation done to make the notes equally spaced:
-        //1. get the position of the first note as it is the leftmost bound
-        //1a. alternatively, the staffLayer.currentHorizontalPosition will work
-        //2. sum the widths of the notes
-        //3. subtract this sum from the width of the view
-        //4. divide this by the number of spaces between notes
-        //4a. note that there are spacers between each note and one on either side for a total of noteLayer.count + 1
-        //FIXME: Accidental layers need to be redone before uniform spacing is possible again
-        if self.spacing == .uniform && false {
-//            let leftmostBound = staffLayer.currentHorizontalPosition
-//            let widthSum = elementLayers.reduce(CGFloat(0), { (collection, layer) -> CGFloat in
-//                return collection + layer.bounds.width
-//            })
-//            let drawableWidth = staffLayer.bounds.width - leftmostBound
-//            let spacerCount = elementLayers.filter({ (layer) -> Bool in
-//                if case .accidental(_) = layer.type {
-//                    return false
-//                }
-//                return true
-//            }).count + 1
-//            let spacerWidth = (drawableWidth - widthSum) / CGFloat(spacerCount)
-//            
-//            currentPosition = leftmostBound + spacerWidth
-//            for layer in elementLayers {
-//                layer.frame.origin.x = currentPosition
-//                staffLayer.addSublayer(layer)
-//                currentPosition += layer.bounds.width
-//                if case .note(_) = layer.type {
-//                    currentPosition += spacerWidth
-//                }
-//                
-//            }
-        } else {
-            for layer in elementLayers {
-                staffLayer.addSublayer(layer)
-            }
+        //add the element layers to the element display layer
+        for layer in elementLayers {
+            self.elementDisplayLayer.addSublayer(layer)
         }
         
-
-        
-    }
-    
-    ///Draws the five lines of the musical staff in the appropriate rectangle. In general, this rectangle is the bounds of the `MusicStaffView` but could eventually be customized.
-    private func drawStaff(in rect: CGRect) {
-        staffLayer.frame = rect
+        //Draw the staff lines, including ledger lines
+        //Unnecessary ledger lines are masked out later
         staffLayer.maxLedgerLines = self.maxLedgerLines
         if debug {
             staffLayer.backgroundColor = UIColor(red: 1.0, green: 0, blue: 0, alpha: 0.25).cgColor
         }
+        
+        //mask out the unnecessary ledger lines
+        staffLayer.mask = staffLayer.staffLineMask
         self.layer.addSublayer(staffLayer)
+        self.layer.addSublayer(elementDisplayLayer)
+        
     }
     
-    ///Draws the clef at the proper position.
-    ///
-    ///Currently, this is hardcoded to draw the treble clef at the far left of the staff.
-    private func draw(clef: MusicClef, atHorizontalPosition xPosition: CGFloat) {
-        //FIXME: Allow for the drawing of other clefs
-//        let clefLayer = MusicStaffViewElementLayer(type: .clef(clef))
-//        clefLayer.height = 6.5 * spaceWidth
-//        clefLayer.position = CGPoint(x: xPosition, y: self.bounds.size.height / 2.0 + spaceWidth)
-//        staffLayer.addSublayer(clefLayer)
-        
-        let element = clef
+    private func layer(for element: MusicStaffViewElement, atHorizontalPosition xPosition: CGFloat) -> CALayer {
         let elementSize = element.size(withSpaceWidth: self.spaceWidth)
         let elementBounds = CGRect(origin: CGPoint.zero, size: elementSize)
         let layer = element.layer(in: elementBounds)
+        
+        if element.direction(in: self.displayedClef) == .down {
+            layer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 0, 0, 1.0)
+        }
         
         var elementPosition = CGPoint(x: xPosition + elementSize.width * 0.5, y: self.bounds.size.height / 2.0)
         let offset = element.offset(in: displayedClef)
         elementPosition.y += CGFloat(offset) * spaceWidth / 2.0
         layer.position = elementPosition
-        staffLayer.addSublayer(layer)
-    }
-    
-    ///Convenience method to adopt Swift 3.0 conventions
-    private func draw(note: MusicNote, atHorizontalPosition xPosition: CGFloat, forcedDirection: NoteFlagDirection?) {
-        let noteLayer = self.noteLayerFor(note: note, atHorizontalPosition: xPosition, forcedDirection: forcedDirection)
-        staffLayer.addSublayer(noteLayer)
-    }
-    
-    ///Intitializes a note at a given horizontal position in the staff.
-    ///
-    ///This method is used by `setupLayers()` to initialize a `MusicStaffViewElementLayer` proper notational attributes at a suggested horizontal position. Specifically, the method calculates where to place the note vertically with respect to the currently selected clef given its name and octave.
-    ///
-    ///The method creates a new `MusicStaffViewElementLayer`, positions it properly and finally adds accidentals and ledger lines as necessary to complete the visual presentation of a note at the appropriate position in the staff.
-    ///
-    ///- note: It is possible to force a note to be drawn in a particular direction (e.g. up or down) by using the forcedDirection attribute. As of yet, this is untested and may result in undefined behavior, most likely ledger lines or accidentals in incorrect places.
-    ///
-    ///- note: Previously, this method was used to actually draw the note in place. In order to best space notes equally, it makes sense to create the layer, but postpone the positioning until the full width of all notes in the view is known. See `setuplayers()` for more information.
-    ///
-    ///- parameter name: The name of the note
-    ///- parameter octave: The octave of the note
-    ///- parameter accidental: The `AccidentalType` to draw, including `AccidentalType.none` if there should be no accidental
-    ///- parameter length: The length of note to be drawn
-    ///- parameter atHorizontalPosition: The horizontal position, in points, at which to draw the left edge of the note
-    ///- parameter forcedDirection: The direction, up or down, to force the note (see note above)
-    private func noteLayerFor(note: MusicNote, atHorizontalPosition xPosition: CGFloat, forcedDirection: NoteFlagDirection?) -> CALayer {
         
-        let element = note
-        let elementSize = element.size(withSpaceWidth: self.spaceWidth)
-        let elementBounds = CGRect(origin: CGPoint.zero, size: elementSize)
-        let layer = element.layer(in: elementBounds)
+        //this is key. if the element requires ledger lines, they need to be unmasked in the staff layer
+        if element.requiresLedgerLines(in: self.displayedClef) {
+            staffLayer.unmaskRects.append(layer.frame)
+        }
         
-        var elementPosition = CGPoint(x: xPosition + elementSize.width * 0.5, y: self.bounds.size.height / 2.0)
-        let offset = element.offset(in: displayedClef)
-        elementPosition.y += CGFloat(offset) * spaceWidth / 2.0
-        layer.position = elementPosition
         return layer
-
-        /*
-        let height = note.heightInStaffSpace * spaceWidth
-        let width = height * note.aspectRatio
-        let elementSize = CGSize(width: width, height: height)
-        var elementPosition = CGPoint(x: xPosition, y: self.bounds.size.height)
-
-        let offset = note.offset(in: displayedClef)
-        let offsetInView = viewOffsetForStaffOffset(offset)
-        elementPosition.y += offsetInView
-
-        let elementBounds = CGRect(origin: CGPoint.zero, size: elementSize)
-        let noteLayer = note.layer(in: elementBounds)
-        noteLayer.position = elementPosition
-        
-        //default direction is up
-        let direction = note.direction(in: displayedClef)
-        if direction != .up {
-            noteLayer.transform = CATransform3DIdentity
-        } else {
-            //noteLayer.anchorPoint = CGPoint(x: 0.5, y: 0.62)
-            noteLayer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 0, 0, 1.0)
-        }
-                
-        //draw ledger lines if necessary
-        var ledgerLines: CALayer?
-
-        let ledger = note.ledgerLines(in: displayedClef)
-        if ledger.count > 0 {
-            ledgerLines = CALayer()
-            
-            //hopefully
-            for i in 0..<ledger.count {
-                let currentLedgerLine = CAShapeLayer()
-                currentLedgerLine.bounds = CGRect(x: 0, y: 0, width: noteLayer.bounds.size.width - 2.0, height: staffLayer.lineWidth * 3.0)
-                currentLedgerLine.backgroundColor = UIColor.black.cgColor
-                currentLedgerLine.position.y += noteLayer.anchorPoint.y * noteLayer.bounds.size.height - CGFloat(i) * spaceWidth
-                currentLedgerLine.position.x += noteLayer.anchorPoint.x * noteLayer.bounds.size.width
-                
-                if !ledger.centered {
-                    currentLedgerLine.position.y -= (direction == .up) ? spaceWidth / 2.0 : -spaceWidth / 2.0
-                }
-                
-                currentLedgerLine.strokeColor = UIColor.black.cgColor
-                ledgerLines?.addSublayer(currentLedgerLine)
-            }
-            
-            noteLayer.addSublayer(ledgerLines!)
-        }
-    
-        if debug {
-            noteLayer.backgroundColor = UIColor(red: 0, green: 0, blue: 1.0, alpha: 0.3).cgColor
-            ledgerLines?.backgroundColor = UIColor.green.cgColor
-        }
-        
-        return noteLayer
-        */
     }
-    
-//    func accidentalLayerFor(note: MusicNote) -> CALayer? {
-//        let accidentalLayer: MusicStaffViewElementLayer
-//        let accidental = note.accidental
-//        
-//        guard accidental != .none else {
-//            return nil
-//        }
-//        
-//        accidentalLayer = MusicStaffViewElementLayer(type: .accidental(accidental))
-//        accidentalLayer.height = 0.70 * 4.0 * spaceWidth
-//        accidentalLayer.position = noteLayer.position
-//        
-//        if debug {
-//            accidentalLayer.backgroundColor = UIColor(red: 0, green: 1.0, blue: 1.0, alpha: 0.3).cgColor
-//        }
-//        return accidentalLayer
-//    }
     
     ///Translates the staff-based offset (e.g. the number of positions above or below the middle staff line) into a useable metric based on the size of the view.
     ///
