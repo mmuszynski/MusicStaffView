@@ -50,6 +50,13 @@ extension MusicNote: MusicStaffViewElement {
         return CGPoint(x: 0.5, y: 0.865)
     }
     
+    var accessoryElements: [MusicStaffViewAccessory]? {
+        if self.accidental != .none {
+            return [self.accidental]
+        }
+        return nil
+    }
+    
     func quarterNotePath(in frame: CGRect) -> CGPath {        
         let quarterNotePath = UIBezierPath()
         quarterNotePath.move(to: CGPoint(x: frame.minX + 0.93974 * frame.width, y: frame.minY + 0.01905 * frame.height))

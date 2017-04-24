@@ -9,7 +9,11 @@
 import Foundation
 import Music
 
-extension MusicPitchAccidental: MusicStaffViewElement {
+extension MusicPitchAccidental: MusicStaffViewAccessory {    
+    var placement: MusicStaffViewAccessoryPlacement {
+        return .leading(spacing: 10.0)
+    }
+    
     func requiresLedgerLines(in clef: MusicClef) -> Bool {
         return false
     }
@@ -27,7 +31,7 @@ extension MusicPitchAccidental: MusicStaffViewElement {
     }
 
     public var anchorPoint: CGPoint {
-        return CGPoint(x: 0.5, y: 0.865)
+        return CGPoint(x: 0.5, y: 0.5)
     }
 
     func naturalPath(in frame: CGRect) -> CGPath {

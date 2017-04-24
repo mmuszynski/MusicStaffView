@@ -1,5 +1,5 @@
 //
-//  MusicStaffViewAccessoryElement.swift
+//  MusicStaffViewAccessory.swift
 //  MusicStaffView
 //
 //  Created by Mike Muszynski on 4/24/17.
@@ -9,10 +9,9 @@
 import Foundation
 
 enum MusicStaffViewAccessoryPlacement {
-    case above, below, leading, trailing
+    case above, below, leading(spacing: CGFloat), trailing(spacing: CGFloat)
 }
 
-protocol MusicStaffViewAccessoryElement: MusicStaffViewElement {
+protocol MusicStaffViewAccessory: MusicStaffViewElement {
     var placement: MusicStaffViewAccessoryPlacement { get }
-    var offsetFromParent: CGFloat { get }
 }

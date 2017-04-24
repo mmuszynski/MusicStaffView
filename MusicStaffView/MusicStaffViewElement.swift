@@ -17,7 +17,8 @@ public enum MusicStaffViewElementDirection {
 protocol MusicStaffViewElement {
     /// The path that describes the shape of the element
     func path(in frame: CGRect) -> CGPath
-    func layer(in frame: CGRect) -> CALayer
+    //func layer(in frame: CGRect) -> CALayer
+    func layer(withSpaceWidth spaceWidth: CGFloat) -> CALayer
     
     /// The ratio of width to height that describes the general shape of the element's bounding box
     ///
@@ -36,12 +37,13 @@ protocol MusicStaffViewElement {
     func direction(in clef: MusicClef) -> MusicStaffViewElementDirection
     func requiresLedgerLines(in clef: MusicClef) -> Bool
     
-    func accessoryElements(in frame: CGRect) -> [MusicStaffViewAccessoryElement]?
+    var accessoryElements: [MusicStaffViewAccessory]? { get }
     
 }
 
 extension MusicStaffViewElement {
-    func layer(in frame: CGRect) -> CALayer {
+    func layer(withSpaceWidth spaceWidth: CGFloat) -> CALayer {
+        let frame = self.bounds(withSpaceWidth: spaceWidth)
         let layer = CAShapeLayer()
         layer.frame = frame
         layer.path = self.path(in: frame)
@@ -55,6 +57,10 @@ extension MusicStaffViewElement {
         return CGSize(width: width, height: height)
     }
     
+    func bounds(withSpaceWidth spaceWidth: CGFloat) -> CGRect {
+        return CGRect(origin: CGPoint.zero, size: self.size(withSpaceWidth: spaceWidth))
+    }
+    
     func offset(in clef: MusicClef) -> Int {
         return 0
     }
@@ -63,7 +69,7 @@ extension MusicStaffViewElement {
         return .up
     }
     
-    func accessoryElements(in frame: CGRect) -> [MusicStaffViewAccessoryElement]? {
+    var accessoryElements: [MusicStaffViewAccessory]? {
         return nil
     }
 }

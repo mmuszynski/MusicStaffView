@@ -19,7 +19,7 @@
 		27569A671EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27569A661EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift */; };
 		27827BD71EA53FCF00D6908C /* MusicStaffView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27827BCD1EA53FCF00D6908C /* MusicStaffView.framework */; };
 		27827BDE1EA53FCF00D6908C /* MusicStaffView.h in Headers */ = {isa = PBXBuildFile; fileRef = 27827BD01EA53FCF00D6908C /* MusicStaffView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		27A336411EAE599F00D904E4 /* MusicStaffViewAccessoryElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A336401EAE599F00D904E4 /* MusicStaffViewAccessoryElement.swift */; };
+		27A336411EAE599F00D904E4 /* MusicStaffViewAccessory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A336401EAE599F00D904E4 /* MusicStaffViewAccessory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +48,7 @@
 		27827BD11EA53FCF00D6908C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27827BD61EA53FCF00D6908C /* MusicStaffViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MusicStaffViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		27827BDD1EA53FCF00D6908C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		27A336401EAE599F00D904E4 /* MusicStaffViewAccessoryElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewAccessoryElement.swift; sourceTree = "<group>"; };
+		27A336401EAE599F00D904E4 /* MusicStaffViewAccessory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewAccessory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				273F2A591EA68E3C00017A7C /* MusicStaffViewElement.swift */,
-				27A336401EAE599F00D904E4 /* MusicStaffViewAccessoryElement.swift */,
+				27A336401EAE599F00D904E4 /* MusicStaffViewAccessory.swift */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -257,7 +257,7 @@
 				2706BFFE1EA900CA0031F32B /* MusicClef+Element.swift in Sources */,
 				273D13631EA807940040B7A7 /* MusicClef+Drawing.swift in Sources */,
 				273F2A601EA68E3C00017A7C /* MusicStaffViewKeySignature.swift in Sources */,
-				27A336411EAE599F00D904E4 /* MusicStaffViewAccessoryElement.swift in Sources */,
+				27A336411EAE599F00D904E4 /* MusicStaffViewAccessory.swift in Sources */,
 				273F2A5E1EA68E3C00017A7C /* MusicStaffViewElement.swift in Sources */,
 				27569A671EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift in Sources */,
 				273F2A621EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift in Sources */,

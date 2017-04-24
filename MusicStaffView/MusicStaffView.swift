@@ -137,14 +137,14 @@ public enum MusicStaffViewSpacingType {
         var elementLayers = [CALayer]()
         
         //the current horizontal position begins at zero
-        //MusicStaffView must keep track of the spacing, and likely will to do the magnetic layout
+        //MusicStaffView must keep track of the spacing, and likely will to due layouts and constraints
         var currentPosition: CGFloat = 0.0
         
         //iterate through the elements and add its CAShapeLayer to the array of layers to be drawn
         //move the current position accordingly
         for element in elements {
-            let layer = self.layer(for: element, atHorizontalPosition: currentPosition)
-            elementLayers.append(layer)
+            let layers = self.layer(for: element, atHorizontalPosition: currentPosition)
+            elementLayers.append(layers)
             currentPosition += (elementLayers.last?.bounds.width ?? 0) + preferredHorizontalSpacing
         }
         
@@ -173,15 +173,13 @@ public enum MusicStaffViewSpacingType {
     }
     
     private func layer(for element: MusicStaffViewElement, atHorizontalPosition xPosition: CGFloat) -> CALayer {
-        let elementSize = element.size(withSpaceWidth: self.spaceWidth)
-        let elementBounds = CGRect(origin: CGPoint.zero, size: elementSize)
-        let layer = element.layer(in: elementBounds)
+        let layer = element.layer(withSpaceWidth: self.spaceWidth)
         
         if element.direction(in: self.displayedClef) == .down {
             layer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 0, 0, 1.0)
         }
         
-        var elementPosition = CGPoint(x: xPosition + elementSize.width * 0.5, y: self.bounds.size.height / 2.0)
+        var elementPosition = CGPoint(x: xPosition + layer.bounds.width * 0.5, y: self.bounds.size.height / 2.0)
         let offset = element.offset(in: displayedClef)
         elementPosition.y += CGFloat(offset) * spaceWidth / 2.0
         layer.position = elementPosition
