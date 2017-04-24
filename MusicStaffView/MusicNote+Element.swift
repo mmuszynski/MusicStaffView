@@ -11,13 +11,9 @@ import Music
 
 extension MusicNote: MusicStaffViewElement {
 
-    func direction(in clef: MusicClef) -> NoteFlagDirection {
+    func direction(in clef: MusicClef) -> MusicStaffViewElementDirection {
         let offset = clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
         return offset > 0 ? .up : .down
-    }
-
-    var type: MusicStaffViewElementType {
-        return MusicStaffViewElementType.note(self.pitch, self.rhythm)
     }
     
     func offset(in clef: MusicClef) -> Int {

@@ -9,14 +9,7 @@
 import UIKit
 import Music
 
-public enum MusicStaffViewElementType {
-    case clef(MusicClef)
-    case note(MusicPitch, MusicRhythm)
-    case accidental(MusicPitchAccidental)
-    case none
-}
-
-public enum NoteFlagDirection {
+public enum MusicStaffViewElementDirection {
     case up
     case down
 }
@@ -40,8 +33,10 @@ protocol MusicStaffViewElement {
     var anchorPoint: CGPoint { get }
     
     func offset(in clef: MusicClef) -> Int
-    func direction(in clef: MusicClef) -> NoteFlagDirection
+    func direction(in clef: MusicClef) -> MusicStaffViewElementDirection
     func requiresLedgerLines(in clef: MusicClef) -> Bool
+    
+    func accessoryElements(in frame: CGRect) -> [MusicStaffViewAccessoryElement]?
     
 }
 
@@ -64,7 +59,11 @@ extension MusicStaffViewElement {
         return 0
     }
     
-    func direction(in clef: MusicClef) -> NoteFlagDirection {
+    func direction(in clef: MusicClef) -> MusicStaffViewElementDirection {
         return .up
+    }
+    
+    func accessoryElements(in frame: CGRect) -> [MusicStaffViewAccessoryElement]? {
+        return nil
     }
 }

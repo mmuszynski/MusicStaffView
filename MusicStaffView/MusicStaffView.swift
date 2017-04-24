@@ -118,14 +118,10 @@ public enum MusicStaffViewSpacingType {
     
     ///Redraws all elements of the `MusicStaffView`, first removing them if they are already drawn.
     ///
-    ///This method does the drawing of the various elements of the musical staff. Generally it is not necessary to call this function manually, as it is called when the various different layer elements are updated (e.g. when the clef type is changed, the view will be redrawn using this method).
+    ///This method does the drawing of the various elements of the musical staff. It is not necessary to call this function manually, as it is called when the various different layer properties are updated (e.g. when the clef type is changed, the view will be redrawn using this method).
     ///
-    ///Elements are drawn in order of increasing importance, so as to keep the most important items drawn on top. In practice, this is unnecessary, as all elements are currently drawn in the same color, but (as an example) addition of color information would require that certain elements such as notes and accidentals are drawn on top of the staff lines.
+    ///In order to fully set up the layers, `MusicStaffView` keeps track of the various `MusicStaffViewElement` objects, asks them for a CALayer that describes their appearance, and applies a best-guess position horizontally. This position is then refined, based on the spacing settings and the properties of the elements themselves. In general, the elements that are drawn have strict vertical position requirements (i.e. they represent notes on a staff and changing their position would change their meaning), but it is possible that there will be further elements that need some refinement in the vertical direction.
     ///
-    ///The current order for drawing is as follows:
-    ///1. The lines of the staff
-    ///2. The clef
-    ///3. The individual notes (and the accidentals which are currently attached to the note layer)
     func setupLayers() {
         //remove the element and staff layers and initialize them with new instances
         staffLayer.removeFromSuperlayer()
@@ -160,15 +156,19 @@ public enum MusicStaffViewSpacingType {
         //Draw the staff lines, including ledger lines
         //Unnecessary ledger lines are masked out later
         staffLayer.maxLedgerLines = self.maxLedgerLines
+        let mask = staffLayer.staffLineMask!
         if debug {
+            mask.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 0, alpha: 0.5).cgColor
             staffLayer.backgroundColor = UIColor(red: 1.0, green: 0, blue: 0, alpha: 0.25).cgColor
+            staffLayer.addSublayer(mask)
+        } else {
         }
         
         //mask out the unnecessary ledger lines
-        staffLayer.mask = staffLayer.staffLineMask
+        staffLayer.mask = mask
+        
         self.layer.addSublayer(staffLayer)
         self.layer.addSublayer(elementDisplayLayer)
-        
     }
     
     private func layer(for element: MusicStaffViewElement, atHorizontalPosition xPosition: CGFloat) -> CALayer {
