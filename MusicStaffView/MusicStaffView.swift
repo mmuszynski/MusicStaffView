@@ -165,6 +165,7 @@ public enum MusicStaffViewSpacingType {
         }
         
         //mask out the unnecessary ledger lines
+        staffLayer.strokeColor = UIColor.black.cgColor
         staffLayer.mask = mask
         
         self.layer.addSublayer(staffLayer)
