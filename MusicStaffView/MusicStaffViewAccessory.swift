@@ -8,10 +8,10 @@
 
 import Foundation
 
-enum MusicStaffViewAccessoryPlacement {
-    case above, below, leading(spacing: CGFloat), trailing(spacing: CGFloat)
+public enum MusicStaffViewAccessoryPlacement {
+    case above, below, leading, trailing, standalone
 }
 
-protocol MusicStaffViewAccessory: MusicStaffViewElement {
+public protocol MusicStaffViewAccessory: MusicStaffViewElement {
     var placement: MusicStaffViewAccessoryPlacement { get }
 }

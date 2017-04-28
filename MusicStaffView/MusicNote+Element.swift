@@ -10,21 +10,21 @@ import UIKit
 import Music
 
 extension MusicNote: MusicStaffViewElement {
-
-    func direction(in clef: MusicClef) -> MusicStaffViewElementDirection {
+    
+    public func direction(in clef: MusicClef) -> MusicStaffViewElementDirection {
         let offset = clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
         return offset > 0 ? .up : .down
     }
     
-    func offset(in clef: MusicClef) -> Int {
+    public func offset(in clef: MusicClef) -> Int {
         return clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
     }
     
-    func requiresLedgerLines(in clef: MusicClef) -> Bool {
+    public func requiresLedgerLines(in clef: MusicClef) -> Bool {
         return abs(offset(in: clef)) > 5
     }
     
-    func path(in frame: CGRect) -> CGPath {
+    public func path(in frame: CGRect) -> CGPath {
         switch self.rhythm {
         case .quarter, .crotchet:
             return quarterNotePath(in: frame)
@@ -33,24 +33,19 @@ extension MusicNote: MusicStaffViewElement {
         }
     }
     
-    var aspectRatio: CGFloat {
+    public var aspectRatio: CGFloat {
         return 39.0 / 90.0
     }
     
-    var heightInStaffSpace: CGFloat {
+    public var heightInStaffSpace: CGFloat {
         return 4.0
     }
     
-    func ledgerLines(in clef: MusicClef) -> (count: Int, centered: Bool) {
-        let offset = clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
-        return clef.ledgerLinesForStaffOffset(offset)
-    }
-    
-    var anchorPoint: CGPoint {
+    public var anchorPoint: CGPoint {
         return CGPoint(x: 0.5, y: 0.865)
     }
     
-    var accessoryElements: [MusicStaffViewAccessory]? {
+    public var accessoryElements: [MusicStaffViewAccessory]? {
         if self.accidental != .none {
             return [self.accidental]
         }

@@ -31,8 +31,8 @@ public enum MusicStaffViewSpacingType {
         }
     }
     
-    ///Private backing array for `noteArray`.
-    private var _noteArray: [MusicNote] = [] {
+    ///Private backing array for `elementArray`.
+    private var _elementArray: [MusicStaffViewElement] = [] {
         didSet {
             setupLayers()
         }
@@ -41,18 +41,18 @@ public enum MusicStaffViewSpacingType {
     ///Provides an array of `MusicStaffViewNote` objects that represent the notes to be displayed in the `MusicStaffView`.
     ///
     ///The notes represented on a the `MusicStaffView` are represented by `MusicStafffViewNote` objects that describe the position and length of each note, along with any accidentals necessary to draw.
-    public var noteArray: [MusicNote] {
+    public var elementArray: [MusicStaffViewElement] {
         get {
             #if TARGET_INTERFACE_BUILDER
                 var testArray = [MusicStaffViewNote]()
                 testArray.append(MusicStaffViewNote(name: .c, accidental: .sharp, length: .quarter, octave: 4))
                 return testArray
             #else
-                return _noteArray
+                return _elementArray
             #endif
         }
         set {
-            _noteArray = newValue
+            _elementArray = newValue
         }
     }
     
@@ -64,18 +64,14 @@ public enum MusicStaffViewSpacingType {
     }
     
     ///The preferred horizontal spacing, in points, between horizontal staff elements, such as notes, accidentals, clefs and key signatures.
-    @IBInspectable public var preferredHorizontalSpacing : CGFloat = 0 {
+    @IBInspectable public var preferredHorizontalSpacing : CGFloat = 0.0 {
         didSet {
             self.setupLayers()
         }
     }
     
     ///The clef to display, wrapped in an `ClefType` enum.
-    @IBInspectable var displayedClef : MusicClef = .treble {
-        didSet{
-            self.setupLayers()
-        }
-    }
+    @IBInspectable public var displayedClef : MusicClef = .treble
     
     ///Whether or not to draw the frames for each of the elements drawn in the staff.
     ///
@@ -105,7 +101,7 @@ public enum MusicStaffViewSpacingType {
     ///Instructs the view to draw all accidentals, even if the `MusicStaffViewNote`'s accidental type is set to none.
     ///
     ///In certain circumstances, it can be helpful to see the accidentals in front of all notes. `MusicStaffView` makes no determinations about accidentals that carry through measures or key signatures.
-    var drawAllAccidentals : Bool = false
+    public var drawAllAccidentals : Bool = false
     
     ///Instructs whether to fill all available space by using uniform spacing or to draw the clef information and then fill in the notes using `preferredHorizontalSpacing`.
     ///
@@ -115,6 +111,10 @@ public enum MusicStaffViewSpacingType {
     //The staff layer that is drawn
     var staffLayer = MusicStaffViewStaffLayer()
     var elementDisplayLayer = CALayer()
+    
+    /// The color that the staff should be drawn
+    public var staffColor: UIColor = UIColor.black
+    public var elementColor: UIColor = UIColor.black
     
     ///Redraws all elements of the `MusicStaffView`, first removing them if they are already drawn.
     ///
@@ -133,7 +133,7 @@ public enum MusicStaffViewSpacingType {
         elementDisplayLayer.frame = self.bounds
         
         //Get the elements to draw, currently just clef and notes
-        let elements: [MusicStaffViewElement] = [displayedClef] + noteArray
+        let elements: [MusicStaffViewElement] = elementArray
         var elementLayers = [CALayer]()
         
         //the current horizontal position begins at zero
@@ -143,9 +143,14 @@ public enum MusicStaffViewSpacingType {
         //iterate through the elements and add its CAShapeLayer to the array of layers to be drawn
         //move the current position accordingly
         for element in elements {
-            let layers = self.layer(for: element, atHorizontalPosition: currentPosition)
-            elementLayers.append(layers)
-            currentPosition += (elementLayers.last?.bounds.width ?? 0) + preferredHorizontalSpacing
+            //if the clef has changed, update the current display clef that makes calculations work
+            if let newClef = element as? MusicClef {
+                self.displayedClef = newClef
+            }
+            
+            let layers = self.layers(for: element, atHorizontalPosition: currentPosition)
+            elementLayers.append(contentsOf: layers)
+            currentPosition = (elementLayers.last?.frame.origin.x ?? 0) + (elementLayers.last?.frame.size.width ?? 0) + preferredHorizontalSpacing
         }
         
         //add the element layers to the element display layer
@@ -165,23 +170,58 @@ public enum MusicStaffViewSpacingType {
         }
         
         //mask out the unnecessary ledger lines
-        staffLayer.strokeColor = UIColor.black.cgColor
+        staffLayer.strokeColor = staffColor.cgColor
         staffLayer.mask = mask
         
         self.layer.addSublayer(staffLayer)
         self.layer.addSublayer(elementDisplayLayer)
     }
     
-    private func layer(for element: MusicStaffViewElement, atHorizontalPosition xPosition: CGFloat) -> CALayer {
+    private func layers(for element: MusicStaffViewElement, atHorizontalPosition xPosition: CGFloat) -> [CALayer] {
+        var elementLayers = [CALayer]()
         let layer = element.layer(withSpaceWidth: self.spaceWidth)
         
         if element.direction(in: self.displayedClef) == .down {
             layer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 0, 0, 1.0)
         }
         
-        var elementPosition = CGPoint(x: xPosition + layer.bounds.width * 0.5, y: self.bounds.size.height / 2.0)
+        var elementPosition = CGPoint(x: xPosition, y: self.bounds.size.height / 2.0)
         let offset = element.offset(in: displayedClef)
         elementPosition.y += CGFloat(offset) * spaceWidth / 2.0
+        
+        //are there any accessories, such as sharps or flats?
+        //add them to the array to lay out
+        if let accessories = element.accessoryElements {
+            for accessory in accessories {
+                
+                //do not draw accidentals unless drawAllAccidentals is true
+                guard !((accessory as? MusicPitchAccidental) == .natural && !drawAllAccidentals) else {
+                    continue
+                }
+                
+                let accessoryLayer = accessory.layer(withSpaceWidth: self.spaceWidth)
+                switch accessory.placement {
+                case .leading:
+                    //reposition elementPosition so that x value is now 0 + half width of accessory layer
+                    elementPosition.x += accessoryLayer.bounds.width * 0.5
+                    accessoryLayer.position = elementPosition
+                    
+                    //reposition elementPosition so that x is now at the full extent of the accessory layer
+                    //then add element spacing and width of element
+                    elementPosition.x += accessoryLayer.bounds.width * 0.5
+                    
+                    //add the accessory element to the display layers
+                    elementLayers.append(accessoryLayer)
+                default:
+                    fatalError()
+                }
+            }
+        }
+        
+        //print(element)
+        //print(element.offset(in: displayedClef))
+        //print(elementPosition)
+        elementPosition.x += layer.bounds.width * 0.5
         layer.position = elementPosition
         
         //this is key. if the element requires ledger lines, they need to be unmasked in the staff layer
@@ -189,7 +229,9 @@ public enum MusicStaffViewSpacingType {
             staffLayer.unmaskRects.append(layer.frame)
         }
         
-        return layer
+        elementLayers.append(layer)
+        
+        return elementLayers
     }
     
     ///Translates the staff-based offset (e.g. the number of positions above or below the middle staff line) into a useable metric based on the size of the view.
