@@ -113,8 +113,8 @@ public enum MusicStaffViewSpacingType {
     var elementDisplayLayer = CALayer()
     
     /// The color that the staff should be drawn
-    public var staffColor: UIColor = UIColor.black
-    public var elementColor: UIColor = UIColor.black
+    public var staffColor: CGColor = UIColor.black.cgColor
+    public var elementColor: CGColor = UIColor.black.cgColor
     
     ///Redraws all elements of the `MusicStaffView`, first removing them if they are already drawn.
     ///
@@ -170,7 +170,7 @@ public enum MusicStaffViewSpacingType {
         }
         
         //mask out the unnecessary ledger lines
-        staffLayer.strokeColor = staffColor.cgColor
+        staffLayer.strokeColor = staffColor
         staffLayer.mask = mask
         
         self.layer.addSublayer(staffLayer)
@@ -179,7 +179,12 @@ public enum MusicStaffViewSpacingType {
     
     private func layers(for element: MusicStaffViewElement, atHorizontalPosition xPosition: CGFloat) -> [CALayer] {
         var elementLayers = [CALayer]()
-        let layer = element.layer(withSpaceWidth: self.spaceWidth)
+        var layer = element.layer(withSpaceWidth: self.spaceWidth, color: self.elementColor)
+        
+        
+        if element is MusicStaffViewShim {
+            layer = element.layer(withSpaceWidth: self.spaceWidth, color: UIColor.clear.cgColor)
+        }
         
         if element.direction(in: self.displayedClef) == .down {
             layer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 0, 0, 1.0)
@@ -199,7 +204,7 @@ public enum MusicStaffViewSpacingType {
                     continue
                 }
                 
-                let accessoryLayer = accessory.layer(withSpaceWidth: self.spaceWidth)
+                let accessoryLayer = accessory.layer(withSpaceWidth: self.spaceWidth, color: self.elementColor)
                 switch accessory.placement {
                 case .leading:
                     //reposition elementPosition so that x value is now 0 + half width of accessory layer
@@ -225,8 +230,27 @@ public enum MusicStaffViewSpacingType {
         layer.position = elementPosition
         
         //this is key. if the element requires ledger lines, they need to be unmasked in the staff layer
+        func extensionFromCenterLine(for rect: CGRect) -> CGRect {
+            let centerLine = self.bounds.midY
+            let maxExtent = centerLine - rect.maxY
+            let minExtent = centerLine - rect.minY
+            
+            var extentsRect = rect
+            
+            if abs(maxExtent) > abs(minExtent) {
+                extentsRect.origin.y = centerLine - spaceWidth / 3.0
+                extentsRect.size.height = abs(maxExtent)
+            } else {
+                extentsRect.origin.y += spaceWidth / 3.0
+                extentsRect.size.height = abs(minExtent)
+            }
+            
+            return extentsRect
+            
+        }
         if element.requiresLedgerLines(in: self.displayedClef) {
-            staffLayer.unmaskRects.append(layer.frame)
+            let maskRect = extensionFromCenterLine(for: layer.frame)
+            staffLayer.unmaskRects.append(maskRect)
         }
         
         elementLayers.append(layer)

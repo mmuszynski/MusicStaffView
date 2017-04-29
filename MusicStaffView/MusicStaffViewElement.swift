@@ -22,7 +22,7 @@ public protocol MusicStaffViewElement {
     ///
     /// - Parameter spaceWidth: The width of the spaces between the lines of the staff.
     /// - Returns: The layer to be drawn by `MusicStaffView`
-    func layer(withSpaceWidth spaceWidth: CGFloat) -> CALayer
+    func layer(withSpaceWidth spaceWidth: CGFloat, color: CGColor) -> CALayer
     
     /// The ratio of width to height that describes the general shape of the element's bounding box
     ///
@@ -62,19 +62,16 @@ public protocol MusicStaffViewElement {
  
     /// Minimum spacing in terms of percentage of the size of the element
     var minimumSpacing: (leading: CGFloat, trailing: CGFloat) { get }
-    
-    /// Color for the object
-    var fillColor: UIColor { get }
 }
 
 extension MusicStaffViewElement {
-    public func layer(withSpaceWidth spaceWidth: CGFloat) -> CALayer {
+    public func layer(withSpaceWidth spaceWidth: CGFloat, color: CGColor) -> CALayer {
         let frame = self.bounds(withSpaceWidth: spaceWidth)
         let layer = CAShapeLayer()
         layer.frame = frame
         layer.path = self.path(in: frame)
         layer.anchorPoint = self.anchorPoint
-        layer.fillColor = self.fillColor.cgColor
+        layer.fillColor = color
         return layer
     }
     
@@ -110,9 +107,5 @@ extension MusicStaffViewElement {
     
     public func requiresLedgerLines(in clef: MusicClef) -> Bool {
         return false
-    }
-    
-    public var fillColor: UIColor {
-        return UIColor.black
     }
 }
