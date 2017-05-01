@@ -13,7 +13,7 @@ extension MusicNote: MusicStaffViewElement {
     
     public func direction(in clef: MusicClef) -> MusicStaffViewElementDirection {
         let offset = clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
-        return offset > 0 ? .up : .down
+        return offset < 0 ? .up : .down
     }
     
     public func offset(in clef: MusicClef) -> Int {

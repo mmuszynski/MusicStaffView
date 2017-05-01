@@ -192,7 +192,7 @@ public enum MusicStaffViewSpacingType {
         
         var elementPosition = CGPoint(x: xPosition, y: self.bounds.size.height / 2.0)
         let offset = element.offset(in: displayedClef)
-        elementPosition.y += CGFloat(offset) * spaceWidth / 2.0
+        elementPosition.y -= CGFloat(offset) * spaceWidth / 2.0
         
         //are there any accessories, such as sharps or flats?
         //add them to the array to lay out
