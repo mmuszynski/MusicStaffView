@@ -181,7 +181,6 @@ public enum MusicStaffViewSpacingType {
         var elementLayers = [CALayer]()
         var layer = element.layer(withSpaceWidth: self.spaceWidth, color: self.elementColor)
         
-        
         if element is MusicStaffViewShim {
             layer = element.layer(withSpaceWidth: self.spaceWidth, color: UIColor.clear.cgColor)
         }
@@ -223,9 +222,10 @@ public enum MusicStaffViewSpacingType {
             }
         }
         
-        //print(element)
-        //print(element.offset(in: displayedClef))
-        //print(elementPosition)
+//        print(element)
+//        print(element.offset(in: displayedClef))
+//        print(elementPosition)
+
         elementPosition.x += layer.bounds.width * 0.5
         layer.position = elementPosition
         
