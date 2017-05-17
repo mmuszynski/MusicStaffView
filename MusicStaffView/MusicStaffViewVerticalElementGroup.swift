@@ -56,7 +56,7 @@ public struct MusicStaffViewVerticalElementGroup: RangeReplaceableCollection, Mu
     //This is the where the group will do the heavy lifting.
     public func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: CGColor) -> CALayer {
         let multiLayer = CALayer()
-        multiLayer.anchorPoint = .zero
+        multiLayer.anchorPoint = self.anchorPoint
         
         var layers = [CALayer]()
         for element in self.elements {
@@ -64,6 +64,7 @@ public struct MusicStaffViewVerticalElementGroup: RangeReplaceableCollection, Mu
             var elementPosition = CGPoint(x: 0, y: 0)
             let offset = element.offset(in: clef)
             elementPosition.y -= CGFloat(offset) * spaceWidth / 2.0
+            elementLayer.position = elementPosition
             layers.append(elementLayer)
         }
         
@@ -101,9 +102,7 @@ public struct MusicStaffViewVerticalElementGroup: RangeReplaceableCollection, Mu
             layer.position.x += multiLayer.bounds.size.width / 2.0
             multiLayer.addSublayer(layer)
         }
-        
-        multiLayer.position.y = highestY
-        
+                
         return multiLayer
     }
 }

@@ -106,7 +106,11 @@ public enum MusicStaffViewSpacingType {
     ///Instructs whether to fill all available space by using uniform spacing or to draw the clef information and then fill in the notes using `preferredHorizontalSpacing`.
     ///
     ///
-    public var spacing: MusicStaffViewSpacingType = .uniform
+    public var spacing: MusicStaffViewSpacingType = .preferred {
+        didSet {
+            self.setupLayers()
+        }
+    }
     
     //The staff layer that is drawn
     var staffLayer = MusicStaffViewStaffLayer()
@@ -166,7 +170,6 @@ public enum MusicStaffViewSpacingType {
             mask.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 0.5).cgColor
             staffLayer.backgroundColor = UIColor(red: 1.0, green: 0, blue: 0, alpha: 0.25).cgColor
             staffLayer.addSublayer(mask)
-        } else {
         }
         
         //mask out the unnecessary ledger lines
@@ -174,6 +177,29 @@ public enum MusicStaffViewSpacingType {
         staffLayer.mask = mask
         
         self.layer.addSublayer(staffLayer)
+
+        //horizontal spacing is a harder task than i expected.
+        //work more on this later
+        
+//        //add shims if uniform spacing was selected
+//        if spacing == .uniform {
+//            //how much space is there to the end of the view?
+//            let remainingSpace = self.bounds.size.width - currentPosition
+//            //how many shims will be needed?
+//            let shimCount = elementLayers.count - 1
+//            
+//            if shimCount > 0 {
+//                //how wide is each shim?
+//                let shimWidth = remainingSpace / CGFloat(shimCount)
+//                for i in 1...shimCount {
+//                    elementLayers[i].position.x += shimWidth * CGFloat(i)
+//                }
+//
+//            } else {
+//                print("could not use uniform spacing with zero spacing elements")
+//            }
+//        }
+        
         self.layer.addSublayer(elementDisplayLayer)
     }
     
@@ -183,7 +209,6 @@ public enum MusicStaffViewSpacingType {
         
         if debug {
             layer.backgroundColor = UIColor(red: 0.0, green: 1.0, blue: 0, alpha: 0.25).cgColor
-            print("layer: \(layer.frame)")
         }
         
         if element is MusicStaffViewShim {
@@ -232,10 +257,6 @@ public enum MusicStaffViewSpacingType {
         //print(elementPosition)
         elementPosition.x += layer.bounds.width * 0.5
         layer.position = elementPosition
-        
-        if element is MusicStaffViewVerticalElementGroup {
-            print("layer: \(layer.frame)")
-        }
         
         //this is key. if the element requires ledger lines, they need to be unmasked in the staff layer
         func extensionFromCenterLine(for rect: CGRect) -> CGRect {
