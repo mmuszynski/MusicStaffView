@@ -22,7 +22,7 @@ public protocol MusicStaffViewElement {
     ///
     /// - Parameter spaceWidth: The width of the spaces between the lines of the staff.
     /// - Returns: The layer to be drawn by `MusicStaffView`
-    func layer(withSpaceWidth spaceWidth: CGFloat, color: CGColor) -> CALayer
+    func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: CGColor) -> CALayer
     
     /// The ratio of width to height that describes the general shape of the element's bounding box
     ///
@@ -50,7 +50,6 @@ public protocol MusicStaffViewElement {
     /// - Returns: Either `MusicStaffViewElementDirection.up` or `MusicStaffViewElementDirection.down`
     func direction(in clef: MusicClef) -> MusicStaffViewElementDirection
     
-    
     /// Instructs the `MusicStaffView` to unmask the ledger lines beneath the element's layer.
     ///
     /// - Parameter clef: The cleff that is currently active use in the `MusicStaffView`
@@ -65,13 +64,17 @@ public protocol MusicStaffViewElement {
 }
 
 extension MusicStaffViewElement {
-    public func layer(withSpaceWidth spaceWidth: CGFloat, color: CGColor) -> CALayer {
+    public func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: CGColor) -> CALayer {
         let frame = self.bounds(withSpaceWidth: spaceWidth)
         let layer = CAShapeLayer()
-        layer.frame = frame
+        layer.bounds = frame
         layer.path = self.path(in: frame)
         layer.anchorPoint = self.anchorPoint
         layer.fillColor = color
+        
+        let offset = self.offset(in: clef)
+        layer.position.y -= CGFloat(offset) * spaceWidth / 2.0
+            
         return layer
     }
     
