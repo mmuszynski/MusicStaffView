@@ -43,29 +43,29 @@ extension MusicKeySignaturePitch: MusicStaffViewAccessory {
         switch clef {
         case .gClef(_):
             if accidental == .sharp {
-                range = -5...1
+                range = -1...5
             } else {
                 range = -3...3
             }
         case .cClef(let offset):
             if offset == 0 {
                 if accidental == .sharp {
-                    range = -4...2
-                } else {
                     range = -2...4
+                } else {
+                    range = -4...2
                 }
             } else {
                 if accidental == .sharp {
-                    range = -4...2
+                    range = -2...4
                 } else {
-                    range = -4...2
+                    range = -2...4
                 }
             }
         default:
             if accidental == .sharp {
                 range = -3...3
             } else {
-                range = -1...5
+                range = -5...1
             }
         }
         
