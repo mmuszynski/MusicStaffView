@@ -11,13 +11,21 @@ import Music
 
 ///Instructs the `MusicStaffView` to draw notes using the spacing set in `preferredHorizontalSpacing` or to fill all available space by dividing the space for notes into equal parts.
 ///
+/// **Values**
+/// - *preferred*: Elements are drawn according to the `preferredHorizontalSpacing` attribute
+/// - *uniformFullWidth*: Elements are drawn an equal width from each other, with no spacing at either margin
+/// - *uniformTrailingSpace*: Elements are drawn an equal width from each other, with another equal space at the trailing edge
+/// - *uniformLeadingAndTrailingSpace*: Elements are drawn an equal width from each other, with equal spacing at the leading and trailing edges
+///
 ///For certain uses, notes on a staff should be drawn to maximize all available space. In other cases (for example, when the notes will take up more space than the visible area of the view itself), it makes sense to draw the notes as close together as possible. These scenarios are represented in `MusicStaffViewSpacingType` as `preferred`, which uses the `preferredHorizontalSpacing` property, or `uniform`, which discards the property in favor of spacing notes equally across the view.
 ///
 ///- Warning: There may be cases where using uniform spacing will still cause notes to be drawn outside the visible area of the `MusicStaffView`. Currently, the framework takes no position in these situations.
 public enum MusicStaffViewSpacingType {
     //FIXME: What happens when spacing causes notes to draw past the bounds of the view?
     case preferred
-    case uniform
+    case uniformFullWidth
+    case uniformTrailingSpace
+    case uniformLeadingAndTrailingSpace
 }
 
 @IBDesignable public class MusicStaffView: UIView {
@@ -106,6 +114,7 @@ public enum MusicStaffViewSpacingType {
     ///Instructs whether to fill all available space by using uniform spacing or to draw the clef information and then fill in the notes using `preferredHorizontalSpacing`.
     ///
     ///
+
     public var spacing: MusicStaffViewSpacingType = .preferred {
         didSet {
             self.setupLayers()
@@ -138,6 +147,11 @@ public enum MusicStaffViewSpacingType {
         
         //Get the elements to draw, currently just clef and notes
         let elements: [MusicStaffViewElement] = elementArray
+        
+        //Reserve an array for the guessed positions of the elements
+        var elementHorizontalPositions = [CGFloat]()
+        
+        //Reserve an array for the layers that are going to be drawn
         var elementLayers = [CALayer]()
         
         //the current horizontal position begins at zero
@@ -154,8 +168,39 @@ public enum MusicStaffViewSpacingType {
             
             let layers = self.layers(for: element, atHorizontalPosition: currentPosition)
             elementLayers.append(contentsOf: layers)
-            currentPosition = (elementLayers.last?.frame.origin.x ?? 0) + (elementLayers.last?.frame.size.width ?? 0) + preferredHorizontalSpacing
+            currentPosition = (elementLayers.last?.frame.origin.x ?? 0) + (elementLayers.last?.frame.size.width ?? 0)
+            elementHorizontalPositions.append(currentPosition)
         }
+        
+        //currently, the elements are drawn with no spacing, so spacing must be added
+        //what is the width of all elements?
+        let elementWidth = elementLayers.reduce(0.0) { (result, layer) -> CGFloat in
+            return result + layer.bounds.size.width
+        }
+        
+        //adds a uniform spacing between each element
+        func addUniformSpacing(of amount: CGFloat, omitFirst: Bool = true) {
+            for (count, layer) in elementLayers.enumerated() {
+                var count = CGFloat(count)
+                if !omitFirst { count += 1.0 }
+                layer.position.x += amount * count
+            }
+        }
+        
+        switch self.spacing {
+        case .preferred:
+            addUniformSpacing(of: preferredHorizontalSpacing)
+        case .uniformFullWidth:
+            let spacing = self.bounds.size.width / CGFloat(elementLayers.count)
+            addUniformSpacing(of: spacing)
+        case .uniformTrailingSpace:
+            let spacing = self.bounds.size.width / CGFloat(elementLayers.count + 1)
+            addUniformSpacing(of: spacing)
+        case .uniformLeadingAndTrailingSpace:
+            let spacing = self.bounds.size.width / CGFloat(elementLayers.count + 2)
+            addUniformSpacing(of: spacing, omitFirst: false)
+        }
+        
         
         //add the element layers to the element display layer
         for layer in elementLayers {
@@ -177,29 +222,6 @@ public enum MusicStaffViewSpacingType {
         staffLayer.mask = mask
         
         self.layer.addSublayer(staffLayer)
-
-        //horizontal spacing is a harder task than i expected.
-        //work more on this later
-        
-//        //add shims if uniform spacing was selected
-//        if spacing == .uniform {
-//            //how much space is there to the end of the view?
-//            let remainingSpace = self.bounds.size.width - currentPosition
-//            //how many shims will be needed?
-//            let shimCount = elementLayers.count - 1
-//            
-//            if shimCount > 0 {
-//                //how wide is each shim?
-//                let shimWidth = remainingSpace / CGFloat(shimCount)
-//                for i in 1...shimCount {
-//                    elementLayers[i].position.x += shimWidth * CGFloat(i)
-//                }
-//
-//            } else {
-//                print("could not use uniform spacing with zero spacing elements")
-//            }
-//        }
-        
         self.layer.addSublayer(elementDisplayLayer)
     }
     
