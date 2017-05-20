@@ -154,6 +154,9 @@ public enum MusicStaffViewSpacingType {
         //Reserve an array for the layers that are going to be drawn
         var elementLayers = [CALayer]()
         
+        //Reserve an array for whether the layer has ledger lines to be unmasked
+        var ledgerLineElementIndices = [Int]()
+        
         //the current horizontal position begins at zero
         //MusicStaffView must keep track of the spacing, and likely will to due layouts and constraints
         var currentPosition: CGFloat = 0.0
@@ -169,6 +172,9 @@ public enum MusicStaffViewSpacingType {
             let layers = self.layers(for: element, atHorizontalPosition: currentPosition)
             elementLayers.append(contentsOf: layers)
             currentPosition = (elementLayers.last?.frame.origin.x ?? 0) + (elementLayers.last?.frame.size.width ?? 0)
+            if element.requiresLedgerLines(in: self.displayedClef) {
+                ledgerLineElementIndices.append(elementHorizontalPositions.count)
+            }
             elementHorizontalPositions.append(currentPosition)
         }
         
@@ -181,9 +187,12 @@ public enum MusicStaffViewSpacingType {
         //adds a uniform spacing between each element
         func addUniformSpacing(of amount: CGFloat, omitFirst: Bool = true) {
             for (count, layer) in elementLayers.enumerated() {
-                var count = CGFloat(count)
-                if !omitFirst { count += 1.0 }
-                layer.position.x += amount * count
+                var moveCount = CGFloat(count)
+                if !omitFirst { moveCount += 1.0 }
+                layer.position.x += amount * moveCount
+                if let ledgerIndex = ledgerLineElementIndices.index(of: count) {
+                    self.staffLayer.unmaskRects[ledgerIndex].origin.x += amount * moveCount
+                }
             }
         }
         
@@ -191,13 +200,27 @@ public enum MusicStaffViewSpacingType {
         case .preferred:
             addUniformSpacing(of: preferredHorizontalSpacing)
         case .uniformFullWidth:
-            let spacing = self.bounds.size.width / CGFloat(elementLayers.count)
+            let spacing: CGFloat
+            if elementLayers.count - 1 == 0 {
+                print("not enough elements to use this spacing. Falling back to preferred spacing.")
+                spacing = preferredHorizontalSpacing
+            } else {
+                print("using uniform full width spacing.")
+                spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count - 1)
+            }
             addUniformSpacing(of: spacing)
         case .uniformTrailingSpace:
-            let spacing = self.bounds.size.width / CGFloat(elementLayers.count + 1)
+            let spacing: CGFloat
+            if elementLayers.count == 0 {
+                print("not enough elements to use this spacing. Falling back to preferred spacing.")
+                spacing = preferredHorizontalSpacing
+            } else {
+                print("using uniform trailing spacing.")
+                spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count)
+            }
             addUniformSpacing(of: spacing)
         case .uniformLeadingAndTrailingSpace:
-            let spacing = self.bounds.size.width / CGFloat(elementLayers.count + 2)
+            let spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count + 1)
             addUniformSpacing(of: spacing, omitFirst: false)
         }
         
@@ -283,21 +306,23 @@ public enum MusicStaffViewSpacingType {
         //this is key. if the element requires ledger lines, they need to be unmasked in the staff layer
         func extensionFromCenterLine(for rect: CGRect) -> CGRect {
             let centerLine = self.bounds.midY
-            let maxExtent = centerLine - rect.maxY
-            let minExtent = centerLine - rect.minY
+            let minY = rect.minY
+            let maxY = rect.maxY
             
-            var extentsRect = rect
+            let rectSize = CGSize(width: rect.size.width, height: self.spaceWidth * 4.0)
+            let rectOrigin = CGPoint(x: rect.origin.x, y: centerLine - self.spaceWidth * 2.0)
+            var extentsRect = CGRect(origin: rectOrigin, size: rectSize)
             
-            if abs(maxExtent) > abs(minExtent) {
-                extentsRect.origin.y = centerLine - spaceWidth / 3.0
-                extentsRect.size.height = abs(maxExtent)
-            } else {
-                extentsRect.origin.y += spaceWidth / 3.0
-                extentsRect.size.height = abs(minExtent)
+            if minY < centerLine - spaceWidth * 2.0 {
+                extentsRect.origin.y = minY
+                extentsRect.size.height += centerLine - self.spaceWidth * 2.0 - minY
+            }
+                        
+            if maxY > centerLine + spaceWidth * 2.0 {
+                extentsRect.size.height += maxY - (centerLine + spaceWidth * 2.0)
             }
             
             return extentsRect
-            
         }
         
         if element.requiresLedgerLines(in: self.displayedClef) {
