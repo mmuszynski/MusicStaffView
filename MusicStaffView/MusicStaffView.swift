@@ -202,20 +202,20 @@ public enum MusicStaffViewSpacingType {
         case .uniformFullWidth:
             let spacing: CGFloat
             if elementLayers.count - 1 == 0 {
-                print("not enough elements to use this spacing. Falling back to preferred spacing.")
+                //print("not enough elements to use this spacing. Falling back to preferred spacing.")
                 spacing = preferredHorizontalSpacing
             } else {
-                print("using uniform full width spacing.")
+                //print("using uniform full width spacing.")
                 spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count - 1)
             }
             addUniformSpacing(of: spacing)
         case .uniformTrailingSpace:
             let spacing: CGFloat
             if elementLayers.count == 0 {
-                print("not enough elements to use this spacing. Falling back to preferred spacing.")
+                //print("not enough elements to use this spacing. Falling back to preferred spacing.")
                 spacing = preferredHorizontalSpacing
             } else {
-                print("using uniform trailing spacing.")
+                //print("using uniform trailing spacing.")
                 spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count)
             }
             addUniformSpacing(of: spacing)
