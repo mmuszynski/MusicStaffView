@@ -313,13 +313,15 @@ public enum MusicStaffViewSpacingType {
             let rectOrigin = CGPoint(x: rect.origin.x, y: centerLine - self.spaceWidth * 2.0)
             var extentsRect = CGRect(origin: rectOrigin, size: rectSize)
             
+            let lineWidth = self.staffLayer.lineWidth
+            
             if minY < centerLine - spaceWidth * 2.0 {
-                extentsRect.origin.y = minY
-                extentsRect.size.height += centerLine - self.spaceWidth * 2.0 - minY
+                extentsRect.origin.y = minY + lineWidth * 3.0
+                extentsRect.size.height += centerLine - self.spaceWidth * 2.0 - minY - lineWidth * 2.0
             }
                         
             if maxY > centerLine + spaceWidth * 2.0 {
-                extentsRect.size.height += maxY - (centerLine + spaceWidth * 2.0)
+                extentsRect.size.height += maxY - (centerLine + spaceWidth * 2.0) - self.staffLayer.lineWidth * 3.0
             }
             
             return extentsRect
