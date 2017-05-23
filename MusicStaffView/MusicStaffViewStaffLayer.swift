@@ -28,12 +28,21 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
         return self.bounds.size.height / (6.0 + 2.0 * CGFloat(maxLedgerLines))
     }
     
+    override var lineWidth: CGFloat {
+        get {
+            return spaceWidth / 10.0
+        }
+        set {
+            
+        }
+    }
+    
     /// The path to draw. The five lines of the staff plus as many ledger lines as will fit in the view (just don't stop drawing ledger lines until you run out of room).
     ///
     /// - Returns: A CGPath representing the potential lines on the staff
     func staffPath() -> CGPath {
         let staffLines = UIBezierPath()
-        self.lineWidth = spaceWidth / 10.0
+        //self.lineWidth = spaceWidth / 10.0
         
         //draw ledger lines until there's no more room to do it anymore.
         //they'll get masked out later in the process

@@ -304,31 +304,29 @@ public enum MusicStaffViewSpacingType {
         layer.position = elementPosition
         
         //this is key. if the element requires ledger lines, they need to be unmasked in the staff layer
-        func extensionFromCenterLine(for rect: CGRect) -> CGRect {
+        func extensionFromCenterLine(for rect: CGRect, fullHeight: Bool) -> CGRect {
             let centerLine = self.bounds.midY
-            let minY = rect.minY
+            let minY = rect.minY + (fullHeight ? 0 : self.staffLayer.lineWidth)
             let maxY = rect.maxY
             
             let rectSize = CGSize(width: rect.size.width, height: self.spaceWidth * 4.0)
             let rectOrigin = CGPoint(x: rect.origin.x, y: centerLine - self.spaceWidth * 2.0)
             var extentsRect = CGRect(origin: rectOrigin, size: rectSize)
-            
-            let lineWidth = self.staffLayer.lineWidth
-            
+                        
             if minY < centerLine - spaceWidth * 2.0 {
-                extentsRect.origin.y = minY + lineWidth * 3.0
-                extentsRect.size.height += centerLine - self.spaceWidth * 2.0 - minY - lineWidth * 2.0
+                extentsRect.origin.y = minY
+                extentsRect.size.height += centerLine - self.spaceWidth * 2.0 - minY
             }
                         
             if maxY > centerLine + spaceWidth * 2.0 {
-                extentsRect.size.height += maxY - (centerLine + spaceWidth * 2.0) - self.staffLayer.lineWidth * 3.0
+                extentsRect.size.height += maxY - (centerLine + spaceWidth * 2.0) - (fullHeight ? 0 : self.staffLayer.lineWidth)
             }
             
             return extentsRect
         }
         
         if element.requiresLedgerLines(in: self.displayedClef) {
-            let maskRect = extensionFromCenterLine(for: layer.frame)
+            let maskRect = extensionFromCenterLine(for: layer.frame, fullHeight: !(element is MusicNote))
             staffLayer.unmaskRects.append(maskRect)
         }
         
