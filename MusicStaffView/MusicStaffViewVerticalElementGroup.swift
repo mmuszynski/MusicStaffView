@@ -9,6 +9,10 @@
 import Foundation
 import Music
 
+public enum MusicStaffViewVerticalElementGroupJustification {
+    case centered, left, right
+}
+
 /// A group of `MusicStaffViewElement` objects designed to be placed in the same horizontal location.
 public struct MusicStaffViewVerticalElementGroup: RangeReplaceableCollection, MusicStaffViewElement {
     
@@ -34,6 +38,8 @@ public struct MusicStaffViewVerticalElementGroup: RangeReplaceableCollection, Mu
     public init() {}
     
     public var shouldDrawLedgerLines: Bool = false
+    
+    public var justification: MusicStaffViewVerticalElementGroupJustification = .centered
     
     //MARK: MusicStaffViewElement Protocol
     //The following methods of MusicStaffViewElement are unnecessary, as they all are used in creating the CALayer that is given to MusicStaffView. As such, I've set them all to throw fatal errors.
@@ -91,7 +97,8 @@ public struct MusicStaffViewVerticalElementGroup: RangeReplaceableCollection, Mu
         multiLayer.bounds = multiFrame
         
         //move all of the layers such that they are in the appropriate place of the multilayer now
-        //this means centering things in an x direction
+        //this means centering things in an x direction if the justification is centered
+        //or putting them the far left or right if they are left or right justified
         //and putting them in the correct y position
         //ypositions should be relative to zero
         //and the multilayer should be positioned where the highest element starts
@@ -99,7 +106,16 @@ public struct MusicStaffViewVerticalElementGroup: RangeReplaceableCollection, Mu
         //add them to the multilayer
         for layer in layers {
             layer.position.y -= highestY
-            layer.position.x += multiLayer.bounds.size.width / 2.0
+            
+            switch self.justification {
+            case .centered:
+                layer.position.x += multiLayer.bounds.size.width / 2.0
+            case .left:
+                layer.position.x = layer.bounds.size.width / 2.0
+            case .right:
+                layer.position.x = multiLayer.bounds.size.width - layer.bounds.size.width / 2.0
+            }
+            
             multiLayer.addSublayer(layer)
         }
                 
