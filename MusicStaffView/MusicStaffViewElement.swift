@@ -14,6 +14,12 @@ public enum MusicStaffViewElementDirection {
     case down
 }
 
+public enum MusicStaffViewElementJustification {
+    case centered
+    case leftJustified
+    case rightJustified
+}
+
 public protocol MusicStaffViewElement {
     /// The path that describes the shape of the element in the element's bounding box. This should be used in concert with `aspectRatio` and `heightInStaffSpace` to determine the actual shape and size of the bounding box when drawing.
     func path(in frame: CGRect) -> CGPath
@@ -110,5 +116,9 @@ extension MusicStaffViewElement {
     
     public func requiresLedgerLines(in clef: MusicClef) -> Bool {
         return false
+    }
+    
+    public var justification: MusicStaffViewElementJustification {
+        return MusicStaffViewElementJustification.centered
     }
 }

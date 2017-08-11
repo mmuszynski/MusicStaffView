@@ -17,21 +17,21 @@ public enum MusicStaffViewVerticalElementGroupJustification {
 public struct MusicStaffViewVerticalElementGroup: RangeReplaceableCollection, MusicStaffViewElement {
     
     //MARK: Collection Protocol
-    public typealias _Element = MusicStaffViewElement
-    var elements = [_Element]()
+    public typealias Element = MusicStaffViewElement
+    var elements = [Element]()
     public var startIndex: Int {
         return elements.startIndex
     }
     public var endIndex: Int {
         return elements.endIndex
     }
-    public subscript(position: Int) -> _Element {
+    public subscript(position: Int) -> Element {
         return elements[position]
     }
     public func index(after i: Int) -> Int {
         return elements.index(after: i)
     }
-    public mutating func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C : Collection, C.Iterator.Element == MusicStaffViewVerticalElementGroup._Element {
+    public mutating func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C : Collection, C.Iterator.Element == MusicStaffViewVerticalElementGroup.Element {
         elements.replaceSubrange(subrange, with: newElements)
     }
     

@@ -9,7 +9,7 @@
 import Foundation
 import Music
 
-extension MusicPitchAccidental: MusicStaffViewAccessory {    
+extension MusicPitchAccidental: MusicStaffViewAccessory {
     public var placement: MusicStaffViewAccessoryPlacement {
         return .leading
     }
