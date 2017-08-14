@@ -264,11 +264,6 @@ public enum MusicStaffViewSpacingType {
             layer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 0, 0, 1.0)
         }
         
-        if element is MusicKeySignature {
-            print(layer.position)
-            print(layer.bounds)
-        }
-        
         var elementPosition = layer.position
         elementPosition.x = xPosition
         elementPosition.y += self.bounds.size.height / 2.0
@@ -279,7 +274,7 @@ public enum MusicStaffViewSpacingType {
             for accessory in accessories {
                 
                 //do not draw accidentals unless drawAllAccidentals is true
-                guard !((accessory as? MusicPitchAccidental) == .natural && !drawAllAccidentals) else {
+                guard !((accessory as? MusicAccidental) == .natural && !drawAllAccidentals) else {
                     continue
                 }
                 

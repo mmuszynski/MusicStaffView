@@ -13,14 +13,14 @@
 		273F2A5E1EA68E3C00017A7C /* MusicStaffViewElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F2A591EA68E3C00017A7C /* MusicStaffViewElement.swift */; };
 		273F2A611EA68E3C00017A7C /* MusicNote+Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F2A5C1EA68E3C00017A7C /* MusicNote+Element.swift */; };
 		273F2A621EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F2A5D1EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift */; };
-		27569A671EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27569A661EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift */; };
+		27569A671EA8140000402C1C /* MusicAccidental+Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27569A661EA8140000402C1C /* MusicAccidental+Element.swift */; };
 		2761B9F01EB22E29007EEC50 /* MusicStaffViewSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2761B9EF1EB22E29007EEC50 /* MusicStaffViewSpacing.swift */; };
 		276237DF1ECBE55700811467 /* MusicStaffViewVerticalElementGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276237DD1ECB70CD00811467 /* MusicStaffViewVerticalElementGroup.swift */; };
 		27827BD71EA53FCF00D6908C /* MusicStaffView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27827BCD1EA53FCF00D6908C /* MusicStaffView.framework */; };
 		27827BDE1EA53FCF00D6908C /* MusicStaffView.h in Headers */ = {isa = PBXBuildFile; fileRef = 27827BD01EA53FCF00D6908C /* MusicStaffView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27A336411EAE599F00D904E4 /* MusicStaffViewAccessory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A336401EAE599F00D904E4 /* MusicStaffViewAccessory.swift */; };
 		27D862101F41ECC900CB6E50 /* MusicKeySignature+Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D8620F1F41ECC900CB6E50 /* MusicKeySignature+Element.swift */; };
-		27F019EA1EB13885004E88C8 /* MusicKeySignaturePitch+Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F019E91EB13885004E88C8 /* MusicKeySignaturePitch+Element.swift */; };
+		27F019EA1EB13885004E88C8 /* MusicPitchAccidental+Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F019E91EB13885004E88C8 /* MusicPitchAccidental+Element.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +40,7 @@
 		273F2A591EA68E3C00017A7C /* MusicStaffViewElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewElement.swift; sourceTree = "<group>"; };
 		273F2A5C1EA68E3C00017A7C /* MusicNote+Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MusicNote+Element.swift"; sourceTree = "<group>"; };
 		273F2A5D1EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewStaffLayer.swift; sourceTree = "<group>"; };
-		27569A661EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MusicPitchAccidental+StaffViewElement.swift"; sourceTree = "<group>"; };
+		27569A661EA8140000402C1C /* MusicAccidental+Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MusicAccidental+Element.swift"; sourceTree = "<group>"; };
 		2761B9EF1EB22E29007EEC50 /* MusicStaffViewSpacing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewSpacing.swift; sourceTree = "<group>"; };
 		276237DD1ECB70CD00811467 /* MusicStaffViewVerticalElementGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewVerticalElementGroup.swift; sourceTree = "<group>"; };
 		27827BCD1EA53FCF00D6908C /* MusicStaffView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicStaffView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,7 +50,7 @@
 		27827BDD1EA53FCF00D6908C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27A336401EAE599F00D904E4 /* MusicStaffViewAccessory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewAccessory.swift; sourceTree = "<group>"; };
 		27D8620F1F41ECC900CB6E50 /* MusicKeySignature+Element.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MusicKeySignature+Element.swift"; sourceTree = "<group>"; };
-		27F019E91EB13885004E88C8 /* MusicKeySignaturePitch+Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MusicKeySignaturePitch+Element.swift"; sourceTree = "<group>"; };
+		27F019E91EB13885004E88C8 /* MusicPitchAccidental+Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MusicPitchAccidental+Element.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,10 +85,10 @@
 		27569A691EA8144300402C1C /* Protocol Adoption */ = {
 			isa = PBXGroup;
 			children = (
-				27569A661EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift */,
+				27569A661EA8140000402C1C /* MusicAccidental+Element.swift */,
+				27F019E91EB13885004E88C8 /* MusicPitchAccidental+Element.swift */,
 				273F2A5C1EA68E3C00017A7C /* MusicNote+Element.swift */,
 				2706BFFD1EA900CA0031F32B /* MusicClef+Element.swift */,
-				27F019E91EB13885004E88C8 /* MusicKeySignaturePitch+Element.swift */,
 				27D8620F1F41ECC900CB6E50 /* MusicKeySignature+Element.swift */,
 			);
 			name = "Protocol Adoption";
@@ -270,8 +270,8 @@
 				276237DF1ECBE55700811467 /* MusicStaffViewVerticalElementGroup.swift in Sources */,
 				2761B9F01EB22E29007EEC50 /* MusicStaffViewSpacing.swift in Sources */,
 				273F2A5E1EA68E3C00017A7C /* MusicStaffViewElement.swift in Sources */,
-				27F019EA1EB13885004E88C8 /* MusicKeySignaturePitch+Element.swift in Sources */,
-				27569A671EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift in Sources */,
+				27F019EA1EB13885004E88C8 /* MusicPitchAccidental+Element.swift in Sources */,
+				27569A671EA8140000402C1C /* MusicAccidental+Element.swift in Sources */,
 				273F2A621EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift in Sources */,
 				273F2A581EA68A9100017A7C /* MusicStaffView.swift in Sources */,
 				27D862101F41ECC900CB6E50 /* MusicKeySignature+Element.swift in Sources */,

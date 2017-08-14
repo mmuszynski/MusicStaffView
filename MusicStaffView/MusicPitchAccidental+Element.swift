@@ -1,5 +1,5 @@
 //
-//  MusicKeySignaturePitch+Element.swift
+//  MusicPitchAccidental+Element.swift
 //  MusicStaffView
 //
 //  Created by Mike Muszynski on 4/26/17.
@@ -9,9 +9,9 @@
 import Foundation
 import Music
 
-extension MusicKeySignaturePitch: MusicStaffViewAccessory {
+extension MusicPitchAccidental: MusicStaffViewAccessory {
     public var placement: MusicStaffViewAccessoryPlacement {
-        return .trailing
+        return .leading
     }
     
     public var anchorPoint: CGPoint {

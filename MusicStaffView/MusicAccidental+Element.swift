@@ -1,5 +1,5 @@
 //
-//  MusicPitchAccidental+StaffViewElement.swift
+//  MusicAccidental+StaffViewElement.swift
 //  MusicStaffView
 //
 //  Created by Mike Muszynski on 4/19/17.
@@ -9,7 +9,7 @@
 import Foundation
 import Music
 
-extension MusicPitchAccidental: MusicStaffViewAccessory {
+extension MusicAccidental: MusicStaffViewAccessory {
     public var placement: MusicStaffViewAccessoryPlacement {
         return .leading
     }
