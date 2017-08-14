@@ -11,7 +11,7 @@ import Music
 
 extension MusicKeySignaturePitch: MusicStaffViewAccessory {
     public var placement: MusicStaffViewAccessoryPlacement {
-        return .standalone
+        return .trailing
     }
     
     public var anchorPoint: CGPoint {

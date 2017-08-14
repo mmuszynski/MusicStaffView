@@ -19,6 +19,7 @@
 		27827BD71EA53FCF00D6908C /* MusicStaffView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27827BCD1EA53FCF00D6908C /* MusicStaffView.framework */; };
 		27827BDE1EA53FCF00D6908C /* MusicStaffView.h in Headers */ = {isa = PBXBuildFile; fileRef = 27827BD01EA53FCF00D6908C /* MusicStaffView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27A336411EAE599F00D904E4 /* MusicStaffViewAccessory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A336401EAE599F00D904E4 /* MusicStaffViewAccessory.swift */; };
+		27D862101F41ECC900CB6E50 /* MusicKeySignature+Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D8620F1F41ECC900CB6E50 /* MusicKeySignature+Element.swift */; };
 		27F019EA1EB13885004E88C8 /* MusicKeySignaturePitch+Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F019E91EB13885004E88C8 /* MusicKeySignaturePitch+Element.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +49,7 @@
 		27827BD61EA53FCF00D6908C /* MusicStaffViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MusicStaffViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		27827BDD1EA53FCF00D6908C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27A336401EAE599F00D904E4 /* MusicStaffViewAccessory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicStaffViewAccessory.swift; sourceTree = "<group>"; };
+		27D8620F1F41ECC900CB6E50 /* MusicKeySignature+Element.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MusicKeySignature+Element.swift"; sourceTree = "<group>"; };
 		27F019E91EB13885004E88C8 /* MusicKeySignaturePitch+Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MusicKeySignaturePitch+Element.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,6 +89,7 @@
 				273F2A5C1EA68E3C00017A7C /* MusicNote+Element.swift */,
 				2706BFFD1EA900CA0031F32B /* MusicClef+Element.swift */,
 				27F019E91EB13885004E88C8 /* MusicKeySignaturePitch+Element.swift */,
+				27D8620F1F41ECC900CB6E50 /* MusicKeySignature+Element.swift */,
 			);
 			name = "Protocol Adoption";
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				27569A671EA8140000402C1C /* MusicPitchAccidental+StaffViewElement.swift in Sources */,
 				273F2A621EA68E3C00017A7C /* MusicStaffViewStaffLayer.swift in Sources */,
 				273F2A581EA68A9100017A7C /* MusicStaffView.swift in Sources */,
+				27D862101F41ECC900CB6E50 /* MusicKeySignature+Element.swift in Sources */,
 				273F2A611EA68E3C00017A7C /* MusicNote+Element.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

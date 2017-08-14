@@ -264,6 +264,11 @@ public enum MusicStaffViewSpacingType {
             layer.transform = CATransform3DMakeRotation(CGFloat(Double.pi), 0, 0, 1.0)
         }
         
+        if element is MusicKeySignature {
+            print(layer.position)
+            print(layer.bounds)
+        }
+        
         var elementPosition = layer.position
         elementPosition.x = xPosition
         elementPosition.y += self.bounds.size.height / 2.0
