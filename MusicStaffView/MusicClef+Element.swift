@@ -10,6 +10,7 @@ import Foundation
 import Music
 
 extension MusicClef: MusicStaffViewElement {
+    
     public func path(in frame: CGRect) -> CGPath {
         switch self {
         case .cClef(_):
