@@ -79,7 +79,7 @@ public enum MusicStaffViewSpacingType {
     }
     
     ///The clef to display, wrapped in an `ClefType` enum.
-    @IBInspectable public var displayedClef : MusicClef = .treble
+    public var displayedClef : MusicClef = .treble
     
     ///Whether or not to draw the frames for each of the elements drawn in the staff.
     ///
