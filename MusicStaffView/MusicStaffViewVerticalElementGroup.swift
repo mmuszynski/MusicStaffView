@@ -60,7 +60,7 @@ public struct MusicStaffViewVerticalElementGroup: RangeReplaceableCollection, Mu
     }
     
     //This is the where the group will do the heavy lifting.
-    public func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: CGColor) -> CALayer {
+    public func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: UIColor?) -> CALayer {
         let multiLayer = CALayer()
         multiLayer.anchorPoint = self.anchorPoint
         

@@ -126,8 +126,8 @@ public enum MusicStaffViewSpacingType {
     var elementDisplayLayer = CALayer()
     
     /// The color that the staff should be drawn
-    public var staffColor: CGColor = UIColor.black.cgColor
-    public var elementColor: CGColor = UIColor.black.cgColor
+    public var staffColor: UIColor = UIColor.black
+    public var elementColor: UIColor = UIColor.black
     
     ///Redraws all elements of the `MusicStaffView`, first removing them if they are already drawn.
     ///
@@ -146,7 +146,86 @@ public enum MusicStaffViewSpacingType {
         elementDisplayLayer.frame = self.bounds
         
         //Get the elements to draw, currently just clef and notes
-        let elements: [MusicStaffViewElement] = elementArray
+        var elements = [MusicStaffViewElement]()
+        
+        //Make the elements from their various sub-elements and shims.
+        //Basically, put a flexible shim in between every element
+        //Make the shims static if necessary
+        for element in elementArray {
+            //Does the element have accessories?
+            if let accessories = element.accessoryElements {
+                
+                //Iterate through each accessory and figure out how to place it
+                for accessory in accessories {
+                    switch accessory.placement {
+                        
+                    //Above and Below are potentially beyond the scope of this horizontal spacing regime
+                    //Standalone may be, but there may also not be a need for standalone at all.
+                    case .above, .below, .standalone:
+                        fatalError("These are not yet implemented")
+                        
+                    //Leading elements precede their parent elements. They require an static shim after themselves.
+                    //Note that shims are not flexible by default
+                    case .leading:
+                        elements.append(accessory)
+                        let shim = MusicStaffViewShim(width: preferredHorizontalSpacing, spaceWidth: spaceWidth)
+                        elements.append(shim)
+                        
+                    //Trailing elements follow their parent elements.
+                    //These are more difficult, because the parent elements will draw a flexible shim after themselves.
+                    //This shim needs to be captured and then made static.
+                    case .trailing:
+                        if var lastShim = elements.last as? MusicStaffViewShim {
+                            lastShim.isFlexible = false
+                            lastShim.width = preferredHorizontalSpacing
+                        }
+                        elements.append(accessory)
+                        var flexShim = MusicStaffViewShim(width: 0.0, spaceWidth: spaceWidth)
+                        flexShim.isFlexible = true
+                        elements.append(flexShim)
+                    }
+                }
+            }
+            
+            //Finally, add the elements themselves
+            elements.append(element)
+            //And a flexible shim
+            var flexShim = MusicStaffViewShim(width: 0.0, spaceWidth: spaceWidth)
+            flexShim.isFlexible = true
+            elements.append(flexShim)
+        
+        }
+        
+        //now that all of the elements are decided, sum their widths:
+        let totalElementWidth = elements.reduce(0.0) { (total, nextElement) -> CGFloat in
+            return total + nextElement.layer(in: displayedClef, withSpaceWidth: spaceWidth, color: nil).bounds.size.width
+        }
+        
+        //get the amount of the view that will be unused space in the end
+        let viewWidth = self.bounds.size.width
+        let extraWidth = viewWidth - totalElementWidth
+        
+        //sum up the number of flexible shims
+        let numFlexible = elements.filter { (element) -> Bool in
+            guard let shim = element as? MusicStaffViewShim else {
+                return false
+            }
+            return shim.isFlexible
+        }.count
+        
+        //come up with the width of each shim, ensuring that it will be positive.
+        //at this point, it just bails out to preferred if it is not positive.
+        //there's also a sanity check in case the numFlexible is equal to zero.
+        var flexWidth: CGFloat = preferredHorizontalSpacing
+        
+        if elements.count > 0 {
+            if numFlexible == 0 || extraWidth < 0 {
+                print("There were either zero flexible elements or their widths would be negative. Reverting to preferred horizontal spacing.")
+                flexWidth = preferredHorizontalSpacing
+            } else {
+                flexWidth = extraWidth / CGFloat(numFlexible)
+            }
+        }
         
         //Reserve an array for the guessed positions of the elements
         var elementHorizontalPositions = [CGFloat]()
@@ -169,7 +248,14 @@ public enum MusicStaffViewSpacingType {
                 self.displayedClef = newClef
             }
             
-            let layers = self.layers(for: element, atHorizontalPosition: currentPosition)
+            let layers: [CALayer]
+            if var element = element as? MusicStaffViewShim, element.isFlexible {
+                element.width = flexWidth
+                layers = self.layers(for: element, atHorizontalPosition: currentPosition)
+            } else {
+                layers = self.layers(for: element, atHorizontalPosition: currentPosition)
+            }
+            
             elementLayers.append(contentsOf: layers)
             currentPosition = (elementLayers.last?.frame.origin.x ?? 0) + (elementLayers.last?.frame.size.width ?? 0)
             if element.requiresLedgerLines(in: self.displayedClef) {
@@ -177,52 +263,55 @@ public enum MusicStaffViewSpacingType {
             }
             elementHorizontalPositions.append(currentPosition)
         }
-        
-        //currently, the elements are drawn with no spacing, so spacing must be added
-        //what is the width of all elements?
-        let elementWidth = elementLayers.reduce(0.0) { (result, layer) -> CGFloat in
-            return result + layer.bounds.size.width
-        }
-        
-        //adds a uniform spacing between each element
-        func addUniformSpacing(of amount: CGFloat, omitFirst: Bool = true) {
-            for (count, layer) in elementLayers.enumerated() {
-                var moveCount = CGFloat(count)
-                if !omitFirst { moveCount += 1.0 }
-                layer.position.x += amount * moveCount
-                if let ledgerIndex = ledgerLineElementIndices.index(of: count) {
-                    self.staffLayer.unmaskRects[ledgerIndex].origin.x += amount * moveCount
-                }
-            }
-        }
-        
-        switch self.spacing {
-        case .preferred:
-            addUniformSpacing(of: preferredHorizontalSpacing)
-        case .uniformFullWidth:
-            let spacing: CGFloat
-            if elementLayers.count - 1 == 0 {
-                //print("not enough elements to use this spacing. Falling back to preferred spacing.")
-                spacing = preferredHorizontalSpacing
-            } else {
-                //print("using uniform full width spacing.")
-                spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count - 1)
-            }
-            addUniformSpacing(of: spacing)
-        case .uniformTrailingSpace:
-            let spacing: CGFloat
-            if elementLayers.count == 0 {
-                //print("not enough elements to use this spacing. Falling back to preferred spacing.")
-                spacing = preferredHorizontalSpacing
-            } else {
-                //print("using uniform trailing spacing.")
-                spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count)
-            }
-            addUniformSpacing(of: spacing)
-        case .uniformLeadingAndTrailingSpace:
-            let spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count + 1)
-            addUniformSpacing(of: spacing, omitFirst: false)
-        }
+                
+        //This is old spacing information
+        //
+        //
+//        //currently, the elements are drawn with no spacing, so spacing must be added
+//        //what is the width of all elements?
+//        let elementWidth = elementLayers.reduce(0.0) { (result, layer) -> CGFloat in
+//            return result + layer.bounds.size.width
+//        }
+//
+//        //adds a uniform spacing between each element
+//        func addUniformSpacing(of amount: CGFloat, omitFirst: Bool = true) {
+//            for (count, layer) in elementLayers.enumerated() {
+//                var moveCount = CGFloat(count)
+//                if !omitFirst { moveCount += 1.0 }
+//                layer.position.x += amount * moveCount
+//                if let ledgerIndex = ledgerLineElementIndices.index(of: count) {
+//                    self.staffLayer.unmaskRects[ledgerIndex].origin.x += amount * moveCount
+//                }
+//            }
+//        }
+//
+//        switch self.spacing {
+//        case .preferred:
+//            addUniformSpacing(of: preferredHorizontalSpacing)
+//        case .uniformFullWidth:
+//            let spacing: CGFloat
+//            if elementLayers.count - 1 == 0 {
+//                //print("not enough elements to use this spacing. Falling back to preferred spacing.")
+//                spacing = preferredHorizontalSpacing
+//            } else {
+//                //print("using uniform full width spacing.")
+//                spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count - 1)
+//            }
+//            addUniformSpacing(of: spacing)
+//        case .uniformTrailingSpace:
+//            let spacing: CGFloat
+//            if elementLayers.count == 0 {
+//                //print("not enough elements to use this spacing. Falling back to preferred spacing.")
+//                spacing = preferredHorizontalSpacing
+//            } else {
+//                //print("using uniform trailing spacing.")
+//                spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count)
+//            }
+//            addUniformSpacing(of: spacing)
+//        case .uniformLeadingAndTrailingSpace:
+//            let spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count + 1)
+//            addUniformSpacing(of: spacing, omitFirst: false)
+//        }
         
         
         //add the element layers to the element display layer
@@ -241,7 +330,7 @@ public enum MusicStaffViewSpacingType {
         }
         
         //mask out the unnecessary ledger lines
-        staffLayer.strokeColor = staffColor
+        staffLayer.strokeColor = staffColor.cgColor
         staffLayer.mask = mask
         
         self.layer.addSublayer(staffLayer)
@@ -257,7 +346,7 @@ public enum MusicStaffViewSpacingType {
         }
         
         if element is MusicStaffViewShim {
-            layer = element.layer(in: displayedClef, withSpaceWidth: self.spaceWidth, color: UIColor.clear.cgColor)
+            layer = element.layer(in: displayedClef, withSpaceWidth: self.spaceWidth, color: UIColor.clear)
         }
         
         if element.direction(in: self.displayedClef) == .down {
@@ -267,35 +356,36 @@ public enum MusicStaffViewSpacingType {
         var elementPosition = layer.position
         elementPosition.x = xPosition
         elementPosition.y += self.bounds.size.height / 2.0
-        
-        //are there any accessories, such as sharps or flats?
-        //add them to the array to lay out
-        if let accessories = element.accessoryElements {
-            for accessory in accessories {
-                
-                //do not draw accidentals unless drawAllAccidentals is true
-                guard !((accessory as? MusicAccidental) == .natural && !drawAllAccidentals) else {
-                    continue
-                }
-                
-                let accessoryLayer = accessory.layer(in: displayedClef, withSpaceWidth: self.spaceWidth, color: self.elementColor)
-                switch accessory.placement {
-                case .leading:
-                    //reposition elementPosition so that x value is now 0 + half width of accessory layer
-                    elementPosition.x += accessoryLayer.bounds.width * 0.5
-                    accessoryLayer.position = elementPosition
-                    
-                    //reposition elementPosition so that x is now at the full extent of the accessory layer
-                    //then add element spacing and width of element
-                    elementPosition.x += accessoryLayer.bounds.width * 0.5
-                    
-                    //add the accessory element to the display layers
-                    elementLayers.append(accessoryLayer)
-                default:
-                    fatalError()
-                }
-            }
-        }
+
+        //i don't think that accessories need to be drawn anymore.
+//        //are there any accessories, such as sharps or flats?
+//        //add them to the array to lay out
+//        if let accessories = element.accessoryElements {
+//            for accessory in accessories {
+//
+//                //do not draw accidentals unless drawAllAccidentals is true
+//                guard !((accessory as? MusicAccidental) == .natural && !drawAllAccidentals) else {
+//                    continue
+//                }
+//
+//                let accessoryLayer = accessory.layer(in: displayedClef, withSpaceWidth: self.spaceWidth, color: self.elementColor)
+//                switch accessory.placement {
+//                case .leading:
+//                    //reposition elementPosition so that x value is now 0 + half width of accessory layer
+//                    elementPosition.x += accessoryLayer.bounds.width * 0.5
+//                    accessoryLayer.position = elementPosition
+//
+//                    //reposition elementPosition so that x is now at the full extent of the accessory layer
+//                    //then add element spacing and width of element
+//                    elementPosition.x += accessoryLayer.bounds.width * 0.5
+//
+//                    //add the accessory element to the display layers
+//                    elementLayers.append(accessoryLayer)
+//                default:
+//                    fatalError()
+//                }
+//            }
+//        }
         
         //print(element)
         //print(element.offset(in: displayedClef))

@@ -10,9 +10,12 @@ import Foundation
 
 public struct MusicStaffViewShim: MusicStaffViewElement {
     public var width: CGFloat
+    public var spaceWidth: CGFloat
+    public var isFlexible: Bool = false
     
-    public init(width: CGFloat) {
+    public init(width: CGFloat, spaceWidth: CGFloat) {
         self.width = width
+        self.spaceWidth = spaceWidth
     }
     
     public func path(in frame: CGRect) -> CGPath {
@@ -21,15 +24,14 @@ public struct MusicStaffViewShim: MusicStaffViewElement {
     }
     
     public var aspectRatio: CGFloat {
-        return width / heightInStaffSpace
+        return width
     }
     
     public var heightInStaffSpace: CGFloat {
-        return 4.0
+        return 1.0 / spaceWidth
     }
     
     public var fillColor: UIColor {
         return UIColor.clear
     }
-    
 }

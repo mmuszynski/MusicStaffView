@@ -10,7 +10,7 @@ import Foundation
 import Music
 
 extension MusicKeySignature: MusicStaffViewElement {
-    public func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: CGColor) -> CALayer {
+    public func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: UIColor?) -> CALayer {
         print("calling key signature layer")
         
         let finalLayer = CALayer()
