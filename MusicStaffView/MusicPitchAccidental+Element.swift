@@ -9,6 +9,40 @@
 import Foundation
 import Music
 
+struct MusicNoteAccidental: MusicStaffViewAccessory {
+    var name: MusicPitchName
+    var accidental: MusicAccidental
+    var octave: Int
+    
+    var placement: MusicStaffViewAccessoryPlacement
+    
+    public var anchorPoint: CGPoint {
+        return self.accidental.anchorPoint
+    }
+    
+    public var aspectRatio: CGFloat {
+        return self.accidental.aspectRatio
+    }
+    
+    public func path(in frame: CGRect) -> CGPath {
+        return self.accidental.path(in: frame)
+    }
+    
+    public var heightInStaffSpace: CGFloat {
+        return self.accidental.heightInStaffSpace
+    }
+    
+    public func requiresLedgerLines(in clef: MusicClef) -> Bool {
+        return false
+    }
+    
+    func offset(in clef: MusicClef) -> Int {
+        let pitch = MusicPitch(name: name, accidental: accidental, octave: octave)
+        let note = MusicNote(pitch: pitch, rhythm: .quarter)
+        return note.offset(in: clef)
+    }
+}
+
 extension MusicPitchAccidental: MusicStaffViewAccessory {
     public var placement: MusicStaffViewAccessoryPlacement {
         return .leading

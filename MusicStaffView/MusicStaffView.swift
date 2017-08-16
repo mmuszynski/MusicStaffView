@@ -42,7 +42,7 @@ public enum MusicStaffViewSpacingType {
     ///Private backing array for `elementArray`.
     private var _elementArray: [MusicStaffViewElement] = [] {
         didSet {
-            setupLayers()
+            self.setupLayers()
         }
     }
     
@@ -135,7 +135,7 @@ public enum MusicStaffViewSpacingType {
     ///
     ///In order to fully set up the layers, `MusicStaffView` keeps track of the various `MusicStaffViewElement` objects, asks them for a CALayer that describes their appearance, and applies a best-guess position horizontally. This position is then refined, based on the spacing settings and the properties of the elements themselves. In general, the elements that are drawn have strict vertical position requirements (i.e. they represent notes on a staff and changing their position would change their meaning), but it is possible that there will be further elements that need some refinement in the vertical direction.
     ///
-    func setupLayers() {
+    public func setupLayers() {
         //remove the element and staff layers and initialize them with new instances
         staffLayer.removeFromSuperlayer()
         staffLayer = MusicStaffViewStaffLayer()
@@ -187,12 +187,15 @@ public enum MusicStaffViewSpacingType {
                 }
             }
             
-            //Finally, add the elements themselves
+            //Finally, add the element itself
             elements.append(element)
-            //And a flexible shim
-            var flexShim = MusicStaffViewShim(width: 0.0, spaceWidth: spaceWidth)
-            flexShim.isFlexible = true
-            elements.append(flexShim)
+            
+            //And a flexible shim, but only if the element is not a shim itself
+            if !(element is MusicStaffViewShim) {
+                var flexShim = MusicStaffViewShim(width: 0.0, spaceWidth: spaceWidth)
+                flexShim.isFlexible = true
+                elements.append(flexShim)
+            }
         
         }
         
@@ -200,31 +203,55 @@ public enum MusicStaffViewSpacingType {
         let totalElementWidth = elements.reduce(0.0) { (total, nextElement) -> CGFloat in
             return total + nextElement.layer(in: displayedClef, withSpaceWidth: spaceWidth, color: nil).bounds.size.width
         }
-        
-        //get the amount of the view that will be unused space in the end
-        let viewWidth = self.bounds.size.width
-        let extraWidth = viewWidth - totalElementWidth
-        
-        //sum up the number of flexible shims
-        let numFlexible = elements.filter { (element) -> Bool in
-            guard let shim = element as? MusicStaffViewShim else {
-                return false
-            }
-            return shim.isFlexible
-        }.count
-        
+
         //come up with the width of each shim, ensuring that it will be positive.
         //at this point, it just bails out to preferred if it is not positive.
         //there's also a sanity check in case the numFlexible is equal to zero.
         var flexWidth: CGFloat = preferredHorizontalSpacing
         
-        if elements.count > 0 {
-            if numFlexible == 0 || extraWidth < 0 {
-                print("There were either zero flexible elements or their widths would be negative. Reverting to preferred horizontal spacing.")
-                flexWidth = preferredHorizontalSpacing
-            } else {
-                flexWidth = extraWidth / CGFloat(numFlexible)
+        func setFlexWidth() {
+            //get the amount of the view that will be unused space in the end
+            let viewWidth = self.bounds.size.width
+            let extraWidth = viewWidth - totalElementWidth
+            
+            //sum up the number of flexible shims
+            let numFlexible = elements.filter { (element) -> Bool in
+                guard let shim = element as? MusicStaffViewShim else {
+                    return false
+                }
+                return shim.isFlexible
+            }.count
+            
+            if elements.count > 0 {
+                if numFlexible == 0 || extraWidth < 0 {
+                    print("There were either zero flexible elements or their widths would be negative. Reverting to preferred horizontal spacing.")
+                    flexWidth = preferredHorizontalSpacing
+                } else {
+                    flexWidth = extraWidth / CGFloat(numFlexible)
+                }
             }
+        }
+        
+        switch self.spacing {
+        case .preferred:
+            //no shims should be flexible
+            //to allow this, just set the flex width to the preferred spacing
+            break
+        case .uniformFullWidth:
+            //the last element should be a shim and should be removed.
+            if elements.last is MusicStaffViewShim {
+                let _ = elements.removeLast()
+            }
+            setFlexWidth()
+        case .uniformLeadingAndTrailingSpace:
+            //the first element should be a flex shim
+            var flexShim = MusicStaffViewShim(width: 0.0, spaceWidth: self.spaceWidth)
+            flexShim.isFlexible = true
+            elements.insert(flexShim, at: 0)
+            setFlexWidth()
+        case .uniformTrailingSpace:
+            setFlexWidth()
+            break;
         }
         
         //Reserve an array for the guessed positions of the elements
@@ -262,59 +289,39 @@ public enum MusicStaffViewSpacingType {
                 ledgerLineElementIndices.append(elementHorizontalPositions.count)
             }
             elementHorizontalPositions.append(currentPosition)
-        }
+            
+            //this is key. if the element requires ledger lines, they need to be unmasked in the staff layer
+            func extensionFromCenterLine(for rect: CGRect, fullHeight: Bool) -> CGRect {
+                let centerLine = self.bounds.midY
+                let minY = rect.minY + (fullHeight ? 0 : self.staffLayer.lineWidth)
+                let maxY = rect.maxY
                 
-        //This is old spacing information
-        //
-        //
-//        //currently, the elements are drawn with no spacing, so spacing must be added
-//        //what is the width of all elements?
-//        let elementWidth = elementLayers.reduce(0.0) { (result, layer) -> CGFloat in
-//            return result + layer.bounds.size.width
-//        }
-//
-//        //adds a uniform spacing between each element
-//        func addUniformSpacing(of amount: CGFloat, omitFirst: Bool = true) {
-//            for (count, layer) in elementLayers.enumerated() {
-//                var moveCount = CGFloat(count)
-//                if !omitFirst { moveCount += 1.0 }
-//                layer.position.x += amount * moveCount
-//                if let ledgerIndex = ledgerLineElementIndices.index(of: count) {
-//                    self.staffLayer.unmaskRects[ledgerIndex].origin.x += amount * moveCount
-//                }
-//            }
-//        }
-//
-//        switch self.spacing {
-//        case .preferred:
-//            addUniformSpacing(of: preferredHorizontalSpacing)
-//        case .uniformFullWidth:
-//            let spacing: CGFloat
-//            if elementLayers.count - 1 == 0 {
-//                //print("not enough elements to use this spacing. Falling back to preferred spacing.")
-//                spacing = preferredHorizontalSpacing
-//            } else {
-//                //print("using uniform full width spacing.")
-//                spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count - 1)
-//            }
-//            addUniformSpacing(of: spacing)
-//        case .uniformTrailingSpace:
-//            let spacing: CGFloat
-//            if elementLayers.count == 0 {
-//                //print("not enough elements to use this spacing. Falling back to preferred spacing.")
-//                spacing = preferredHorizontalSpacing
-//            } else {
-//                //print("using uniform trailing spacing.")
-//                spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count)
-//            }
-//            addUniformSpacing(of: spacing)
-//        case .uniformLeadingAndTrailingSpace:
-//            let spacing = (self.bounds.size.width - elementWidth) / CGFloat(elementLayers.count + 1)
-//            addUniformSpacing(of: spacing, omitFirst: false)
-//        }
-        
+                let rectSize = CGSize(width: rect.size.width, height: self.spaceWidth * 4.0)
+                let rectOrigin = CGPoint(x: rect.origin.x, y: centerLine - self.spaceWidth * 2.0)
+                var extentsRect = CGRect(origin: rectOrigin, size: rectSize)
+                
+                if minY < centerLine - spaceWidth * 2.0 {
+                    extentsRect.origin.y = minY
+                    extentsRect.size.height += centerLine - self.spaceWidth * 2.0 - minY
+                }
+                
+                if maxY > centerLine + spaceWidth * 2.0 {
+                    extentsRect.size.height += maxY - (centerLine + spaceWidth * 2.0) - (fullHeight ? 0 : self.staffLayer.lineWidth)
+                }
+                
+                return extentsRect
+            }
+            
+            for layer in layers {
+                if element.requiresLedgerLines(in: self.displayedClef) {
+                    let maskRect = extensionFromCenterLine(for: layer.frame, fullHeight: !(element is MusicNote))
+                    staffLayer.unmaskRects.append(maskRect)
+                }
+            }
+        }
         
         //add the element layers to the element display layer
+        print(elementLayers.count)
         for layer in elementLayers {
             self.elementDisplayLayer.addSublayer(layer)
         }
@@ -357,68 +364,8 @@ public enum MusicStaffViewSpacingType {
         elementPosition.x = xPosition
         elementPosition.y += self.bounds.size.height / 2.0
 
-        //i don't think that accessories need to be drawn anymore.
-//        //are there any accessories, such as sharps or flats?
-//        //add them to the array to lay out
-//        if let accessories = element.accessoryElements {
-//            for accessory in accessories {
-//
-//                //do not draw accidentals unless drawAllAccidentals is true
-//                guard !((accessory as? MusicAccidental) == .natural && !drawAllAccidentals) else {
-//                    continue
-//                }
-//
-//                let accessoryLayer = accessory.layer(in: displayedClef, withSpaceWidth: self.spaceWidth, color: self.elementColor)
-//                switch accessory.placement {
-//                case .leading:
-//                    //reposition elementPosition so that x value is now 0 + half width of accessory layer
-//                    elementPosition.x += accessoryLayer.bounds.width * 0.5
-//                    accessoryLayer.position = elementPosition
-//
-//                    //reposition elementPosition so that x is now at the full extent of the accessory layer
-//                    //then add element spacing and width of element
-//                    elementPosition.x += accessoryLayer.bounds.width * 0.5
-//
-//                    //add the accessory element to the display layers
-//                    elementLayers.append(accessoryLayer)
-//                default:
-//                    fatalError()
-//                }
-//            }
-//        }
-        
-        //print(element)
-        //print(element.offset(in: displayedClef))
-        //print(elementPosition)
         elementPosition.x += layer.bounds.width * 0.5
         layer.position = elementPosition
-        
-        //this is key. if the element requires ledger lines, they need to be unmasked in the staff layer
-        func extensionFromCenterLine(for rect: CGRect, fullHeight: Bool) -> CGRect {
-            let centerLine = self.bounds.midY
-            let minY = rect.minY + (fullHeight ? 0 : self.staffLayer.lineWidth)
-            let maxY = rect.maxY
-            
-            let rectSize = CGSize(width: rect.size.width, height: self.spaceWidth * 4.0)
-            let rectOrigin = CGPoint(x: rect.origin.x, y: centerLine - self.spaceWidth * 2.0)
-            var extentsRect = CGRect(origin: rectOrigin, size: rectSize)
-                        
-            if minY < centerLine - spaceWidth * 2.0 {
-                extentsRect.origin.y = minY
-                extentsRect.size.height += centerLine - self.spaceWidth * 2.0 - minY
-            }
-                        
-            if maxY > centerLine + spaceWidth * 2.0 {
-                extentsRect.size.height += maxY - (centerLine + spaceWidth * 2.0) - (fullHeight ? 0 : self.staffLayer.lineWidth)
-            }
-            
-            return extentsRect
-        }
-        
-        if element.requiresLedgerLines(in: self.displayedClef) {
-            let maskRect = extensionFromCenterLine(for: layer.frame, fullHeight: !(element is MusicNote))
-            staffLayer.unmaskRects.append(maskRect)
-        }
         
         elementLayers.append(layer)
 
