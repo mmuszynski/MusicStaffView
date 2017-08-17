@@ -52,8 +52,7 @@ public enum MusicStaffViewSpacingType {
     public var elementArray: [MusicStaffViewElement] {
         get {
             #if TARGET_INTERFACE_BUILDER
-                var testArray = [MusicStaffViewNote]()
-                testArray.append(MusicStaffViewNote(name: .c, accidental: .sharp, length: .quarter, octave: 4))
+                var testArray: [MusicStaffViewElement] = [MusicClef.bass, MusicNote(pitch: MusicPitch(name: .c, accidental: .sharp, octave: 4), rhythm: .quarter)]
                 return testArray
             #else
                 return _elementArray
@@ -79,7 +78,7 @@ public enum MusicStaffViewSpacingType {
     }
     
     ///The clef to display, wrapped in an `ClefType` enum.
-    public var displayedClef : MusicClef = .treble
+    private var displayedClef : MusicClef = .treble
     
     ///Whether or not to draw the frames for each of the elements drawn in the staff.
     ///
@@ -106,7 +105,7 @@ public enum MusicStaffViewSpacingType {
         }
     }
     
-    ///Instructs the view to draw all accidentals, even if the `MusicStaffViewNote`'s accidental type is set to none.
+    ///Instructs the view to draw all accidentals, even if the `MusicNote`'s accidental type is set to none.
     ///
     ///In certain circumstances, it can be helpful to see the accidentals in front of all notes. `MusicStaffView` makes no determinations about accidentals that carry through measures or key signatures.
     public var drawAllAccidentals : Bool = false
@@ -115,7 +114,7 @@ public enum MusicStaffViewSpacingType {
     ///
     ///
 
-    public var spacing: MusicStaffViewSpacingType = .preferred {
+    public var spacing: MusicStaffViewSpacingType = .uniformTrailingSpace {
         didSet {
             self.setupLayers()
         }
@@ -136,6 +135,11 @@ public enum MusicStaffViewSpacingType {
     ///In order to fully set up the layers, `MusicStaffView` keeps track of the various `MusicStaffViewElement` objects, asks them for a CALayer that describes their appearance, and applies a best-guess position horizontally. This position is then refined, based on the spacing settings and the properties of the elements themselves. In general, the elements that are drawn have strict vertical position requirements (i.e. they represent notes on a staff and changing their position would change their meaning), but it is possible that there will be further elements that need some refinement in the vertical direction.
     ///
     public func setupLayers() {
+        //For some reason, a zero bounds display is trying to load
+        guard self.bounds != .zero else {
+            return
+        }
+        
         //remove the element and staff layers and initialize them with new instances
         staffLayer.removeFromSuperlayer()
         staffLayer = MusicStaffViewStaffLayer()
@@ -321,7 +325,6 @@ public enum MusicStaffViewSpacingType {
         }
         
         //add the element layers to the element display layer
-        print(elementLayers.count)
         for layer in elementLayers {
             self.elementDisplayLayer.addSublayer(layer)
         }
