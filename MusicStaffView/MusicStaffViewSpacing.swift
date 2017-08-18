@@ -13,7 +13,7 @@ public struct MusicStaffViewShim: MusicStaffViewElement {
     public var spaceWidth: CGFloat
     public var isFlexible: Bool = false
     
-    public init(width: CGFloat, spaceWidth: CGFloat) {
+    public init(width: CGFloat, spaceWidth: CGFloat = 1.0) {
         self.width = width
         self.spaceWidth = spaceWidth
     }

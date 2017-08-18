@@ -280,8 +280,11 @@ public enum MusicStaffViewSpacingType {
             }
             
             let layers: [CALayer]
-            if var element = element as? MusicStaffViewShim, element.isFlexible {
-                element.width = flexWidth
+            if var element = element as? MusicStaffViewShim {
+                if element.isFlexible {
+                    element.width = flexWidth
+                }
+                element.spaceWidth = self.spaceWidth
                 layers = self.layers(for: element, atHorizontalPosition: currentPosition)
             } else {
                 layers = self.layers(for: element, atHorizontalPosition: currentPosition)
