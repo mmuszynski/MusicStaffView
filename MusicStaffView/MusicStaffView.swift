@@ -39,6 +39,13 @@ public enum MusicStaffViewSpacingType {
         }
     }
     
+    ///Whether or not the elements will adjust to fit the entirety of the view bounds. Defaults to false.
+    ///
+    ///There are certain cases where the staff view will draw ledger lines both above and below the staff. In other places, it may only be necessary to draw extra space either above or below. Or there may not be ledger lines at all. In these cases, the space is still reserved, in an attempt to give various staff view instances the same `spaceWidth` value. In cases where space is tight and only one instance is drawn (or it is not critical for the `spaceWidth` values to match), this variable can be set to true.
+    ///
+    ///The draw cycle will add an extra transform step at the end to make the required changes.
+    @IBInspectable public var fitsStaffToBounds = false
+    
     ///Private backing array for `elementArray`.
     private var _elementArray: [MusicStaffViewElement] = [] {
         didSet {
@@ -52,7 +59,7 @@ public enum MusicStaffViewSpacingType {
     public var elementArray: [MusicStaffViewElement] {
         get {
             #if TARGET_INTERFACE_BUILDER
-                var testArray: [MusicStaffViewElement] = [MusicClef.bass, MusicNote(pitch: MusicPitch(name: .c, accidental: .sharp, octave: 4), rhythm: .quarter)]
+                var testArray: [MusicStaffViewElement] = [MusicClef.bass, MusicNote(pitch: MusicPitch(name: .f, accidental: .sharp, octave: 4), rhythm: .quarter)]
                 return testArray
             #else
                 return _elementArray
@@ -63,11 +70,34 @@ public enum MusicStaffViewSpacingType {
         }
     }
     
+    private var ledgerLines: (above: Int, below: Int) {
+        guard self.fitsStaffToBounds else {
+            return (above: maxLedgerLines, below: maxLedgerLines)
+        }
+        let lines = elementArray.reduce((above: 0, below: 0)) { (result, element) -> (above: Int, below: Int) in
+            var result = result
+            let elementLedgerLines = element.requiredLedgerLines(in: self.displayedClef)
+            if elementLedgerLines > 0 {
+                result.above = result.above >= elementLedgerLines ? result.above : elementLedgerLines
+            } else if elementLedgerLines < 0 {
+                result.below = result.below <= elementLedgerLines ? result.below : abs(elementLedgerLines)
+            }
+            return result
+        }
+        self.staffLayer.ledgerLines = lines
+        return lines
+    }
     ///The maximum number of ledger lines to be drawn within the `MusicStaffView`.
     @IBInspectable public var maxLedgerLines : Int = 0 {
         didSet {
             self.setupLayers()
         }
+    }
+    
+    ///The height for the center line, which is the anchor point of all the offset values.
+    private var centerlineHeight: CGFloat {
+        let ledgerOffset = CGFloat(ledgerLines.above - ledgerLines.below) * self.spaceWidth / 2.0
+        return self.bounds.size.height / 2.0 + ledgerOffset
     }
     
     ///The preferred horizontal spacing, in points, between horizontal staff elements, such as notes, accidentals, clefs and key signatures.
@@ -101,7 +131,7 @@ public enum MusicStaffViewSpacingType {
     ///
     var spaceWidth : CGFloat {
         get {
-            return self.bounds.size.height / (6.0 + 2.0 * CGFloat(maxLedgerLines))
+            return self.bounds.size.height / (6.0 + CGFloat(self.ledgerLines.above + self.ledgerLines.below))
         }
     }
     
@@ -299,7 +329,7 @@ public enum MusicStaffViewSpacingType {
             
             //this is key. if the element requires ledger lines, they need to be unmasked in the staff layer
             func extensionFromCenterLine(for rect: CGRect, fullHeight: Bool) -> CGRect {
-                let centerLine = self.bounds.midY
+                let centerLine = self.centerlineHeight
                 let minY = rect.minY + (fullHeight ? 0 : self.staffLayer.lineWidth)
                 let maxY = rect.maxY
                 
@@ -348,6 +378,25 @@ public enum MusicStaffViewSpacingType {
         
         self.layer.addSublayer(staffLayer)
         self.layer.addSublayer(elementDisplayLayer)
+        
+        if self.fitsStaffToBounds {
+            guard
+                let mask = staffLayer.staffLineMask as? CAShapeLayer,
+                let bounds = mask.path?.boundingBox,
+                bounds.width > 0,
+                bounds.height > 0
+            else {
+                return
+            }
+            
+            let scaleAmt = min(self.bounds.width / bounds.width, self.bounds.height / bounds.height)
+            
+            let scale = CATransform3DMakeScale(scaleAmt, scaleAmt, 1.0)
+            let translate = CATransform3DMakeTranslation(-bounds.origin.x, bounds.origin.y, 0)
+            for layer in self.layer.sublayers! {
+                layer.transform = CATransform3DConcat(translate, scale)
+            }
+        }
     }
     
     private func layers(for element: MusicStaffViewElement, atHorizontalPosition xPosition: CGFloat) -> [CALayer] {
@@ -368,7 +417,7 @@ public enum MusicStaffViewSpacingType {
         
         var elementPosition = layer.position
         elementPosition.x = xPosition
-        elementPosition.y += self.bounds.size.height / 2.0
+        elementPosition.y += centerlineHeight
 
         elementPosition.x += layer.bounds.width * 0.5
         layer.position = elementPosition

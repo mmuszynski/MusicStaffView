@@ -12,6 +12,14 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
     
     /// The maximum number of ledger lines to be drawn. This is controlled by the `MusicStaffView` instance and is not called directly.
     var maxLedgerLines : Int = 0
+    var ledgerLines: (above: Int, below: Int)?
+    var totalLedgerLines: Int {
+        if let ledger = ledgerLines {
+            return ledger.above + ledger.below
+        } else {
+            return 2 * maxLedgerLines
+        }
+    }
     
     /// The path described by the staff lines.
     override var path : CGPath! {
@@ -25,7 +33,11 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
     
     /// The width of the spaces between the lines
     var spaceWidth: CGFloat {
-        return self.bounds.size.height / (6.0 + 2.0 * CGFloat(maxLedgerLines))
+        if let lines = ledgerLines {
+            return self.bounds.size.height / (6.0 + CGFloat(lines.above + lines.below))
+        } else {
+            return self.bounds.size.height / (6.0 + 2.0 * CGFloat(maxLedgerLines))
+        }
     }
     
     override var lineWidth: CGFloat {
@@ -47,6 +59,9 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
         //draw ledger lines until there's no more room to do it anymore.
         //they'll get masked out later in the process
         var height = self.bounds.origin.y
+        //are the ledger lines offset at all? are there an odd number?
+        let ledgerOffset = CGFloat(totalLedgerLines % 2) * self.spaceWidth / 2.0
+        height += 0
         while height <= self.bounds.size.height {
             staffLines.move(to: CGPoint(x: self.bounds.origin.x, y: height))
             staffLines.addLine(to: CGPoint(x: self.bounds.origin.x + self.bounds.size.width, y: height))
@@ -62,7 +77,15 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
     /// The layer that will uncover the staff and ledger lines necessary
     var staffLineMask: CALayer? {
         //Unmask the staff itself
-        let staffRect = self.bounds.insetBy(dx: 0.0, dy: CGFloat(maxLedgerLines + 1) * spaceWidth - lineWidth * 3.0)
+        var staffRect: CGRect
+        if let ledgerLines = ledgerLines {
+            staffRect = self.bounds.insetBy(dx: 0.0, dy: CGFloat(ledgerLines.above + ledgerLines.below + 1) / 2.0 * spaceWidth - lineWidth * 3.0)
+            //are the ledger lines offset at all? are there an odd number?
+            let ledgerOffset = CGFloat(totalLedgerLines % 2) * self.spaceWidth / 2.0
+            staffRect.origin.y += CGFloat(ledgerLines.above - ledgerLines.below) * spaceWidth / 2.0 + ledgerOffset
+        } else {
+            staffRect = self.bounds.insetBy(dx: 0.0, dy: CGFloat(maxLedgerLines + 1) * spaceWidth - lineWidth * 3.0)
+        }
         let maskLayer = CAShapeLayer()
         maskLayer.frame = self.bounds
         maskLayer.fillColor = UIColor.white.cgColor

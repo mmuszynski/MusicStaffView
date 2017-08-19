@@ -32,10 +32,6 @@ struct MusicNoteAccidental: MusicStaffViewAccessory {
         return self.accidental.heightInStaffSpace
     }
     
-    public func requiresLedgerLines(in clef: MusicClef) -> Bool {
-        return false
-    }
-    
     func offset(in clef: MusicClef) -> Int {
         let pitch = MusicPitch(name: name, accidental: accidental, octave: octave)
         let note = MusicNote(pitch: pitch, rhythm: .quarter)
@@ -62,10 +58,6 @@ extension MusicPitchAccidental: MusicStaffViewAccessory {
     
     public var heightInStaffSpace: CGFloat {
         return self.accidental.heightInStaffSpace
-    }
-    
-    public func requiresLedgerLines(in clef: MusicClef) -> Bool {
-        return false
     }
     
     public func offset(in clef: MusicClef) -> Int {

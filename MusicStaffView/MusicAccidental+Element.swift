@@ -13,10 +13,6 @@ extension MusicAccidental: MusicStaffViewAccessory {
     public var placement: MusicStaffViewAccessoryPlacement {
         return .leading
     }
-    
-    public func requiresLedgerLines(in clef: MusicClef) -> Bool {
-        return false
-    }
 
     public func path(in frame: CGRect) -> CGPath {
         switch self {

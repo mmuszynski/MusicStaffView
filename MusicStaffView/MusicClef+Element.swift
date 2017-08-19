@@ -59,10 +59,6 @@ extension MusicClef: MusicStaffViewElement {
         return self.offsetForPitch(named: referencePitch.name, octave: referencePitch.octave)
     }
     
-    public func requiresLedgerLines(in clef: MusicClef) -> Bool {
-        return false
-    }
-    
     func trebleClefPath(in frame: CGRect) -> CGPath {
         let bezierPath = UIBezierPath()
         

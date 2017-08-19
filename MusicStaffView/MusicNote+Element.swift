@@ -20,8 +20,16 @@ extension MusicNote: MusicStaffViewElement {
         return clef.offsetForPitch(named: self.pitch.name, octave: self.pitch.octave)
     }
     
-    public func requiresLedgerLines(in clef: MusicClef) -> Bool {
-        return abs(offset(in: clef)) > 5
+    public func requiredLedgerLines(in clef: MusicClef) -> Int {
+        var theOffset = offset(in: clef)
+        guard theOffset < -5 || theOffset > -5 else { return 0 }
+        if theOffset < 0 {
+            theOffset += 4
+        } else {
+            theOffset -= 4
+        }
+        
+        return theOffset / 2
     }
     
     public func path(in frame: CGRect) -> CGPath {

@@ -43,7 +43,6 @@ public protocol MusicStaffViewElement {
     /// - Returns: Number of positions from the middle staff line
     func offset(in clef: MusicClef) -> Int
     
-    
     /// The direction that the element should be drawn, either upward or downward.
     ///
     /// - Parameter clef: The cleff that is currently active use in the `MusicStaffView`
@@ -53,7 +52,13 @@ public protocol MusicStaffViewElement {
     /// Instructs the `MusicStaffView` to unmask the ledger lines beneath the element's layer.
     ///
     /// - Parameter clef: The cleff that is currently active use in the `MusicStaffView`
-    /// - Returns: True if the element requires ledger lines, false if not
+    /// - Returns: The number of ledger lines required in the clef (positive above, negative below) or 0 if none are required.
+    func requiredLedgerLines(in clef: MusicClef) -> Int
+    
+    /// Instructs the `MusicStaffView` to unmask the ledger lines beneath the element's layer.
+    ///
+    /// - Parameter clef: The cleff that is currently active use in the `MusicStaffView`
+    /// - Returns: True if the element requires ledger lines, false if not.
     func requiresLedgerLines(in clef: MusicClef) -> Bool
     
     /// Any `MusicStaffViewAccessory` elements that should be drawn.
@@ -111,8 +116,12 @@ extension MusicStaffViewElement {
         return (leading: 0, trailing: 0)
     }
     
+    public func requiredLedgerLines(in clef: MusicClef) -> Int {
+        return 0
+    }
+    
     public func requiresLedgerLines(in clef: MusicClef) -> Bool {
-        return false
+        return requiredLedgerLines(in: clef) != 0
     }
     
     public var color: UIColor {
