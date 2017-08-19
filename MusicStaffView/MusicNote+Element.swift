@@ -22,7 +22,7 @@ extension MusicNote: MusicStaffViewElement {
     
     public func requiredLedgerLines(in clef: MusicClef) -> Int {
         var theOffset = offset(in: clef)
-        guard theOffset < -5 || theOffset > -5 else { return 0 }
+        guard theOffset < -5 || theOffset > 5 else { return 0 }
         if theOffset < 0 {
             theOffset += 4
         } else {

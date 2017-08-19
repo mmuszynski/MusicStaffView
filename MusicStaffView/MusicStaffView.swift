@@ -59,7 +59,7 @@ public enum MusicStaffViewSpacingType {
     public var elementArray: [MusicStaffViewElement] {
         get {
             #if TARGET_INTERFACE_BUILDER
-                var testArray: [MusicStaffViewElement] = [MusicClef.bass, MusicNote(pitch: MusicPitch(name: .f, accidental: .sharp, octave: 4), rhythm: .quarter)]
+                var testArray: [MusicStaffViewElement] = [MusicClef.bass, MusicNote(pitch: MusicPitch(name: .a, accidental: .sharp, octave: 1), rhythm: .quarter)]
                 return testArray
             #else
                 return _elementArray

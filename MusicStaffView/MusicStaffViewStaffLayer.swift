@@ -74,18 +74,23 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
     /// The CGRects that should not be masked. When the elements have been placed, their frames will be added to this array to describe where the excess ledger lines need to be uncovered
     var unmaskRects = [CGRect]()
     
+    ///The height for the center line, which is the anchor point of all the offset values.
+    private var centerlineHeight: CGFloat {
+        if let ledgerLines = ledgerLines {
+            let ledgerOffset = CGFloat(ledgerLines.above - ledgerLines.below) * self.spaceWidth / 2.0
+            return self.bounds.size.height / 2.0 + ledgerOffset
+        }
+        
+        return self.bounds.size.width / 2.0
+    }
+    
     /// The layer that will uncover the staff and ledger lines necessary
     var staffLineMask: CALayer? {
         //Unmask the staff itself
-        var staffRect: CGRect
-        if let ledgerLines = ledgerLines {
-            staffRect = self.bounds.insetBy(dx: 0.0, dy: CGFloat(ledgerLines.above + ledgerLines.below + 1) / 2.0 * spaceWidth - lineWidth * 3.0)
-            //are the ledger lines offset at all? are there an odd number?
-            let ledgerOffset = CGFloat(totalLedgerLines % 2) * self.spaceWidth / 2.0
-            staffRect.origin.y += CGFloat(ledgerLines.above - ledgerLines.below) * spaceWidth / 2.0 + ledgerOffset
-        } else {
-            staffRect = self.bounds.insetBy(dx: 0.0, dy: CGFloat(maxLedgerLines + 1) * spaceWidth - lineWidth * 3.0)
-        }
+        let staffRect = CGRect(x: 0,
+                               y: centerlineHeight - 2.0 * (self.spaceWidth + self.lineWidth),
+                               width: self.bounds.size.width,
+                               height: self.spaceWidth * 4.0 + self.lineWidth * 5.0)
         let maskLayer = CAShapeLayer()
         maskLayer.frame = self.bounds
         maskLayer.fillColor = UIColor.white.cgColor
