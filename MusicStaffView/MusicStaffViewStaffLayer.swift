@@ -59,9 +59,6 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
         //draw ledger lines until there's no more room to do it anymore.
         //they'll get masked out later in the process
         var height = self.bounds.origin.y
-        //are the ledger lines offset at all? are there an odd number?
-        let ledgerOffset = CGFloat(totalLedgerLines % 2) * self.spaceWidth / 2.0
-        height += 0
         while height <= self.bounds.size.height {
             staffLines.move(to: CGPoint(x: self.bounds.origin.x, y: height))
             staffLines.addLine(to: CGPoint(x: self.bounds.origin.x + self.bounds.size.width, y: height))

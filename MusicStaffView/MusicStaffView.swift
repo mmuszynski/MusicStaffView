@@ -74,7 +74,7 @@ public enum MusicStaffViewSpacingType {
         guard self.fitsStaffToBounds else {
             return (above: maxLedgerLines, below: maxLedgerLines)
         }
-        let lines = elementArray.reduce((above: 0, below: 0)) { (result, element) -> (above: Int, below: Int) in
+        var lines = elementArray.reduce((above: 0, below: 0)) { (result, element) -> (above: Int, below: Int) in
             var result = result
             let elementLedgerLines = element.requiredLedgerLines(in: self.displayedClef)
             if elementLedgerLines > 0 {
@@ -84,6 +84,7 @@ public enum MusicStaffViewSpacingType {
             }
             return result
         }
+        
         self.staffLayer.ledgerLines = lines
         return lines
     }
