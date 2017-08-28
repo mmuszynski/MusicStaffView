@@ -78,7 +78,7 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
             return self.bounds.size.height / 2.0 + ledgerOffset
         }
         
-        return self.bounds.size.width / 2.0
+        return self.bounds.size.height / 2.0
     }
     
     /// The layer that will uncover the staff and ledger lines necessary

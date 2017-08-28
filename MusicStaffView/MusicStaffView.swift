@@ -72,9 +72,12 @@ public enum MusicStaffViewSpacingType {
     
     private var ledgerLines: (above: Int, below: Int) {
         guard self.fitsStaffToBounds else {
-            return (above: maxLedgerLines, below: maxLedgerLines)
+            let lines = (above: maxLedgerLines, below: maxLedgerLines)
+            self.staffLayer.ledgerLines = lines
+            return lines
         }
-        var lines = elementArray.reduce((above: 0, below: 0)) { (result, element) -> (above: Int, below: Int) in
+        
+        let lines = elementArray.reduce((above: 0, below: 0)) { (result, element) -> (above: Int, below: Int) in
             var result = result
             let elementLedgerLines = element.requiredLedgerLines(in: self.displayedClef)
             if elementLedgerLines > 0 {
@@ -88,8 +91,9 @@ public enum MusicStaffViewSpacingType {
         self.staffLayer.ledgerLines = lines
         return lines
     }
+    
     ///The maximum number of ledger lines to be drawn within the `MusicStaffView`.
-    @IBInspectable public var maxLedgerLines : Int = 0 {
+    @IBInspectable public var maxLedgerLines: Int = 0 {
         didSet {
             self.setupLayers()
         }
