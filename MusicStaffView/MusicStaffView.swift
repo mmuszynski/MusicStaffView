@@ -59,7 +59,10 @@ public enum MusicStaffViewSpacingType {
     public var elementArray: [MusicStaffViewElement] {
         get {
             #if TARGET_INTERFACE_BUILDER
-                var testArray: [MusicStaffViewElement] = [MusicClef.bass, MusicNote(pitch: MusicPitch(name: .a, accidental: .sharp, octave: 1), rhythm: .quarter)]
+                var testArray: [MusicStaffViewElement] = [MusicClef.treble,
+                                                          MusicNote(pitch: MusicPitch(name: .b, accidental: .sharp, octave: 4), rhythm: .quarter),
+                                                          MusicNote(pitch: MusicPitch(name: .b, accidental: .sharp, octave: 4), rhythm: .quarter),
+                                                          MusicNote(pitch: MusicPitch(name: .b, accidental: .sharp, octave: 4), rhythm: .quarter)]
                 return testArray
             #else
                 return _elementArray
@@ -114,6 +117,13 @@ public enum MusicStaffViewSpacingType {
     
     ///The clef to display, wrapped in an `ClefType` enum.
     private var displayedClef : MusicClef = .treble
+    
+    ///Whether or not the clef should be drawn
+    @IBInspectable public var shouldDrawClef: Bool = true {
+        didSet {
+            self.setupLayers()
+        }
+    }
     
     ///Whether or not to draw the frames for each of the elements drawn in the staff.
     ///
@@ -191,6 +201,11 @@ public enum MusicStaffViewSpacingType {
         //Basically, put a flexible shim in between every element
         //Make the shims static if necessary
         for element in elementArray {
+            //hopefully will not draw the clef if not asked
+            guard !(element is MusicClef && !shouldDrawClef) else {
+                continue
+            }
+            
             //Does the element have accessories?
             if let accessories = element.accessoryElements {
                 
@@ -445,5 +460,6 @@ public enum MusicStaffViewSpacingType {
     override public func prepareForInterfaceBuilder() {
         self.setupLayers()
     }
+    
 
 }
