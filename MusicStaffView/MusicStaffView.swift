@@ -28,7 +28,7 @@ public enum MusicStaffViewSpacingType {
     case uniformLeadingAndTrailingSpace
 }
 
-@IBDesignable public class MusicStaffView: UIView {
+@IBDesignable open class MusicStaffView: UIView {
     
     ///The number of notes to be displayed in the interface builder preview.
     ///
@@ -135,7 +135,7 @@ public enum MusicStaffViewSpacingType {
     }
     
     //Redraw the layers when the bounding rectangle changes
-    override public var bounds : CGRect {
+    override open var bounds : CGRect {
         didSet {
             self.setupLayers()
         }
@@ -457,7 +457,7 @@ public enum MusicStaffViewSpacingType {
         return -self.bounds.size.height / 2.0 + offsetFloat * spaceWidth / 2.0
     }
         
-    override public func prepareForInterfaceBuilder() {
+    override open func prepareForInterfaceBuilder() {
         self.setupLayers()
     }
     
