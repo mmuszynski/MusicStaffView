@@ -34,7 +34,7 @@ extension MusicNote: MusicStaffViewElement {
     
     public func path(in frame: CGRect) -> CGPath {
         switch self.rhythm {
-        case .quarter, .crotchet:
+        case .quarter:
             return quarterNotePath(in: frame)
         default:
             return quarterNotePath(in: frame)
