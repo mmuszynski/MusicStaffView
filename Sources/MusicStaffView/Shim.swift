@@ -8,6 +8,12 @@
 
 import Foundation
 
+#if os(iOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
+
 public struct MusicStaffViewShim: MusicStaffViewElement {
     public var width: CGFloat
     public var spaceWidth: CGFloat
@@ -31,7 +37,7 @@ public struct MusicStaffViewShim: MusicStaffViewElement {
         return 1.0 / spaceWidth
     }
     
-    public var fillColor: UIColor {
-        return UIColor.clear
+    public var fillColor: ColorType {
+        return ColorType.clear
     }
 }

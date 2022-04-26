@@ -6,7 +6,11 @@
 //  Copyright (c) 2015 Mike Muszynski. All rights reserved.
 //
 
+#if os(iOS)
 import UIKit
+#elseif os(macOS)
+import Cocoa
+#endif
 
 class MusicStaffViewStaffLayer: CAShapeLayer {
     
@@ -53,7 +57,7 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
     ///
     /// - Returns: A CGPath representing the potential lines on the staff
     func staffPath() -> CGPath {
-        let staffLines = UIBezierPath()
+        let staffLines = CGMutablePath()
         //self.lineWidth = spaceWidth / 10.0
         
         //draw ledger lines until there's no more room to do it anymore.
@@ -65,7 +69,7 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
             height += spaceWidth
         }
         
-        return staffLines.cgPath
+        return staffLines
     }
     
     /// The CGRects that should not be masked. When the elements have been placed, their frames will be added to this array to describe where the excess ledger lines need to be uncovered
@@ -90,7 +94,7 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
                                height: self.spaceWidth * 4.0 + self.lineWidth * 5.0)
         let maskLayer = CAShapeLayer()
         maskLayer.frame = self.bounds
-        maskLayer.fillColor = UIColor.white.cgColor
+        maskLayer.fillColor = ColorType.white.cgColor
         
         //create a mutable path so that other frames can be added to it
         let path = CGMutablePath()

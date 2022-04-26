@@ -6,8 +6,18 @@
 //  Copyright (c) 2015 Mike Muszynski. All rights reserved.
 //
 
-import UIKit
 import Music
+
+#if os(iOS)
+import UIKit
+public typealias ViewType = UIView
+public typealias ColorType = UIColor
+#elseif os(macOS)
+import Cocoa
+public typealias ViewType = NSView
+public typealias ColorType = NSColor
+#endif
+
 
 ///Instructs the `MusicStaffView` to draw notes using the spacing set in `preferredHorizontalSpacing` or to fill all available space by dividing the space for notes into equal parts.
 ///
@@ -28,7 +38,7 @@ public enum MusicStaffViewSpacingType {
     case uniformLeadingAndTrailingSpace
 }
 
-@IBDesignable open class MusicStaffView: UIView {
+@IBDesignable open class MusicStaffView: ViewType {
     
     ///The number of notes to be displayed in the interface builder preview.
     ///
@@ -170,8 +180,8 @@ public enum MusicStaffViewSpacingType {
     var elementDisplayLayer = CALayer()
     
     /// The color that the staff should be drawn
-    public var staffColor: UIColor = UIColor.black
-    public var elementColor: UIColor = UIColor.black
+    public var staffColor: ColorType = .black
+    public var elementColor: ColorType = .black
     
     ///Redraws all elements of the `MusicStaffView`, first removing them if they are already drawn.
     ///
@@ -387,8 +397,8 @@ public enum MusicStaffViewSpacingType {
         staffLayer.maxLedgerLines = self.maxLedgerLines
         let mask = staffLayer.staffLineMask!
         if debug {
-            mask.backgroundColor = UIColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 0.5).cgColor
-            staffLayer.backgroundColor = UIColor(red: 1.0, green: 0, blue: 0, alpha: 0.25).cgColor
+            mask.backgroundColor = ColorType(red: 1.0, green: 0.0, blue: 1.0, alpha: 0.5).cgColor
+            staffLayer.backgroundColor = ColorType(red: 1.0, green: 0, blue: 0, alpha: 0.25).cgColor
             staffLayer.addSublayer(mask)
         }
         
@@ -396,8 +406,8 @@ public enum MusicStaffViewSpacingType {
         staffLayer.strokeColor = staffColor.cgColor
         staffLayer.mask = mask
         
-        self.layer.addSublayer(staffLayer)
-        self.layer.addSublayer(elementDisplayLayer)
+        self.layer?.addSublayer(staffLayer)
+        self.layer?.addSublayer(elementDisplayLayer)
         
         if self.fitsStaffToBounds {
             guard
@@ -413,7 +423,7 @@ public enum MusicStaffViewSpacingType {
             
             let scale = CATransform3DMakeScale(scaleAmt, scaleAmt, 1.0)
             let translate = CATransform3DMakeTranslation(-bounds.origin.x, bounds.origin.y, 0)
-            for layer in self.layer.sublayers! {
+            for layer in self.layer!.sublayers! {
                 layer.transform = CATransform3DConcat(translate, scale)
             }
         }
@@ -424,11 +434,11 @@ public enum MusicStaffViewSpacingType {
         var layer = element.layer(in: displayedClef, withSpaceWidth: self.spaceWidth, color: self.elementColor)
         
         if debug {
-            layer.backgroundColor = UIColor(red: 0.0, green: 1.0, blue: 0, alpha: 0.25).cgColor
+            layer.backgroundColor = ColorType(red: 0.0, green: 1.0, blue: 0, alpha: 0.25).cgColor
         }
         
         if element is MusicStaffViewShim {
-            layer = element.layer(in: displayedClef, withSpaceWidth: self.spaceWidth, color: UIColor.clear)
+            layer = element.layer(in: displayedClef, withSpaceWidth: self.spaceWidth, color: .clear)
         }
         
         if element.direction(in: self.displayedClef) == .down {

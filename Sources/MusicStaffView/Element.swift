@@ -6,7 +6,12 @@
 //  Copyright (c) 2015 Mike Muszynski. All rights reserved.
 //
 
+#if os(macOS)
+import Cocoa
+#elseif os(iOS)
 import UIKit
+#endif
+
 import Music
 
 public enum MusicStaffViewElementDirection {
@@ -18,12 +23,21 @@ public protocol MusicStaffViewElement {
     /// The path that describes the shape of the element in the element's bounding box. This should be used in concert with `aspectRatio` and `heightInStaffSpace` to determine the actual shape and size of the bounding box when drawing.
     func path(in frame: CGRect) -> CGPath
     
+    #if os(iOS)
+    typealias ColorType = UIColor
+    #elseif os(macOS)
+    typealias ColorType = NSColor
+    #endif
+    
     /// Returns a CALayer containing the element to be drawn.
     ///
     /// - Parameter spaceWidth: The width of the spaces between the lines of the staff.
     /// - Returns: The layer to be drawn by `MusicStaffView`
-    func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: UIColor?) -> CALayer
+    func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: ColorType?) -> CALayer
     
+    /// Provides a default color
+    var color: ColorType { get }
+
     /// The ratio of width to height that describes the general shape of the element's bounding box
     ///
     /// In order to remain resolution-independent, the `MusicStaffView` draws elements in terms of the size they appear relative to the height of spaces in the staff. For example, a quarter note is currently drawn at a height of 4.0 * spaceWidth. This value is used in conjunction with `heightInStaffSpaces` to compute the bounding box for the element.
@@ -66,13 +80,10 @@ public protocol MusicStaffViewElement {
  
     /// Minimum spacing in terms of percentage of the size of the element
     var minimumSpacing: (leading: CGFloat, trailing: CGFloat) { get }
-    
-    /// Provide a default color
-    var color: UIColor { get }
 }
 
 extension MusicStaffViewElement {
-    public func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: UIColor?) -> CALayer {
+    public func layer(in clef: MusicClef, withSpaceWidth spaceWidth: CGFloat, color: ColorType?) -> CALayer {
         let frame = self.bounds(withSpaceWidth: spaceWidth)
         let layer = CAShapeLayer()
         layer.bounds = frame
@@ -124,7 +135,7 @@ extension MusicStaffViewElement {
         return requiredLedgerLines(in: clef) != 0
     }
     
-    public var color: UIColor {
-        return UIColor.black
+    public var color: ColorType {
+        return .black
     }
 }
