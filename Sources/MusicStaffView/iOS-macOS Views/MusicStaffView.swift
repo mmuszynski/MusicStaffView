@@ -18,27 +18,25 @@ public typealias ViewType = NSView
 public typealias ColorType = NSColor
 #endif
 
-
-///Instructs the `MusicStaffView` to draw notes using the spacing set in `preferredHorizontalSpacing` or to fill all available space by dividing the space for notes into equal parts.
-///
-/// **Values**
-/// - *preferred*: Elements are drawn according to the `preferredHorizontalSpacing` attribute
-/// - *uniformFullWidth*: Elements are drawn an equal width from each other, with no spacing at either margin
-/// - *uniformTrailingSpace*: Elements are drawn an equal width from each other, with another equal space at the trailing edge
-/// - *uniformLeadingAndTrailingSpace*: Elements are drawn an equal width from each other, with equal spacing at the leading and trailing edges
-///
-///For certain uses, notes on a staff should be drawn to maximize all available space. In other cases (for example, when the notes will take up more space than the visible area of the view itself), it makes sense to draw the notes as close together as possible. These scenarios are represented in `MusicStaffViewSpacingType` as `preferred`, which uses the `preferredHorizontalSpacing` property, or `uniform`, which discards the property in favor of spacing notes equally across the view.
-///
-///- Warning: There may be cases where using uniform spacing will still cause notes to be drawn outside the visible area of the `MusicStaffView`. Currently, the framework takes no position in these situations.
-public enum MusicStaffViewSpacingType {
-    //FIXME: What happens when spacing causes notes to draw past the bounds of the view?
-    case preferred
-    case uniformFullWidth
-    case uniformTrailingSpace
-    case uniformLeadingAndTrailingSpace
-}
-
 @IBDesignable open class MusicStaffView: ViewType {
+    ///Instructs the `MusicStaffView` to draw notes using the spacing set in `preferredHorizontalSpacing` or to fill all available space by dividing the space for notes into equal parts.
+    ///
+    /// **Values**
+    /// - *preferred*: Elements are drawn according to the `preferredHorizontalSpacing` attribute
+    /// - *uniformFullWidth*: Elements are drawn an equal width from each other, with no spacing at either margin
+    /// - *uniformTrailingSpace*: Elements are drawn an equal width from each other, with another equal space at the trailing edge
+    /// - *uniformLeadingAndTrailingSpace*: Elements are drawn an equal width from each other, with equal spacing at the leading and trailing edges
+    ///
+    ///For certain uses, notes on a staff should be drawn to maximize all available space. In other cases (for example, when the notes will take up more space than the visible area of the view itself), it makes sense to draw the notes as close together as possible. These scenarios are represented in `MusicStaffViewSpacingType` as `preferred`, which uses the `preferredHorizontalSpacing` property, or `uniform`, which discards the property in favor of spacing notes equally across the view.
+    ///
+    ///- Warning: There may be cases where using uniform spacing will still cause notes to be drawn outside the visible area of the `MusicStaffView`. Currently, the framework takes no position in these situations.
+    public enum SpacingType {
+        //FIXME: What happens when spacing causes notes to draw past the bounds of the view?
+        case preferred
+        case uniformFullWidth
+        case uniformTrailingSpace
+        case uniformLeadingAndTrailingSpace
+    }
     
     ///The number of notes to be displayed in the interface builder preview.
     ///
@@ -169,7 +167,7 @@ public enum MusicStaffViewSpacingType {
     ///
     ///
 
-    public var spacing: MusicStaffViewSpacingType = .uniformTrailingSpace {
+    public var spacing: SpacingType = .uniformTrailingSpace {
         didSet {
             self.setupLayers()
         }

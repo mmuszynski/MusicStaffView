@@ -25,22 +25,17 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
         }
     }
     
+    var spaceWidth: CGFloat {
+        MusicStaffView.spaceWidth(in: self.bounds, ledgerLines: self.totalLedgerLines)
+    }
+    
     /// The path described by the staff lines.
     override var path : CGPath! {
         get {
-            return staffPath()
+            return MusicStaffView.staffPath(in: self.bounds, spaceWidth: self.spaceWidth)
         }
         set {
             
-        }
-    }
-    
-    /// The width of the spaces between the lines
-    var spaceWidth: CGFloat {
-        if let lines = ledgerLines {
-            return self.bounds.size.height / (6.0 + CGFloat(lines.above + lines.below))
-        } else {
-            return self.bounds.size.height / (6.0 + 2.0 * CGFloat(maxLedgerLines))
         }
     }
     
@@ -51,25 +46,6 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
         set {
             
         }
-    }
-    
-    /// The path to draw. The five lines of the staff plus as many ledger lines as will fit in the view (just don't stop drawing ledger lines until you run out of room).
-    ///
-    /// - Returns: A CGPath representing the potential lines on the staff
-    func staffPath() -> CGPath {
-        let staffLines = CGMutablePath()
-        //self.lineWidth = spaceWidth / 10.0
-        
-        //draw ledger lines until there's no more room to do it anymore.
-        //they'll get masked out later in the process
-        var height = self.bounds.origin.y
-        while height <= self.bounds.size.height {
-            staffLines.move(to: CGPoint(x: self.bounds.origin.x, y: height))
-            staffLines.addLine(to: CGPoint(x: self.bounds.origin.x + self.bounds.size.width, y: height))
-            height += spaceWidth
-        }
-        
-        return staffLines
     }
     
     /// The CGRects that should not be masked. When the elements have been placed, their frames will be added to this array to describe where the excess ledger lines need to be uncovered
