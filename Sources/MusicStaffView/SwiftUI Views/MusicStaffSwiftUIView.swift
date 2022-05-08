@@ -10,7 +10,7 @@ import Music
 
 extension AnyMusicStaffViewElement: Identifiable {
     var id: UUID {
-        return self.uuid
+        return UUID()
     }
     
     public static func == (lhs: AnyMusicStaffViewElement, rhs: AnyMusicStaffViewElement) -> Bool {
@@ -26,7 +26,7 @@ extension AnyMusicStaffViewElement: Identifiable {
 }
 
 @available(macOS 12, *)
-@available(iOS 10.0, *)
+@available(iOS 15, *)
 struct MusicStaffSwiftUIView: View {
     var elements: [AnyMusicStaffViewElement] = []
     var ledgerLines: (above: Int, below: Int)?
@@ -66,7 +66,7 @@ struct MusicStaffSwiftUIView: View {
 }
 
 @available(macOS 12, *)
-@available(iOS 10.0, *)
+@available(iOS 15, *)
 struct MusicStaffSwiftUIView_Previews: PreviewProvider {
     static var scale: [AnyMusicStaffViewElement] = try! MusicScale(root: MusicPitch(name: .c, accidental: .natural, octave: 3), mode: .major).map { MusicNote(pitch: $0, rhythm: .quarter).asAnyMusicStaffViewElement }
     static var test: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement] + scale

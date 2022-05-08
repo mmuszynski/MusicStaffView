@@ -23,12 +23,6 @@ public protocol MusicStaffViewElement {
     /// The path that describes the shape of the element in the element's bounding box. This should be used in concert with `aspectRatio` and `heightInStaffSpace` to determine the actual shape and size of the bounding box when drawing.
     func path(in frame: CGRect) -> CGPath
     
-    #if os(iOS)
-    typealias ColorType = UIColor
-    #elseif os(macOS)
-    typealias ColorType = NSColor
-    #endif
-    
     /// Returns a CALayer containing the element to be drawn.
     ///
     /// - Parameter spaceWidth: The width of the spaces between the lines of the staff.

@@ -8,6 +8,7 @@
 import SwiftUI
 
 @available(macOS 12, *)
+@available(iOS 13, *)
 struct StaffShape: Shape {
     var spaceWidth: CGFloat = 10
     var lineWidth: CGFloat { spaceWidth / 10 }

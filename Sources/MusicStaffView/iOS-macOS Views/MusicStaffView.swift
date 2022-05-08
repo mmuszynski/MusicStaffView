@@ -404,8 +404,13 @@ public typealias ColorType = NSColor
         staffLayer.strokeColor = staffColor.cgColor
         staffLayer.mask = mask
         
-        self.layer?.addSublayer(staffLayer)
-        self.layer?.addSublayer(elementDisplayLayer)
+        #if os(iOS)
+            self.layer.addSublayer(staffLayer)
+            self.layer.addSublayer(elementDisplayLayer)
+        #elseif os(macOS)
+            self.layer?.addSublayer(staffLayer)
+            self.layer?.addSublayer(elementDisplayLayer)
+        #endif
         
         if self.fitsStaffToBounds {
             guard
@@ -421,9 +426,18 @@ public typealias ColorType = NSColor
             
             let scale = CATransform3DMakeScale(scaleAmt, scaleAmt, 1.0)
             let translate = CATransform3DMakeTranslation(-bounds.origin.x, bounds.origin.y, 0)
+            
+        #if os(iOS)
+            for layer in self.layer.sublayers! {
+                layer.transform = CATransform3DConcat(translate, scale)
+            }
+        #elseif os(macOS)
             for layer in self.layer!.sublayers! {
                 layer.transform = CATransform3DConcat(translate, scale)
             }
+        #endif
+            
+
         }
     }
     

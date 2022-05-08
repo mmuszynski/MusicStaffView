@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension MusicStaffView {
     class func spaceWidth(in rect: CGRect, ledgerLines: Int = 0) -> CGFloat {

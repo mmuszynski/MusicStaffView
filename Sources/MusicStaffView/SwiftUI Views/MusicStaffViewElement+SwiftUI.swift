@@ -17,6 +17,7 @@ import Music
  */
 
 @available(macOS 12, *)
+@available(iOS 13, *)
 /// Translates the `path` function of the `MusicStaffViewElement` into a specific, but generic `Shape` for use in SwiftUI
 ///
 /// 2022-05-01: I was creating a new shape for every element, and decided instead to try to implement it with a generic `Shape` that could take any type of `MusicStaffViewElement`
@@ -29,6 +30,7 @@ struct MusicStaffViewElementShape<Element: MusicStaffViewElement>: Shape {
 }
 
 @available(macOS 12, *)
+@available(iOS 13, *)
 extension MusicStaffViewElement {
     
     /// Returns the generic `Shape` struct to be drawn in SwiftUI
@@ -49,6 +51,7 @@ extension MusicStaffViewElement {
  */
 
 @available(macOS 12, *)
+@available(iOS 13, *)
 extension MusicStaffViewElement {
     func spaceWidth(_ width: CGFloat, clef: MusicClef? = nil) -> some View {
         let size = self.size(withSpaceWidth: width)

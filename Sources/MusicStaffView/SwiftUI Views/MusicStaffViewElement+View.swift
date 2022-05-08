@@ -14,13 +14,19 @@ import SwiftUI
 import Music
 
 @available(macOS 12, *)
+@available(iOS 13, *)
 extension MusicClef: View {}
+
 @available(macOS 12, *)
+@available(iOS 13, *)
 extension MusicNote: View {}
+
 @available(macOS 12, *)
+@available(iOS 13, *)
 extension MusicAccidental: View {}
 
 @available(macOS 12, *)
+@available(iOS 13, *)
 extension MusicStaffViewElement {
     public var body: some View {
         self.swiftUIShape
