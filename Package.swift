@@ -23,7 +23,8 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "MusicStaffView",
-            dependencies: ["Music"]),
+            dependencies: ["Music", "SVGParser"],
+            resources: [.process("Opus/")]),
         .testTarget(
             name: "MusicStaffViewTests",
             dependencies: ["MusicStaffView"]),

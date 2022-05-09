@@ -9,8 +9,13 @@
 import Foundation
 import CoreGraphics
 import Music
+import SVGParser
 
 extension MusicAccidental: MusicStaffViewAccessory {
+    public var spacing: MusicStaffViewAccessorySpacing {
+        return .preferred
+    }
+    
     public var placement: MusicStaffViewAccessoryPlacement {
         return .leading
     }
