@@ -214,38 +214,36 @@ public typealias ColorType = NSColor
                 continue
             }
             
-            //Does the element have accessories?
-            if let accessories = element.accessoryElements {
+
                 
-                //Iterate through each accessory and figure out how to place it
-                for accessory in accessories {
-                    switch accessory.placement {
-                        
-                    //Above and Below are potentially beyond the scope of this horizontal spacing regime
-                    //Standalone may be, but there may also not be a need for standalone at all.
-                    case .above, .below, .standalone:
-                        fatalError("These are not yet implemented")
-                        
-                    //Leading elements precede their parent elements. They require an static shim after themselves.
-                    //Note that shims are not flexible by default
-                    case .leading:
-                        elements.append(accessory)
-                        let shim = MusicStaffViewShim(width: preferredHorizontalSpacing, spaceWidth: spaceWidth)
-                        elements.append(shim)
-                        
-                    //Trailing elements follow their parent elements.
-                    //These are more difficult, because the parent elements will draw a flexible shim after themselves.
-                    //This shim needs to be captured and then made static.
-                    case .trailing:
-                        if var lastShim = elements.last as? MusicStaffViewShim {
-                            lastShim.isFlexible = false
-                            lastShim.width = preferredHorizontalSpacing
-                        }
-                        elements.append(accessory)
-                        var flexShim = MusicStaffViewShim(width: 0.0, spaceWidth: spaceWidth)
-                        flexShim.isFlexible = true
-                        elements.append(flexShim)
+            //Iterate through each accessory and figure out how to place it
+            for accessory in element.accessoryElements {
+                switch accessory.placement {
+                    
+                //Above and Below are potentially beyond the scope of this horizontal spacing regime
+                //Standalone may be, but there may also not be a need for standalone at all.
+                case .above, .below, .standalone:
+                    fatalError("These are not yet implemented")
+                    
+                //Leading elements precede their parent elements. They require an static shim after themselves.
+                //Note that shims are not flexible by default
+                case .leading:
+                    elements.append(accessory)
+                    let shim = MusicStaffViewShim(width: preferredHorizontalSpacing, spaceWidth: spaceWidth)
+                    elements.append(shim)
+                    
+                //Trailing elements follow their parent elements.
+                //These are more difficult, because the parent elements will draw a flexible shim after themselves.
+                //This shim needs to be captured and then made static.
+                case .trailing:
+                    if var lastShim = elements.last as? MusicStaffViewShim {
+                        lastShim.isFlexible = false
+                        lastShim.width = preferredHorizontalSpacing
                     }
+                    elements.append(accessory)
+                    var flexShim = MusicStaffViewShim(width: 0.0, spaceWidth: spaceWidth)
+                    flexShim.isFlexible = true
+                    elements.append(flexShim)
                 }
             }
             

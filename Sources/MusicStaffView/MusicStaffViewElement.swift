@@ -70,7 +70,7 @@ public protocol MusicStaffViewElement {
     func requiresLedgerLines(in clef: MusicClef) -> Bool
     
     /// Any `MusicStaffViewAccessory` elements that should be drawn.
-    var accessoryElements: [MusicStaffViewAccessory]? { get }
+    var accessoryElements: [MusicStaffViewAccessory] { get }
  
     /// Minimum spacing in terms of percentage of the size of the element
     var minimumSpacing: (leading: CGFloat, trailing: CGFloat) { get }
@@ -113,8 +113,8 @@ extension MusicStaffViewElement {
         return .up
     }
     
-    public var accessoryElements: [MusicStaffViewAccessory]? {
-        return nil
+    public var accessoryElements: [MusicStaffViewAccessory] {
+        return []
     }
     
     public var minimumSpacing: (leading: CGFloat, trailing: CGFloat) {

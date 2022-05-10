@@ -69,7 +69,7 @@ internal protocol _MusicStaffViewElementBox {
     func requiresLedgerLines(in clef: MusicClef) -> Bool
     
     /// Any `MusicStaffViewAccessory` elements that should be drawn.
-    var accessoryElements: [MusicStaffViewAccessory]? { get }
+    var accessoryElements: [MusicStaffViewAccessory] { get }
  
     /// Minimum spacing in terms of percentage of the size of the element
     var minimumSpacing: (leading: CGFloat, trailing: CGFloat) { get }
@@ -84,7 +84,7 @@ struct ConcreteAnyMusicStaffViewElementBox<Base: MusicStaffViewElement>: _MusicS
         return base as MusicStaffViewElement
     }
     
-    var accessoryElements: [MusicStaffViewAccessory]? { return base.accessoryElements }
+    var accessoryElements: [MusicStaffViewAccessory] { return base.accessoryElements }
     
     var minimumSpacing: (leading: CGFloat, trailing: CGFloat) { return base.minimumSpacing }
 
@@ -163,6 +163,10 @@ struct AnyMusicStaffViewElement: MusicStaffViewElement {
     
     func direction(in clef: MusicClef) -> MusicStaffViewElementDirection {
         return box.direction(in: clef)
+    }
+    
+    var accessoryElements: [MusicStaffViewAccessory] {
+        return box.accessoryElements
     }
 }
 

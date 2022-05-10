@@ -54,13 +54,13 @@ extension MusicNote: MusicStaffViewElement {
         return CGPoint(x: 0.5, y: 0.865)
     }
     
-//    public var accessoryElements: [MusicStaffViewAccessory]? {
-//        if self.accidental != .natural {
-//            let noteAccidental = accidental
-//            return [noteAccidental]
-//        }
-//        return nil
-//    }
+    public var accessoryElements: [MusicStaffViewAccessory] {
+        if self.accidental != .natural {
+            let noteAccidental = accidental
+            return [noteAccidental]
+        }
+        return []
+    }
 
     func quarterNotePath(in frame: CGRect) -> CGPath {
         let quarterNotePath = CGMutablePath()

@@ -51,17 +51,25 @@ struct MusicStaffSwiftUIView: View {
                     }
                     .overlay {
                         HStack {
-                            Group {
-                                ForEach(elements) { element in
-                                    element
-                                        .spaceWidth(self.spaceWidth(in: g))
-                                }
-                                Spacer()
+                            ForEach(elements) { element in
+                                accessoryViews(for: element, spaceWidth: self.spaceWidth(in: g))
+                                
+                                element
+                                    .spaceWidth(self.spaceWidth(in: g))
                             }
+                            Spacer()
                         }
                     }
             }
         }
+    }
+}
+
+func accessoryViews(for element: MusicStaffViewElement, spaceWidth: CGFloat) -> some View {
+    ForEach(0..<element.accessoryElements.count, id: \.self) { i in
+        element.accessoryElements[i]
+            .asAnyMusicStaffViewElement
+            .spaceWidth(spaceWidth)
     }
 }
 
@@ -70,7 +78,7 @@ struct MusicStaffSwiftUIView: View {
 struct MusicStaffSwiftUIView_Previews: PreviewProvider {
     static var scale: [AnyMusicStaffViewElement] = try! MusicScale(root: MusicPitch(name: .c, accidental: .natural, octave: 3), mode: .major).map { MusicNote(pitch: $0, rhythm: .quarter).asAnyMusicStaffViewElement }
     static var test: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement] + scale
-    static var keys: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement]
+    static var keys: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement, MusicNote(pitchName: .e, accidental: .sharp, octave: 3, rhythm: .quarter).asAnyMusicStaffViewElement]
     
     
     static var previews: some View {

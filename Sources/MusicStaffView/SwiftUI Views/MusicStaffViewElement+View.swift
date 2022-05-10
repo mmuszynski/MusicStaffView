@@ -36,3 +36,11 @@ extension MusicStaffViewElement {
         self.swiftUIShape
     }
 }
+
+@available(macOS 12, *)
+@available(iOS 13, *)
+extension MusicStaffViewAccessory {
+    public var body: some View {
+        self.swiftUIShape
+    }
+}
