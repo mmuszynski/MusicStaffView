@@ -8,46 +8,15 @@
 
 import Foundation
 import Music
+import CoreGraphics
 
-struct MusicNoteAccidental: MusicStaffViewAccessory {
-    var name: MusicPitchName
-    var accidental: MusicAccidental
-    var octave: Int
-    var spacing: MusicStaffViewAccessorySpacing = .minimal
-    var placement: MusicStaffViewAccessoryPlacement = .leading
-    
-    init(name: MusicPitchName, accidental: MusicAccidental, octave: Int) {
-        self.name = name
-        self.accidental = accidental
-        self.octave = octave
+extension MusicPitchAccidental: MusicStaffViewElement {
+    public func path(in frame: CGRect) -> CGPath {
+        self.accidental.path(in: frame)
     }
     
-    public var anchorPoint: CGPoint {
-        return self.accidental.anchorPoint
-    }
-    
-    public var aspectRatio: CGFloat {
-        return self.accidental.aspectRatio
-    }
-    
-    public func path(in frame: CGRect, for direction: MusicStaffViewElementDirection) -> CGPath {
-        return self.accidental.path(in: frame, for: direction)
-    }
-    
-    public var heightInStaffSpace: CGFloat {
-        return self.accidental.heightInStaffSpace
-    }
-    
-    func offset(in clef: MusicClef) -> Int {
-        let pitch = MusicPitch(name: name, accidental: accidental, octave: octave)
-        let note = MusicNote(pitch: pitch, rhythm: .quarter)
-        return note.offset(in: clef)
-    }
-}
-
-extension MusicPitchAccidental: MusicStaffViewAccessory {
     public var spacing: MusicStaffViewAccessorySpacing {
-        return .minimalNonzero
+        return .minimal
     }
     
     public var placement: MusicStaffViewAccessoryPlacement {
@@ -63,7 +32,7 @@ extension MusicPitchAccidental: MusicStaffViewAccessory {
     }
     
     public func path(in frame: CGRect, for direction: MusicStaffViewElementDirection) -> CGPath {
-        return self.accidental.path(in: frame, for: direction)
+        return self.accidental.path(in: frame)
     }
     
     public var heightInStaffSpace: CGFloat {

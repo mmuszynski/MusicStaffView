@@ -70,8 +70,13 @@ struct MusicStaffSwiftUIView: View {
 struct MusicStaffSwiftUIView_Previews: PreviewProvider {
     static var scale: [AnyMusicStaffViewElement] = try! MusicScale(root: MusicPitch(name: .c, accidental: .natural, octave: 3), mode: .major).map { MusicNote(pitch: $0, rhythm: .quarter).asAnyMusicStaffViewElement }
     static var test: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement] + scale
+    static var keys: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement]
+    
+    
     static var previews: some View {
         MusicStaffSwiftUIView(elements: self.test, maxLedgerLines: 1)
+            .previewLayout(.fixed(width: 800, height: 100))
+        MusicStaffSwiftUIView(elements: self.keys, maxLedgerLines: 1)
             .previewLayout(.fixed(width: 800, height: 100))
     }
 }

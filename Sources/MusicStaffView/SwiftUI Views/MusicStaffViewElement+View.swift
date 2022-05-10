@@ -27,6 +27,10 @@ extension MusicAccidental: View {}
 
 @available(macOS 12, *)
 @available(iOS 13, *)
+extension MusicPitchAccidental: View {}
+
+@available(macOS 12, *)
+@available(iOS 13, *)
 extension MusicStaffViewElement {
     public var body: some View {
         self.swiftUIShape

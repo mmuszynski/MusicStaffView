@@ -8,6 +8,7 @@
 
 import Foundation
 import Music
+import CoreGraphics
 
 public enum MusicStaffViewAccessoryPlacement {
     case above, below, leading, trailing, standalone

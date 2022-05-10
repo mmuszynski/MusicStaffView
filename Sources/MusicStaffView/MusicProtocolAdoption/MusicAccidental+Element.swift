@@ -36,7 +36,7 @@ extension MusicAccidental: MusicStaffViewAccessory {
     public var aspectRatio: CGFloat {
         switch self {
         case .natural:
-            return 16.0 / 45.0
+            return MusicAccidental.naturalPath.boundingBox.size.width / MusicAccidental.naturalPath.boundingBox.size.height
         case .flat:
             return 16.0 / 45.0
         case .sharp:
@@ -62,28 +62,41 @@ extension MusicAccidental: MusicStaffViewAccessory {
             fatalError()
         }
     }
+    
+    static let naturalPath: CGPath = try! SVGSingleElementContent(forResource: "opusNatural", withExtenstion: "svg").path!
 
     func naturalPath(in frame: CGRect) -> CGPath {
-        let naturalPath = CGMutablePath()
+        let path = MusicAccidental.naturalPath
         
-        naturalPath.move(to: CGPoint(x: frame.minX + 0.84750 * frame.width, y: frame.minY + 0.94356 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.84750 * frame.width, y: frame.minY + 0.22756 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.27375 * frame.width, y: frame.minY + 0.29956 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.27375 * frame.width, y: frame.minY + 0.03156 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.18000 * frame.width, y: frame.minY + 0.03156 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.18000 * frame.width, y: frame.minY + 0.74756 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.75375 * frame.width, y: frame.minY + 0.67689 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.75375 * frame.width, y: frame.minY + 0.94356 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.84750 * frame.width, y: frame.minY + 0.94356 * frame.height))
-        naturalPath.closeSubpath()
-        naturalPath.move(to: CGPoint(x: frame.minX + 0.27375 * frame.width, y: frame.minY + 0.40756 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.75375 * frame.width, y: frame.minY + 0.34489 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.75375 * frame.width, y: frame.minY + 0.56889 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.27375 * frame.width, y: frame.minY + 0.63022 * frame.height))
-        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.27375 * frame.width, y: frame.minY + 0.40756 * frame.height))
-        naturalPath.closeSubpath()
+        let originalBox = path.boundingBox
+        let finalBox = frame
+  
+        var transform = CGAffineTransform(translationX: finalBox.minX, y: finalBox.minY)
+        transform = transform.scaledBy(x: finalBox.width / originalBox.width, y: finalBox.height / originalBox.height)
+        transform = transform.translatedBy(x: -originalBox.minX, y: -originalBox.minY)
         
-        return naturalPath
+        return path.copy(using: &transform)!
+        
+//        let naturalPath = CGMutablePath()
+//
+//        naturalPath.move(to: CGPoint(x: frame.minX + 0.84750 * frame.width, y: frame.minY + 0.94356 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.84750 * frame.width, y: frame.minY + 0.22756 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.27375 * frame.width, y: frame.minY + 0.29956 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.27375 * frame.width, y: frame.minY + 0.03156 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.18000 * frame.width, y: frame.minY + 0.03156 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.18000 * frame.width, y: frame.minY + 0.74756 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.75375 * frame.width, y: frame.minY + 0.67689 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.75375 * frame.width, y: frame.minY + 0.94356 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.84750 * frame.width, y: frame.minY + 0.94356 * frame.height))
+//        naturalPath.closeSubpath()
+//        naturalPath.move(to: CGPoint(x: frame.minX + 0.27375 * frame.width, y: frame.minY + 0.40756 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.75375 * frame.width, y: frame.minY + 0.34489 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.75375 * frame.width, y: frame.minY + 0.56889 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.27375 * frame.width, y: frame.minY + 0.63022 * frame.height))
+//        naturalPath.addLine(to: CGPoint(x: frame.minX + 0.27375 * frame.width, y: frame.minY + 0.40756 * frame.height))
+//        naturalPath.closeSubpath()
+//
+//        return naturalPath
     }
     
     func sharpPath(in frame: CGRect) -> CGPath {

@@ -15,8 +15,8 @@
         "repositoryURL": "git@github.com:mmuszynski/SVGParser",
         "state": {
           "branch": null,
-          "revision": "87af95bac4debc42f16bcb9f940e71e9e7f0e145",
-          "version": "0.0.11"
+          "revision": "4149a695039ade6ac878af33dcc8d8b335ace731",
+          "version": "0.0.12"
         }
       }
     ]
