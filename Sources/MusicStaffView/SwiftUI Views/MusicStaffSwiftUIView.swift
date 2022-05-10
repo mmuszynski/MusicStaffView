@@ -50,12 +50,14 @@ struct MusicStaffSwiftUIView: View {
                         StaffShape.staffMask(withSpaceWidth: spaceWidth(in: g))
                     }
                     .overlay {
-                        HStack {
+                        HStack(spacing: 0) {
                             ForEach(elements) { element in
                                 accessoryViews(for: element, spaceWidth: self.spaceWidth(in: g))
                                 
                                 element
                                     .spaceWidth(self.spaceWidth(in: g))
+                                Spacer()
+                                    .frame(width: 10)
                             }
                             Spacer()
                         }
@@ -68,17 +70,19 @@ struct MusicStaffSwiftUIView: View {
 func accessoryViews(for element: MusicStaffViewElement, spaceWidth: CGFloat) -> some View {
     ForEach(0..<element.accessoryElements.count, id: \.self) { i in
         element.accessoryElements[i]
-            .asAnyMusicStaffViewElement
-            .spaceWidth(spaceWidth)
+            .asAnyMusicStaffViewAccessory
+            .spaceWidth(parent: element, spaceWidth)
+        Spacer()
+            .frame(width: 2)
     }
 }
 
 @available(macOS 12, *)
 @available(iOS 15, *)
 struct MusicStaffSwiftUIView_Previews: PreviewProvider {
-    static var scale: [AnyMusicStaffViewElement] = try! MusicScale(root: MusicPitch(name: .c, accidental: .natural, octave: 3), mode: .major).map { MusicNote(pitch: $0, rhythm: .quarter).asAnyMusicStaffViewElement }
+    static var scale: [AnyMusicStaffViewElement] = try! MusicScale(root: MusicPitch(name: .c, accidental: .flat, octave: 3), mode: .major).map { MusicNote(pitch: $0, rhythm: .quarter).asAnyMusicStaffViewElement }
     static var test: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement] + scale
-    static var keys: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement, MusicNote(pitchName: .e, accidental: .sharp, octave: 3, rhythm: .quarter).asAnyMusicStaffViewElement]
+    static var keys: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement, MusicNote(pitchName: .e, accidental: .sharp, octave: 3, rhythm: .quarter).asAnyMusicStaffViewElement, MusicNote(pitchName: .e, accidental: .flat, octave: 3, rhythm: .quarter).asAnyMusicStaffViewElement]
     
     
     static var previews: some View {

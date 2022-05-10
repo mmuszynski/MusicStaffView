@@ -43,7 +43,6 @@ extension MusicStaffViewElement {
     }
 }
 
-
 /*
  ====================================================
  Modifier for space widths. Is this the right way to do this?
@@ -68,14 +67,14 @@ extension MusicStaffViewElement {
 @available(macOS 12, *)
 @available(iOS 13, *)
 extension MusicStaffViewAccessory {
-    func spaceWidth(_ width: CGFloat, clef: MusicClef? = nil) -> some View {
+    func spaceWidth(parent: MusicStaffViewElement, _ width: CGFloat, clef: MusicClef? = nil) -> some View {
         let size = self.size(withSpaceWidth: width)
         
         return self
             .body
-            .position(x: size.width * anchorPoint.x, y: size.height * (1 - anchorPoint.y))
+            .position(x: size.width * self.anchorPoint.x, y: size.height * (1 - self.anchorPoint.y))
             .rotationEffect(self.direction(in: clef ?? .bass) == .up ? Angle(degrees: 0) : Angle(degrees: 180))
-            .offset(y: -CGFloat(self.offset(in: clef ?? .bass)) * width / 2)
+            .offset(y: -CGFloat(parent.offset(in: clef ?? .bass)) * width / 2)
             .frame(width: size.width, height: size.height, alignment: .center)
     }
 }
