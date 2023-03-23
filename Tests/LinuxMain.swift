@@ -1,7 +1,7 @@
 import XCTest
 
-import MusicStaffView_2_0Tests
+import MusicStaffViewTests
 
 var tests = [XCTestCaseEntry]()
-tests += MusicStaffView_2_0Tests.allTests()
+tests += MusicStaffViewTests.allTests()
 XCTMain(tests)

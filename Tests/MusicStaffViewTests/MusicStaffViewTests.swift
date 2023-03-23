@@ -1,12 +1,12 @@
 import XCTest
-@testable import MusicStaffView_2_0
+@testable import MusicStaffView
 
-final class MusicStaffView_2_0Tests: XCTestCase {
+final class MusicStaffViewTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(MusicStaffView_2_0().text, "Hello, World!")
+        XCTAssertEqual(MusicStaffView().text, "Hello, World!")
     }
 
     static var allTests = [

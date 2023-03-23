@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Music",
+        "repositoryURL": "https://github.com/mmuszynski/Music",
+        "state": {
+          "branch": null,
+          "revision": "d1576a50b2221b5e86f4d1d1cc684cd31bd41a88",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

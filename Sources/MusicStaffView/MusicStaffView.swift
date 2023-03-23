@@ -1,3 +1,3 @@
-struct MusicStaffView_2_0 {
+struct MusicStaffView {
     var text = "Hello, World!"
 }

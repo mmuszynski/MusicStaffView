@@ -1,3 +1,3 @@
-# MusicStaffView 2.0
+# MusicStaffView
 
-A description of this package.
+A SwiftUI Package to display music.
