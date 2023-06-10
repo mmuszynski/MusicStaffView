@@ -14,7 +14,7 @@ struct StaffShape: Shape {
     var lineWidth: CGFloat { spaceWidth / 10 }
     var ledgerLines: Int
     func path(in rect: CGRect) -> Path {
-        Path(MusicStaffView.staffPath(in: rect, spaceWidth: self.spaceWidth, ledgerLines: self.ledgerLines))
+        Path(UIMusicStaffView.staffPath(in: rect, spaceWidth: self.spaceWidth, ledgerLines: self.ledgerLines))
     }
     
     static func staffMask(withSpaceWidth spaceWidth: CGFloat, lineWidth: CGFloat? = nil) -> some View {

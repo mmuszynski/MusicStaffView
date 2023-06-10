@@ -19,9 +19,7 @@ public typealias ColorType = NSColor
 #endif
 
 @available(*, unavailable, renamed: "UIMusicStaffView")
-final class MusicStaffView: ViewType {
-    
-}
+final class MusicStaffView: ViewType {}
 
 @IBDesignable open class UIMusicStaffView: ViewType {
     ///Instructs the `MusicStaffView` to draw notes using the spacing set in `preferredHorizontalSpacing` or to fill all available space by dividing the space for notes into equal parts.

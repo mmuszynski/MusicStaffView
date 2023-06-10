@@ -8,7 +8,7 @@
 import Foundation
 import CoreGraphics
 
-extension MusicStaffView {
+extension UIMusicStaffView {
     class func spaceWidth(in rect: CGRect, ledgerLines: Int = 0) -> CGFloat {
         return rect.size.height / (6.0 + CGFloat(ledgerLines))
     }
@@ -19,7 +19,7 @@ extension MusicStaffView {
     class func staffPath(in rect: CGRect, spaceWidth: CGFloat? = nil, ledgerLines: Int = 0) -> CGPath {
         let staffLines = CGMutablePath()
         //self.lineWidth = spaceWidth / 10.0
-        let spaceWidth = spaceWidth ?? MusicStaffView.spaceWidth(in: rect, ledgerLines: ledgerLines)
+        let spaceWidth = spaceWidth ?? UIMusicStaffView.spaceWidth(in: rect, ledgerLines: ledgerLines)
         
         //draw ledger lines until there's no more room to do it anymore.
         //they'll get masked out later in the process

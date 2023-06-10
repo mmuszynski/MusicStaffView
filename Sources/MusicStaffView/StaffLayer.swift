@@ -26,13 +26,13 @@ class MusicStaffViewStaffLayer: CAShapeLayer {
     }
     
     var spaceWidth: CGFloat {
-        MusicStaffView.spaceWidth(in: self.bounds, ledgerLines: self.totalLedgerLines)
+        UIMusicStaffView.spaceWidth(in: self.bounds, ledgerLines: self.totalLedgerLines)
     }
     
     /// The path described by the staff lines.
     override var path : CGPath! {
         get {
-            return MusicStaffView.staffPath(in: self.bounds, spaceWidth: self.spaceWidth)
+            return UIMusicStaffView.staffPath(in: self.bounds, spaceWidth: self.spaceWidth)
         }
         set {
             
