@@ -18,7 +18,12 @@ public typealias ViewType = NSView
 public typealias ColorType = NSColor
 #endif
 
-@IBDesignable open class MusicStaffView: ViewType {
+@available(*, unavailable, renamed: "UIMusicStaffView")
+final class MusicStaffView: ViewType {
+    
+}
+
+@IBDesignable open class UIMusicStaffView: ViewType {
     ///Instructs the `MusicStaffView` to draw notes using the spacing set in `preferredHorizontalSpacing` or to fill all available space by dividing the space for notes into equal parts.
     ///
     /// **Values**
@@ -402,13 +407,14 @@ public typealias ColorType = NSColor
         staffLayer.strokeColor = staffColor.cgColor
         staffLayer.mask = mask
         
-        #if os(iOS)
-            self.layer.addSublayer(staffLayer)
-            self.layer.addSublayer(elementDisplayLayer)
-        #elseif os(macOS)
-            self.layer?.addSublayer(staffLayer)
-            self.layer?.addSublayer(elementDisplayLayer)
-        #endif
+
+#if os(macOS)
+        self.layer?.addSublayer(staffLayer)
+        self.layer?.addSublayer(elementDisplayLayer)
+#elseif os(iOS)
+        self.layer.addSublayer(staffLayer)
+        self.layer.addSublayer(elementDisplayLayer)
+#endif
         
         if self.fitsStaffToBounds {
             guard
@@ -425,17 +431,16 @@ public typealias ColorType = NSColor
             let scale = CATransform3DMakeScale(scaleAmt, scaleAmt, 1.0)
             let translate = CATransform3DMakeTranslation(-bounds.origin.x, bounds.origin.y, 0)
             
-        #if os(iOS)
-            for layer in self.layer.sublayers! {
-                layer.transform = CATransform3DConcat(translate, scale)
-            }
-        #elseif os(macOS)
+
+#if os(macOS)
             for layer in self.layer!.sublayers! {
                 layer.transform = CATransform3DConcat(translate, scale)
             }
-        #endif
-            
-
+#elseif os(iOS)
+            for layer in self.layer.sublayers! {
+                layer.transform = CATransform3DConcat(translate, scale)
+            }
+#endif
         }
     }
     

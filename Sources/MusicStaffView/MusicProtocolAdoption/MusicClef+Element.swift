@@ -9,6 +9,7 @@
 import Foundation
 import CoreGraphics
 import Music
+import CoreGraphics
 
 extension MusicClef: MusicStaffViewElement {
     

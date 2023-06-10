@@ -9,7 +9,7 @@
 import Foundation
 import CoreGraphics
 import Music
-import SVGParser
+import CoreGraphics
 
 extension MusicAccidental: MusicStaffViewAccessory {
     public var spacing: MusicStaffViewAccessorySpacing {

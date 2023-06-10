@@ -25,8 +25,9 @@ extension AnyMusicStaffViewElement: Identifiable {
     }
 }
 
-@available(macOS 12, *)
-@available(iOS 15, *)
+
+@available(macOS 15, *)
+@available(iOS 10.0, *)
 struct MusicStaffSwiftUIView: View {
     var elements: [AnyMusicStaffViewElement] = []
     var ledgerLines: (above: Int, below: Int)?
@@ -44,24 +45,43 @@ struct MusicStaffSwiftUIView: View {
     var body: some View {
         GeometryReader { g in
             ZStack {
-                StaffShape(spaceWidth: self.spaceWidth(in: g), ledgerLines: maxLedgerLines)
-                    .stroke()
-                    .mask{
-                        StaffShape.staffMask(withSpaceWidth: spaceWidth(in: g))
-                    }
-                    .overlay {
-                        HStack(spacing: 0) {
-                            ForEach(elements) { element in
-                                accessoryViews(for: element, spaceWidth: self.spaceWidth(in: g))
-                                
-                                element
-                                    .spaceWidth(self.spaceWidth(in: g))
-                                Spacer()
-                                    .frame(width: 10)
+                if #available(iOS 15.0, *) {
+                    let spaceWidth = self.spaceWidth(in: g)
+                    StaffShape(spaceWidth: spaceWidth,
+                               ledgerLines: maxLedgerLines)
+                        .stroke()
+                        .mask{
+                            StaffShape.staffMask(withSpaceWidth: spaceWidth)
+                        }
+                        .overlay {
+                            HStack {
+                                Group {
+                                    ForEach(elements) { element in
+                                        element
+                                            .with(spaceWidth: spaceWidth)
+                                    }
+                                    Spacer()
+                                }
                             }
                             Spacer()
                         }
+                        .mask {
+                            HStack {
+                                Group {
+                                    ForEach(elements) { element in
+                                        element
+                                            .mask(for: spaceWidth)
+                                    }
+                                    Spacer()
+                                }
+                            }
+                        }
+                    if true {
+                        EmptyView()
                     }
+                } else {
+                    // Fallback on earlier versions
+                }
             }
         }
     }

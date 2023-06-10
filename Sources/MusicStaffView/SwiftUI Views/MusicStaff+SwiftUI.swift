@@ -23,3 +23,11 @@ struct StaffShape: Shape {
             .frame(height: spaceWidth * 4 + lineWidth)
     }
 }
+
+struct StaffShapePreview: PreviewProvider {
+    static var previews: some View {
+        StaffShape(ledgerLines: 2)
+            .stroke(Color.black)
+            .previewLayout(.sizeThatFits)
+    }
+}

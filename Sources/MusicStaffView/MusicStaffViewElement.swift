@@ -42,7 +42,9 @@ public protocol MusicStaffViewElement {
     /// In order to remain resolution-independent, the `MusicStaffView` draws elements in terms of the size they appear relative to the height of spaces in the staff. For example, a quarter note is currently drawn at a height of 4.0 * spaceWidth. This value is used in conjunction with `aspectRatio` to compute the bounding box for the element.
     var heightInStaffSpace: CGFloat { get }
     
-    /// The anchor point that will eventually be used to center the image in the range of [0.0-1.0]
+    /// The anchor point that describes where to position the image in relation to its height and width. Each axis is represented by a fractional number in the range of [0.0-1.0]
+    ///
+    /// As an example, the position of a quarter note is defined by the center of the head of the note, which places roughly 5/6 of the shape of the note below or above it. This translates in the framework as a point of (0.5, 0.865). Note that the center in the horizontal axis is exactly at the halfway point.
     var anchorPoint: CGPoint { get }
     
     /// The distance in staff positions that the element is drawn from the center line, given a specific clef. For example, in Bass Clef, the note E3 would be drawn one position higher than the middle line and would need to return +1 from this function.

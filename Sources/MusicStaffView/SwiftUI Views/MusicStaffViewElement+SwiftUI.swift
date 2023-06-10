@@ -52,7 +52,7 @@ extension MusicStaffViewElement {
 @available(macOS 12, *)
 @available(iOS 13, *)
 extension MusicStaffViewElement {
-    func spaceWidth(_ width: CGFloat, clef: MusicClef? = nil) -> some View {
+    func with(spaceWidth width: CGFloat, clef: MusicClef? = nil) -> some View {
         let size = self.size(withSpaceWidth: width)
         
         return self
@@ -60,6 +60,17 @@ extension MusicStaffViewElement {
             .position(x: size.width * anchorPoint.x, y: size.height * (1 - anchorPoint.y))
             .rotationEffect(self.direction(in: clef ?? .bass) == .up ? Angle(degrees: 0) : Angle(degrees: 180))
             .offset(y: -CGFloat(self.offset(in: clef ?? .bass)) * width / 2)
+            .frame(width: size.width, height: size.height, alignment: .center)
+    }
+    
+    
+    func mask(for spaceWidth: CGFloat, clef: MusicClef = .bass) -> some View {
+        let size = self.size(withSpaceWidth: spaceWidth)
+        
+        return Rectangle()
+            .position(x: size.width * anchorPoint.x, y: size.height * (1 - anchorPoint.y))
+            .rotationEffect(self.direction(in: clef) == .up ? Angle(degrees: 0) : Angle(degrees: 180))
+            .offset(y: -CGFloat(self.offset(in: clef)) * spaceWidth / 2)
             .frame(width: size.width, height: size.height, alignment: .center)
     }
 }
