@@ -63,7 +63,7 @@ extension MusicAccidental: MusicStaffViewAccessory {
         }
     }
     
-    static let naturalPath: CGPath = try! SVGSingleElementContent(forResource: "opusNatural", withExtenstion: "svg").path!
+    //static let naturalPath: CGPath = try! SVGSingleElementContent(forResource: "opusNatural", withExtenstion: "svg").path!
 
     func naturalPath(in frame: CGRect) -> CGPath {
         let path = MusicAccidental.naturalPath
