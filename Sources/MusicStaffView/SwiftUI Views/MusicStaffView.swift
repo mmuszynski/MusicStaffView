@@ -63,7 +63,6 @@ struct MusicStaffView: View {
             ZStack {
                 if #available(iOS 15.0, *) {
                     let spaceWidth = self.spaceWidth(in: g)
-                    var clef = MusicClef.bass
                     
                     HStack {
                         Group {
@@ -83,14 +82,12 @@ struct MusicStaffView: View {
                         ZStack {
                             StaffShape.staffMask(withSpaceWidth: spaceWidth)
                             HStack {
-                                Group {
                                     ForEach(drawnElements) { element in
                                         element
                                             .mask(for: spaceWidth)
                                         Spacer()
                                     }
                                     Spacer()
-                                }
                             }
                         }
                     }
@@ -120,7 +117,7 @@ struct MusicStaffView: View {
 
 @available(macOS 12, *)
 @available(iOS 10.0, *)
-struct MusicStaffSwiftUIView_Previews: PreviewProvider {
+struct MusicStaffView_Previews: PreviewProvider {
     /*
      static var scale: [AnyMusicStaffViewElement] = try! MusicScale(root: MusicPitch(name: .c, accidental: .natural, octave: 3), mode: .major).map { MusicNote(pitch: $0, rhythm: .quarter).asAnyMusicStaffViewElement }
      static var test: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement] + scale

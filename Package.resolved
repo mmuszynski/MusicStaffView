@@ -5,9 +5,9 @@
         "package": "Music",
         "repositoryURL": "git@github.com:mmuszynski/Music.git",
         "state": {
-          "branch": null,
-          "revision": "d1576a50b2221b5e86f4d1d1cc684cd31bd41a88",
-          "version": "1.0.0"
+          "branch": "master",
+          "revision": "b4893a9ef49d1dc6e3b453414676f861d4343306",
+          "version": null
         }
       },
       {
