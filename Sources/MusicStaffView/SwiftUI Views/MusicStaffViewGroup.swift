@@ -14,8 +14,22 @@ struct MusicStaffViewGroup: View {
     var elements: [any MusicStaffViewElement] = []
     var ledgerLines: (above: Int, below: Int)?
     var maxLedgerLines: Int = 0
+    var spacing: MusicStaffView.Spacing = .all
+    var hidesClef: Bool = false
     
+    func spacing(_ spacing: MusicStaffView.Spacing) -> Self {
+        var new = self
+        new.spacing = spacing
+        return new
+    }
     
+    var margin: EdgeInsets = .init()
+    func margin(_ insets: EdgeInsets) -> Self {
+        var new = self
+        new.margin = insets
+        return new
+    }
+        
     /// Caluclates the space width in a given geometry
     /// - Parameter geometry: The geometry proxy
     /// - Returns: A height suitable for drawing the various MusicStaffViewElement items contained in the array
@@ -29,7 +43,8 @@ struct MusicStaffViewGroup: View {
         return geometry.size.height / (6.0 + CGFloat(lines))
     }
     
-    init(maxLedgerLines: Int = 2, @MusicStaffViewBuilder _ elements: () -> [any MusicStaffViewElement]) {
+    init(clef: MusicClef = .treble, maxLedgerLines: Int = 2, @MusicStaffViewBuilder _ elements: () -> [any MusicStaffViewElement]) {
+        self.clef = clef
         self.maxLedgerLines = maxLedgerLines
         self.elements = elements().map { AnyMusicStaffViewElement($0) }
     }
@@ -49,41 +64,64 @@ struct MusicStaffViewGroup: View {
                             HStack {
                                 renderMask(elements, in: g)
                             }
+                            .padding(.horizontal)
+                            
                         }
                     }
                 
                 HStack {
                     render(elements, in: g)
                 }
-                
-                
+                .padding(.horizontal)
             }
+            
+        }
+    }
+    
+    @ViewBuilder private func renderClef(with spaceWidth: CGFloat, in clef: MusicClef) -> some View {
+        if !self.hidesClef {
+            Spacer()
+            clef
+                .with(spaceWidth: spaceWidth, in: clef)
         }
     }
     
     @ViewBuilder private func render(_ elements: [any MusicStaffViewElement], in geometry: GeometryProxy) -> some View {
         let spaceWidth = spaceWidth(in: geometry)
         
+        renderClef(with: spaceWidth, in: clef)
+        
         ForEach(elements.map(\.asAnyMusicStaffViewElement)) { element in
-
+            Spacer()
             element
                 .with(spaceWidth: spaceWidth, in: clef)
         }
+        Spacer()
     }
     
     @ViewBuilder private func renderMask(_ elements: [any MusicStaffViewElement], in geometry: GeometryProxy) -> some View {
         let spaceWidth = spaceWidth(in: geometry)
         
-        ForEach(elements.map(\.asAnyMusicStaffViewElement)) { element in
+        renderClef(with: spaceWidth, in: clef)
 
+        ForEach(elements.map(\.asAnyMusicStaffViewElement)) { element in
+            Spacer()
             element
                 .mask(for: spaceWidth, in: clef)
         }
+        
+        Spacer()
     }
     
-    func clef(_ clef: MusicClef) -> MusicStaffViewGroup {
+    func clef(_ clef: MusicClef) -> Self {
         var new = self
         new.clef = clef
+        return new
+    }
+    
+    func hideClef() -> Self {
+        var new = self
+        new.hidesClef = true
         return new
     }
 }
@@ -91,8 +129,7 @@ struct MusicStaffViewGroup: View {
 @available(iOS 15.0, *)
 struct MusicStaffViewGroupPreviews: PreviewProvider {
     static var previews: some View {
-        MusicStaffViewGroup {
-            MusicClef.treble
+        MusicStaffViewGroup(clef: .treble) {
             MusicPitch.c
                 .accidental(.natural)
                 .octave(4)
@@ -103,7 +140,6 @@ struct MusicStaffViewGroupPreviews: PreviewProvider {
                 .length(.quarter)
             MusicNote(pitchName: .e, accidental: .natural, octave: 4, rhythm: .quarter)
         }
-        .clef(.treble)
         .previewLayout(.fixed(width: 600, height: 300))
     }
 }

@@ -9,6 +9,15 @@
           "revision": "b4893a9ef49d1dc6e3b453414676f861d4343306",
           "version": null
         }
+      },
+      {
+        "package": "SVGParser",
+        "repositoryURL": "git@github.com:mmuszynski/SVGParser.git",
+        "state": {
+          "branch": "master",
+          "revision": "4149a695039ade6ac878af33dcc8d8b335ace731",
+          "version": null
+        }
       }
     ]
   },

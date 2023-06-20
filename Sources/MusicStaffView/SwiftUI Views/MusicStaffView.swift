@@ -14,14 +14,22 @@ extension AnyMusicStaffViewElement: Identifiable {
     }
     
     public static func == (lhs: AnyMusicStaffViewElement, rhs: AnyMusicStaffViewElement) -> Bool {
-        if type(of: lhs) != type(of: rhs) {
-            return false
-        }
-        return true
+        lhs.uuid == rhs.uuid
     }
     
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.path(in: .zero))
+        hasher.combine(self.uuid)
+    }
+}
+
+extension MusicStaffView {
+    struct Spacing: OptionSet {
+        let rawValue: Int
+        
+        static let leading = Spacing(rawValue: 1 << 0)
+        static let trailing = Spacing(rawValue: 1 << 1)
+        
+        static let all: Spacing = [.leading, .trailing]
     }
 }
 
@@ -69,9 +77,7 @@ struct MusicStaffView: View {
                             ForEach(drawnElements) { element in
                                 element
                                     .with(spaceWidth: spaceWidth)
-                                Spacer()
                             }
-                            Spacer()
                         }
                     }
                     
@@ -85,9 +91,7 @@ struct MusicStaffView: View {
                                     ForEach(drawnElements) { element in
                                         element
                                             .mask(for: spaceWidth)
-                                        Spacer()
                                     }
-                                    Spacer()
                             }
                         }
                     }
@@ -102,7 +106,6 @@ struct MusicStaffView: View {
                                         element.mask(for: spaceWidth)
                                             .foregroundStyle(Color.red)
                                     }
-                                    Spacer()
                                 }
                             }
                         }
