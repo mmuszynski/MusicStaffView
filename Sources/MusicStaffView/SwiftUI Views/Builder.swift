@@ -8,8 +8,9 @@
 import Foundation
 import Music
 
+@available(iOS 15.0, *)
 extension MusicStaffView {
-    @MusicStaffViewBuilder
+    @MusicStaffViewGroupBuilder
     var testElements: [MusicStaffViewElement] {
         MusicClef.bass
         
@@ -21,7 +22,7 @@ extension MusicStaffView {
 }
 
 @resultBuilder
-enum MusicStaffViewBuilder {
+enum MusicStaffViewGroupBuilder {
     static func buildBlock(_ components: MusicStaffViewElement...) -> [MusicStaffViewElement] {
         return components
     }

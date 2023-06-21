@@ -9,26 +9,16 @@ import SwiftUI
 import Music
 
 @available(iOS 15.0, *)
-struct MusicStaffViewGroup: View {
-    var clef: MusicClef = .bass
+struct MusicStaffViewGroup: Identifiable, View {
+    let id: UUID = UUID()
+    
     var elements: [any MusicStaffViewElement] = []
-    var ledgerLines: (above: Int, below: Int)?
-    var maxLedgerLines: Int = 0
-    var spacing: MusicStaffView.Spacing = .all
+    
+    var clef: MusicClef = .bass
     var hidesClef: Bool = false
     
-    func spacing(_ spacing: MusicStaffView.Spacing) -> Self {
-        var new = self
-        new.spacing = spacing
-        return new
-    }
-    
-    var margin: EdgeInsets = .init()
-    func margin(_ insets: EdgeInsets) -> Self {
-        var new = self
-        new.margin = insets
-        return new
-    }
+    var ledgerLines: (above: Int, below: Int)?
+    var maxLedgerLines: Int = 0
         
     /// Caluclates the space width in a given geometry
     /// - Parameter geometry: The geometry proxy
@@ -43,7 +33,7 @@ struct MusicStaffViewGroup: View {
         return geometry.size.height / (6.0 + CGFloat(lines))
     }
     
-    init(clef: MusicClef = .treble, maxLedgerLines: Int = 2, @MusicStaffViewBuilder _ elements: () -> [any MusicStaffViewElement]) {
+    init(clef: MusicClef = .treble, maxLedgerLines: Int = 2, @MusicStaffViewGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
         self.clef = clef
         self.maxLedgerLines = maxLedgerLines
         self.elements = elements().map { AnyMusicStaffViewElement($0) }
