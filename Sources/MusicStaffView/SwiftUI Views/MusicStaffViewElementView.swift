@@ -14,11 +14,13 @@ struct MusicStaffViewElementView<Element: MusicStaffViewElement>: View {
         element.swiftUIShape
     }
     
-    func with(spaceWidth width: CGFloat, clef: MusicClef = .bass) -> some View {
+    @ViewBuilder func with(spaceWidth width: CGFloat, clef: MusicClef = .bass) -> some View {
         let size = element.size(withSpaceWidth: width)
         let direction = element.direction(in: clef)
         
-        return self
+        
+        
+        self
             .body
             .position(x: size.width * element.anchorPoint.x, y: size.height * (1 - element.anchorPoint.y))
             .rotationEffect(Angle(degrees: direction == .up ? 0 : 180))
