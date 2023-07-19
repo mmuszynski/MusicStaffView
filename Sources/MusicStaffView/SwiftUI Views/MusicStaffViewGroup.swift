@@ -119,17 +119,20 @@ struct MusicStaffViewGroup: Identifiable, View {
 @available(iOS 15.0, *)
 struct MusicStaffViewGroupPreviews: PreviewProvider {
     static var previews: some View {
-        MusicStaffViewGroup(clef: .treble) {
-            MusicPitch.c
-                .accidental(.natural)
-                .octave(4)
-                .length(.quarter)
-            MusicPitch.c
-                .accidental(.natural)
-                .octave(5)
-                .length(.quarter)
-            MusicNote(pitchName: .e, accidental: .natural, octave: 4, rhythm: .quarter)
+        Group {
+            MusicStaffViewGroup(clef: .treble) {
+                MusicPitch.c
+                    .accidental(.flat)
+                    .octave(4)
+                    .length(.quarter)
+                MusicPitch.c
+                    .accidental(.natural)
+                    .octave(5)
+                    .length(.quarter)
+                MusicNote(pitchName: .e, accidental: .natural, octave: 4, rhythm: .quarter)
+            }
         }
         .previewLayout(.fixed(width: 600, height: 300))
+
     }
 }

@@ -52,20 +52,33 @@ extension MusicStaffViewElement {
 @available(macOS 12, *)
 @available(iOS 13, *)
 extension MusicStaffViewElement {
-    func with(spaceWidth width: CGFloat, in clef: MusicClef = .bass) -> some View {
+    @ViewBuilder func with(spaceWidth width: CGFloat, in clef: MusicClef = .bass) -> some View {
         let size = self.size(withSpaceWidth: width)
         let direction = self.direction(in: clef)
+        let offset = -CGFloat(self.offset(in: clef)) * width / 2
         
-        return self
+        ForEach(accessoryElements.map(\.asAnyMusicStaffViewAccessory)) { element in
+            let elementSize = element.size(withSpaceWidth: width)
+            
+            switch element.placement {
+            default:
+                element
+                    .body
+                    .frame(width: elementSize.width, height: elementSize.height)
+                    .offset(y: offset)
+            }
+        }
+        
+        self
             .body
             .position(x: size.width * anchorPoint.x, y: size.height * (1 - anchorPoint.y))
             .rotationEffect(Angle(degrees: direction == .up ? 0 : 180))
-            .offset(y: -CGFloat(self.offset(in: clef)) * width / 2)
+            .offset(y: offset)
             .frame(width: size.width, height: size.height, alignment: .center)
     }
     
     
-    func mask(for spaceWidth: CGFloat, in clef: MusicClef = .bass) -> some View {
+    @ViewBuilder func mask(for spaceWidth: CGFloat, in clef: MusicClef = .bass) -> some View {
         let size = self.size(withSpaceWidth: spaceWidth)
         let lineWidth = spaceWidth / 10
         
@@ -73,7 +86,7 @@ extension MusicStaffViewElement {
         //but actually, the anchor point sits on the offset line
         let actualOffset = -CGFloat(self.offset(in: clef)) * spaceWidth / 2
         
-        return Rectangle()
+        Rectangle()
             //.position(x: size.width * anchorPoint.x, y: size.height * (1 - anchorPoint.y))
             .frame(width: size.width, height: abs(actualOffset) + lineWidth, alignment: .center)
             .offset(y: actualOffset / 2)

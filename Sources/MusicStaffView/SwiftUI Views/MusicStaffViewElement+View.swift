@@ -33,7 +33,7 @@ extension MusicPitchAccidental: View {}
 @available(iOS 13, *)
 extension MusicStaffViewElement {
     public var body: some View {
-        MusicStaffViewElementView(element: self)
+        MusicStaffViewSingleElementView(element: self)
     }
 }
 

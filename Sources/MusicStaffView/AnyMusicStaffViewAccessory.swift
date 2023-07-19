@@ -138,6 +138,7 @@ struct ConcreteAnyMusicStaffViewAccessoryBox<Base: MusicStaffViewAccessory>: _Mu
 
 struct AnyMusicStaffViewAccessory: MusicStaffViewAccessory {
     private let box: _MusicStaffViewAccessoryBox
+    let uuid = UUID()
     
     init<T: MusicStaffViewAccessory>(_ object: T) {
         box = ConcreteAnyMusicStaffViewAccessoryBox(base: object)
