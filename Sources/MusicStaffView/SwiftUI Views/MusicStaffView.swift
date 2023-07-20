@@ -24,7 +24,7 @@ extension MusicStaffView {
 @available(iOS 15.0, *)
 struct MusicStaffView: View {
     var debug = false
-    var groups: [MusicStaffViewGroup] = []
+    var group: MusicStaffViewGroup
     var ledgerLines: (above: Int, below: Int)?
     var maxLedgerLines: Int = 0
     func spaceWidth(in geometry: GeometryProxy) -> CGFloat {
@@ -37,55 +37,50 @@ struct MusicStaffView: View {
         return geometry.size.height / (6.0 + CGFloat(lines))
     }
     
-    @ViewBuilder private func render(_ group: MusicStaffViewGroup) -> some View {
-        EmptyView()
+    init(clef: MusicClef = .treble, maxLedgerLines: Int = 2, @MusicStaffViewGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
+        self.group = MusicStaffViewGroup(clef: clef, maxLedgerLines: maxLedgerLines, elements)
     }
         
     var body: some View {
         GeometryReader { g in
-            ForEach(groups) { group in
-                render(group)
-            }
+            group
+                .environment(\.spaceWidth, self.spaceWidth(in: g))
         }
     }
 }
 
-//@available(macOS 12, *)
-//@available(iOS 10.0, *)
-//struct MusicStaffView_Previews: PreviewProvider {
-//    /*
-//     static var scale: [AnyMusicStaffViewElement] = try! MusicScale(root: MusicPitch(name: .c, accidental: .natural, octave: 3), mode: .major).map { MusicNote(pitch: $0, rhythm: .quarter).asAnyMusicStaffViewElement }
-//     static var test: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement] + scale
-//     static var previews: some View {
-//     MusicStaffView(elements: self.test, maxLedgerLines: 1)
-//     .previewLayout(.fixed(width: 800, height: 150))
-//     }
-//     */
-//    
-//    static var previews: some View {
-//        Group {
-//            MusicStaffView(maxLedgerLines: 2) {
-//                MusicClef.bass
-//                MusicPitch.c
-//                    .accidental(.natural)
-//                    .octave(4)
-//                    .length(.quarter)
-//                MusicPitch.c
-//                    .accidental(.natural)
-//                    .octave(3)
-//                    .length(.quarter)
-//                MusicNote(pitchName: .c, accidental: .natural, octave: 3, rhythm: .quarter)
-//                MusicClef.treble
-//                MusicClef.tenor
-//            }
-//            .previewLayout(.fixed(width: 600, height: 300))
-//         
-//            MusicStaffView(maxLedgerLines: 2) {
-//                MusicClef.treble
-//                MusicPitch.a
-//                    .octave(4)
-//                    .length(.quarter)
-//            }
-//        }
-//    }
-//}
+@available(macOS 12, *)
+@available(iOS 15.0, *)
+struct MusicStaffView_Previews: PreviewProvider {
+    /*
+     static var scale: [AnyMusicStaffViewElement] = try! MusicScale(root: MusicPitch(name: .c, accidental: .natural, octave: 3), mode: .major).map { MusicNote(pitch: $0, rhythm: .quarter).asAnyMusicStaffViewElement }
+     static var test: [AnyMusicStaffViewElement] = [MusicClef.bass.asAnyMusicStaffViewElement] + scale
+     static var previews: some View {
+     MusicStaffView(elements: self.test, maxLedgerLines: 1)
+     .previewLayout(.fixed(width: 800, height: 150))
+     }
+     */
+    
+    static var previews: some View {
+        Group {
+            MusicStaffView(clef: .treble) {
+                MusicPitch.c
+                    .accidental(.natural)
+                    .octave(4)
+                    .length(.quarter)
+                MusicPitch.c
+                    .accidental(.natural)
+                    .octave(3)
+                    .length(.quarter)
+                MusicNote(pitchName: .c, accidental: .natural, octave: 3, rhythm: .quarter)
+            }
+            .previewLayout(.fixed(width: 600, height: 300))
+         
+            MusicStaffView(maxLedgerLines: 2) {
+                MusicPitch.a
+                    .octave(4)
+                    .length(.quarter)
+            }
+        }
+    }
+}
