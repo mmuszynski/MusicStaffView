@@ -9,7 +9,7 @@
 import Foundation
 import CoreGraphics
 import Music
-import CoreGraphics
+import SVGParser
 
 extension MusicNote: MusicStaffViewElement {
     
@@ -36,6 +36,8 @@ extension MusicNote: MusicStaffViewElement {
     
     public func path(in frame: CGRect) -> CGPath {
         switch self.rhythm {
+        case .whole:
+            return try! SVGSingleElementContent(contentsOf: Bundle.main.url(forResource: "opusWholeNote", withExtension: "svg")!).path!
         case .quarter:
             return quarterNotePath(in: frame)
         default:
@@ -56,11 +58,8 @@ extension MusicNote: MusicStaffViewElement {
     }
     
     public var accessoryElements: [MusicStaffViewAccessory] {
-        if self.accidental != .natural {
-            let noteAccidental = accidental
-            return [noteAccidental]
-        }
-        return []
+        let noteAccidental = accidental
+        return [noteAccidental]
     }
 
     func quarterNotePath(in frame: CGRect) -> CGPath {

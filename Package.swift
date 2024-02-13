@@ -16,7 +16,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(name: "Music", url: "git@github.com:mmuszynski/Music.git", branch: "master"),
-        .package(name: "SVGParser", url: "git@github.com:mmuszynski/SVGParser.git", branch: "master")
+        .package(name: "SVGParser", url: "git@bitbucket.org:mmuszynski/svgparser.git", branch: "master")
         //.package(name: "Music", url: "git@github.com:mmuszynski/Music.git", from: Version("1.0.0"))
     ],
     targets: [
@@ -25,7 +25,7 @@ let package = Package(
         .target(
             name: "MusicStaffView",
             dependencies: ["Music", "SVGParser"],
-            resources: [.process("Opus/")]),
+            resources: [.process("Music Fonts/")]),
         .testTarget(
             name: "MusicStaffViewTests",
             dependencies: ["MusicStaffView"]),

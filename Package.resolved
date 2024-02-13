@@ -12,10 +12,10 @@
       },
       {
         "package": "SVGParser",
-        "repositoryURL": "git@github.com:mmuszynski/SVGParser.git",
+        "repositoryURL": "git@bitbucket.org:mmuszynski/svgparser.git",
         "state": {
           "branch": "master",
-          "revision": "4149a695039ade6ac878af33dcc8d8b335ace731",
+          "revision": "12b6b760392726906bb1d2b3a36e4a544959a775",
           "version": null
         }
       }

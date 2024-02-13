@@ -14,4 +14,8 @@ final class MusicStaffViewTests: XCTestCase {
         
         let _: [any MusicStaffViewElement] = [MusicAccidental.natural, MusicNote(pitch: MusicPitch(name: .c, accidental: .natural, octave: 4), rhythm: .quarter)]
     }
+    
+    func testNaturalPath() throws {
+        let path = MusicAccidental.natural.path(in: CGRect(x: 0, y: 0, width: 100, height: 100))
+    }
 }

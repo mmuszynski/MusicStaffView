@@ -18,3 +18,17 @@ extension EnvironmentValues {
         set { self[SpaceWidthKey.self] = newValue }
     }
 }
+
+struct SpaceWidthModifier: ViewModifier {
+    var spaceWidth: CGFloat
+    func body(content: Content) -> some View {
+        content
+            .environment(\.spaceWidth, spaceWidth)
+    }
+}
+
+extension View {
+    func spaceWidth(_ spaceWidth: CGFloat) -> some View {
+        modifier(SpaceWidthModifier(spaceWidth: spaceWidth))
+    }
+}

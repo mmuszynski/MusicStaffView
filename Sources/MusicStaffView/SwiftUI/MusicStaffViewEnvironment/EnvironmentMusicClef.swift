@@ -18,3 +18,17 @@ extension EnvironmentValues {
         set { self[ClefKey.self] = newValue }
     }
 }
+
+struct ClefModifier: ViewModifier {
+    var clef: MusicClef
+    func body(content: Content) -> some View {
+        content
+            .environment(\.clef, clef)
+    }
+}
+
+extension View {
+    func clef(_ clef: MusicClef) -> some View {
+        modifier(ClefModifier(clef: clef))
+    }
+}

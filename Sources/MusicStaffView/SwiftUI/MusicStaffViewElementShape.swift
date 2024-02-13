@@ -33,7 +33,6 @@ struct MusicStaffViewElementShape<Element: MusicStaffViewElement>: Shape {
 @available(macOS 12, *)
 @available(iOS 13, *)
 extension MusicStaffViewElement {
-    
     /// Returns the generic `Shape` struct to be drawn in SwiftUI
     ///
     /// For more information, see `MusicStaffViewElementShape<Element>` above.
@@ -41,5 +40,27 @@ extension MusicStaffViewElement {
     /// 2022-05-01: The second of the necessary elements to draw these shapes in SwiftUI, this method extends `MusicStaffViewElement` to take advantage of the generic `Shape` defined in `MusicStaffViewElementShape`
     var shape: MusicStaffViewElementShape<Self> {
         return MusicStaffViewElementShape<Self>(self)
+    }
+}
+
+struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
+    var parent: MusicStaffViewElement? = nil
+    
+    @Environment(\.spaceWidth) var spaceWidth: CGFloat
+    @Environment(\.clef) var clef: MusicClef
+    
+    var offset: CGFloat {
+        CGFloat(parent?.offset(in: clef) ?? element.offset(in: clef))
+    }
+    
+    var element: Element
+    var body: some View {
+        element
+            .shape
+            .aspectRatio(element.aspectRatio, contentMode: .fit)
+            .frame(height: element.heightInStaffSpace * spaceWidth)
+            .offset(y: element.heightInStaffSpace * spaceWidth * (0.5 - element.anchorPoint.y))
+            .rotationEffect(element.direction(in: clef) == .down ? .degrees(180) : .zero)
+            .offset(y: -offset * spaceWidth / 2)
     }
 }
