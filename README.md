@@ -28,3 +28,33 @@ Using `MusicStaffView` in UIKit and Cocoa requires the use of the class `UIMusic
     staffView.elementArray = [MusicClef.treble, MusicPitch.c.octave(4).note(with: .quarter)]
         
 ![Image of UIMusicStaffView output](/Example Images/uimusicstaffviewexample.png "Example UIMusicStaffView output")
+
+Note that many properties of the view can be customized. See the documentation for more details.
+
+### SwiftUI ###
+`MusicStaffView` can also be used in SwiftUI with the class `MusicStaffView`, which uses the SwiftUI `View` protocol to display the staff and its elements. **This is the current focus of development, and as such, many features that exist in the UIKit/Cocoa version are not complete.** However, SwiftUI allows `MusicStaffView` to be deployed in a simpler fashion, thanks to the inclusion of a class that leverages Swift result bulders to create a [domain-specific language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language) for building staff views:
+
+    MusicStaffView(clef: .treble) {
+        MusicPitch.c.octave(4).length(.quarter)
+        MusicPitch.d.octave(4).length(.quarter)
+        MusicPitch.e.octave(4).length(.quarter)
+        MusicPitch.f.accidental(.sharp).octave(4).length(.quarter)
+    }
+    
+    *Image coming eventually.*
+    
+This allows for idiomatic description of staff view elements, and hopefully a more readable description of music than can be achieved using array-based assignment.
+
+Further, in SwiftUI, various properties of the staff view have been moved into Environment values, allowing for much clearer descriptions of their function:
+
+    MusicStaffView {
+        MusicPitch.c.octave(4).length(.quarter)
+        MusicPitch.d.octave(4).length(.quarter)
+        MusicPitch.e.octave(4).length(.quarter)
+        MusicPitch.f.accidental(.sharp).octave(4).length(.quarter)
+    }
+    .clef(.treble)
+    .showNaturalAccidentals(false)
+    .lineWidth(10.0)
+    
+Hopefully, this descriptive language model will lead to better results.
