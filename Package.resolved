@@ -1,25 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Music",
-        "repositoryURL": "git@github.com:mmuszynski/Music.git",
-        "state": {
-          "branch": "master",
-          "revision": "b4893a9ef49d1dc6e3b453414676f861d4343306",
-          "version": null
-        }
-      },
-      {
-        "package": "SVGParser",
-        "repositoryURL": "git@bitbucket.org:mmuszynski/svgparser.git",
-        "state": {
-          "branch": "master",
-          "revision": "12b6b760392726906bb1d2b3a36e4a544959a775",
-          "version": null
-        }
+  "pins" : [
+    {
+      "identity" : "music",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:mmuszynski/Music.git",
+      "state" : {
+        "revision" : "84c80a7e56e1a6cb457bef339861d0e8c69e1f5d",
+        "version" : "1.0.1"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "svgparser",
+      "kind" : "remoteSourceControl",
+      "location" : "git@bitbucket.org:mmuszynski/svgparser.git",
+      "state" : {
+        "revision" : "4149a695039ade6ac878af33dcc8d8b335ace731",
+        "version" : "0.0.12"
+      }
+    }
+  ],
+  "version" : 2
 }
