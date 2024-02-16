@@ -27,4 +27,4 @@ Using `MusicStaffView` in UIKit and Cocoa requires the use of the class `UIMusic
     staffView.spacing = .preferred
     staffView.elementArray = [MusicClef.treble, MusicPitch.c.octave(4).note(with: .quarter)]
         
-![Image of UIMusicStaffView output](/Example\ Images/uimusicstaffviewexample.png "Example UIMusicStaffView output")
+![Image of UIMusicStaffView output](/Example Images/uimusicstaffviewexample.png "Example UIMusicStaffView output")
