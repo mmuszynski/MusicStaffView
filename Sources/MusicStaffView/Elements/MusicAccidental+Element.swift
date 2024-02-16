@@ -37,7 +37,8 @@ extension MusicAccidental: MusicStaffViewAccessory {
     public var aspectRatio: CGFloat {
         switch self {
         case .natural:
-            return MusicAccidental.naturalPath.boundingBox.size.width / MusicAccidental.naturalPath.boundingBox.size.height
+            return 16.0 / 45.0
+            //return MusicAccidental.naturalPath.boundingBox.size.width / MusicAccidental.naturalPath.boundingBox.size.height
         case .flat:
             return 16.0 / 45.0
         case .sharp:
@@ -64,7 +65,7 @@ extension MusicAccidental: MusicStaffViewAccessory {
         }
     }
     
-    static let naturalPath: CGPath = try! SVGSingleElementContent(forResource: "opusNatural", withExtenstion: "svg").path!
+//    static let naturalPath: CGPath = try! SVGSingleElementContent(forResource: "opusNatural", withExtenstion: "svg").path!
 
     func naturalPath(in frame: CGRect) -> CGPath {
 //        let path = MusicAccidental.naturalPath

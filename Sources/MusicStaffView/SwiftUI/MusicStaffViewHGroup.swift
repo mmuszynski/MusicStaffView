@@ -9,6 +9,7 @@ import Foundation
 import Music
 import SwiftUI
 
+@available(macOS 12, *)
 struct MusicStaffViewHGroup: MusicStaffViewElement {
     var elements: [any MusicStaffViewElement]
     var anyElements: [AnyMusicStaffViewElement] {
@@ -40,6 +41,7 @@ struct MusicStaffViewHGroup: MusicStaffViewElement {
     }
 }
 
+@available(macOS 12, *)
 extension MusicStaffViewHGroup: View {}
 
 #Preview {

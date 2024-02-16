@@ -43,6 +43,7 @@ extension MusicStaffViewElement {
     }
 }
 
+@available(macOS 12, *)
 struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
     var parent: MusicStaffViewElement? = nil
     

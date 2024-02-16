@@ -8,6 +8,7 @@
 import Foundation
 import Music
 
+@available(macOS 15, *)
 @available(iOS 15.0, *)
 extension MusicStaffView {
     @MusicStaffViewElementGroupBuilder
