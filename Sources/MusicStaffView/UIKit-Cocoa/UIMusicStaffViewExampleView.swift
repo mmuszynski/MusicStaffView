@@ -9,11 +9,14 @@ import SwiftUI
 import Music
 
 struct UIMusicStaffViewExampleView: UIViewRepresentable {
+    let staffView: UIMusicStaffView
+    init(@MusicStaffViewElementGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
+        staffView = UIMusicStaffView(frame: .zero, elements)
+    }
+    
     func makeUIView(context: Context) -> UIMusicStaffView {
-        let staffView = UIMusicStaffView()
         staffView.maxLedgerLines = 3
         staffView.spacing = .preferred
-        staffView.elementArray = [MusicClef.treble, MusicPitch.c.octave(4).note(with: .quarter)]
         return staffView
     }
     
@@ -23,6 +26,9 @@ struct UIMusicStaffViewExampleView: UIViewRepresentable {
 }
 
 #Preview {
-    UIMusicStaffViewExampleView()
-        .padding()
+    UIMusicStaffViewExampleView {
+        MusicClef.treble
+        MusicPitch.c.sharp.quarter
+    }
+    .padding()
 }

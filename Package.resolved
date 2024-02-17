@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:mmuszynski/Music.git",
       "state" : {
-        "revision" : "84c80a7e56e1a6cb457bef339861d0e8c69e1f5d",
-        "version" : "1.0.1"
+        "revision" : "0391c6cab39a203cf9cb21e75997a99628a43718",
+        "version" : "1.0.3"
       }
     },
     {
