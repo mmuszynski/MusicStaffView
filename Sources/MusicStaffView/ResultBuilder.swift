@@ -23,8 +23,8 @@ extension MusicStaffView {
 }
 
 @resultBuilder
-enum MusicStaffViewElementGroupBuilder {
-    static func buildBlock(_ components: MusicStaffViewElement...) -> [MusicStaffViewElement] {
+public enum MusicStaffViewElementGroupBuilder {
+    public static func buildBlock(_ components: MusicStaffViewElement...) -> [MusicStaffViewElement] {
         return components
     }
 }
