@@ -12,6 +12,7 @@ struct UIMusicStaffViewExampleView: UIViewRepresentable {
     let staffView: UIMusicStaffView
     init(@MusicStaffViewElementGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
         staffView = UIMusicStaffView(frame: .zero, elements)
+        staffView.shouldDrawNaturals = false
     }
     
     func makeUIView(context: Context) -> UIMusicStaffView {
@@ -21,14 +22,14 @@ struct UIMusicStaffViewExampleView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UIMusicStaffView, context: Context) {
-
+        
     }
 }
 
 #Preview {
     UIMusicStaffViewExampleView {
         MusicClef.treble
-        MusicPitch.c.sharp.quarter
+        MusicPitch.c.quarter
     }
     .padding()
 }

@@ -155,6 +155,13 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
         }
     }
     
+    ///Whether or not to draw natural accidentals by default
+    @IBInspectable public var shouldDrawNaturals: Bool = true {
+        didSet {
+            self.setupLayers()
+        }
+    }
+    
     ///Whether or not to draw the frames for each of the elements drawn in the staff.
     ///
     ///When set to true, this will draw bright, semi-transparent boxes in the frames of each of the layers representing a staff element.
@@ -256,6 +263,12 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
                     //Leading elements precede their parent elements. They require an static shim after themselves.
                     //Note that shims are not flexible by default
                 case .leading:
+                    if let accessory = accessory as? MusicAccidental {
+                        if accessory == .natural && !shouldDrawNaturals {
+                            continue
+                        }
+                    }
+                    
                     let finalAccessory = AccessoryElementWithParent(parent: element, accessory: accessory)
                     elements.append(finalAccessory)
                     let shim = MusicStaffViewShim(width: preferredHorizontalSpacing, spaceWidth: spaceWidth)
