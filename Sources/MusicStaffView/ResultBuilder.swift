@@ -30,7 +30,7 @@ enum MusicStaffViewElementGroupBuilder {
 }
 
 extension UIMusicStaffView {
-    convenience init(frame: CGRect, @MusicStaffViewElementGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
+    public convenience init(frame: CGRect, @MusicStaffViewElementGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
         self.init(frame: frame)
         self.elementArray = elements()
     }
