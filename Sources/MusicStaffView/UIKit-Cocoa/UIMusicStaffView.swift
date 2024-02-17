@@ -88,15 +88,15 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
     ///The notes represented on a the `MusicStaffView` are represented by `MusicStafffViewNote` objects that describe the position and length of each note, along with any accidentals necessary to draw.
     public var elementArray: [MusicStaffViewElement] {
         get {
-            #if TARGET_INTERFACE_BUILDER
-                var testArray: [MusicStaffViewElement] = [MusicClef.treble,
-                                                          MusicNote(pitch: MusicPitch(name: .b, accidental: .sharp, octave: 4), rhythm: .quarter),
-                                                          MusicNote(pitch: MusicPitch(name: .b, accidental: .sharp, octave: 4), rhythm: .quarter),
-                                                          MusicNote(pitch: MusicPitch(name: .b, accidental: .sharp, octave: 4), rhythm: .quarter)]
-                return testArray
-            #else
-                return _elementArray
-            #endif
+#if TARGET_INTERFACE_BUILDER
+            var testArray: [MusicStaffViewElement] = [MusicClef.treble,
+                                                      MusicNote(pitch: MusicPitch(name: .b, accidental: .sharp, octave: 4), rhythm: .quarter),
+                                                      MusicNote(pitch: MusicPitch(name: .b, accidental: .sharp, octave: 4), rhythm: .quarter),
+                                                      MusicNote(pitch: MusicPitch(name: .b, accidental: .sharp, octave: 4), rhythm: .quarter)]
+            return testArray
+#else
+            return _elementArray
+#endif
         }
         set {
             _elementArray = newValue
@@ -188,7 +188,7 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
     ///Instructs whether to fill all available space by using uniform spacing or to draw the clef information and then fill in the notes using `preferredHorizontalSpacing`.
     ///
     ///
-
+    
     public var spacing: SpacingType = .uniformTrailingSpace {
         didSet {
             self.setupLayers()
@@ -200,8 +200,8 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
     var elementDisplayLayer = CALayer()
     
     /// The color that the staff should be drawn
-    public var staffColor: ColorType = .black
-    public var elementColor: ColorType = .black
+    public var staffColor: ColorType = .secondaryLabel
+    public var elementColor: ColorType = .label
     
     ///Redraws all elements of the `MusicStaffView`, first removing them if they are already drawn.
     ///
@@ -243,27 +243,27 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
              
              Previously, accidentals were all drawn as the notes were drawn, so this was less of an issue. Now, the layers are set up and the accessories are drawn in order. Perhaps accessories need a concrete element to store that extra information.
              */
-                
+            
             //Iterate through each accessory and figure out how to place it
             for accessory in element.accessoryElements {
                 switch accessory.placement {
                     
-                //Above and Below are potentially beyond the scope of this horizontal spacing regime
-                //Standalone may be, but there may also not be a need for standalone at all.
+                    //Above and Below are potentially beyond the scope of this horizontal spacing regime
+                    //Standalone may be, but there may also not be a need for standalone at all.
                 case .above, .below, .standalone:
                     fatalError("These are not yet implemented")
                     
-                //Leading elements precede their parent elements. They require an static shim after themselves.
-                //Note that shims are not flexible by default
+                    //Leading elements precede their parent elements. They require an static shim after themselves.
+                    //Note that shims are not flexible by default
                 case .leading:
                     let finalAccessory = AccessoryElementWithParent(parent: element, accessory: accessory)
                     elements.append(finalAccessory)
                     let shim = MusicStaffViewShim(width: preferredHorizontalSpacing, spaceWidth: spaceWidth)
                     elements.append(shim)
                     
-                //Trailing elements follow their parent elements.
-                //These are more difficult, because the parent elements will draw a flexible shim after themselves.
-                //This shim needs to be captured and then made static.
+                    //Trailing elements follow their parent elements.
+                    //These are more difficult, because the parent elements will draw a flexible shim after themselves.
+                    //This shim needs to be captured and then made static.
                 case .trailing:
                     if var lastShim = elements.last as? MusicStaffViewShim {
                         lastShim.isFlexible = false
@@ -285,14 +285,14 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
                 flexShim.isFlexible = true
                 elements.append(flexShim)
             }
-        
+            
         }
         
         //now that all of the elements are decided, sum their widths:
         let totalElementWidth = elements.reduce(0.0) { (total, nextElement) -> CGFloat in
             return total + nextElement.layer(in: displayedClef, withSpaceWidth: spaceWidth, color: nil).bounds.size.width
         }
-
+        
         //come up with the width of each shim, ensuring that it will be positive.
         //at this point, it just bails out to preferred if it is not positive.
         //there's also a sanity check in case the numFlexible is equal to zero.
@@ -431,13 +431,13 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
         staffLayer.strokeColor = staffColor.cgColor
         staffLayer.mask = mask
         
-        #if os(iOS)
-            self.layer.addSublayer(staffLayer)
-            self.layer.addSublayer(elementDisplayLayer)
-        #elseif os(macOS)
-            self.layer?.addSublayer(staffLayer)
-            self.layer?.addSublayer(elementDisplayLayer)
-        #endif
+#if os(iOS)
+        self.layer.addSublayer(staffLayer)
+        self.layer.addSublayer(elementDisplayLayer)
+#elseif os(macOS)
+        self.layer?.addSublayer(staffLayer)
+        self.layer?.addSublayer(elementDisplayLayer)
+#endif
         
         if self.fitsStaffToBounds {
             guard
@@ -454,17 +454,17 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
             let scale = CATransform3DMakeScale(scaleAmt, scaleAmt, 1.0)
             let translate = CATransform3DMakeTranslation(-bounds.origin.x, bounds.origin.y, 0)
             
-        #if os(iOS)
+#if os(iOS)
             for layer in self.layer.sublayers! {
                 layer.transform = CATransform3DConcat(translate, scale)
             }
-        #elseif os(macOS)
+#elseif os(macOS)
             for layer in self.layer!.sublayers! {
                 layer.transform = CATransform3DConcat(translate, scale)
             }
-        #endif
+#endif
             
-
+            
         }
     }
     
@@ -487,12 +487,12 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
         var elementPosition = layer.position
         elementPosition.x = xPosition
         elementPosition.y += centerlineHeight
-
+        
         elementPosition.x += layer.bounds.width * 0.5
         layer.position = elementPosition
         
         elementLayers.append(layer)
-
+        
         return elementLayers
     }
     
@@ -505,8 +505,13 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
         let offsetFloat = CGFloat(offset)
         return -self.bounds.size.height / 2.0 + offsetFloat * spaceWidth / 2.0
     }
-        
+    
     override open func prepareForInterfaceBuilder() {
+        self.setupLayers()
+    }
+ 
+    open override func layoutSubviews() {
+        super.layoutSubviews()
         self.setupLayers()
     }
 }

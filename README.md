@@ -57,4 +57,4 @@ Further, in SwiftUI, various properties of the staff view have been moved into E
     .showNaturalAccidentals(false)
     .lineWidth(10.0)
     
-Hopefully, this descriptive language model will lead to better results.
+Hopefully, this descriptive language model will lead to more fluent, understandable code.

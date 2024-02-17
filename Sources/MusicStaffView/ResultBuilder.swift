@@ -28,3 +28,10 @@ enum MusicStaffViewElementGroupBuilder {
         return components
     }
 }
+
+extension UIMusicStaffView {
+    convenience init(frame: CGRect, @MusicStaffViewElementGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
+        self.init(frame: frame)
+        self.elementArray = elements()
+    }
+}
