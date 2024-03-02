@@ -39,7 +39,7 @@ public struct MusicStaffView: View {
         return geometry.size.height / (6.0 + CGFloat(lines))
     }
         
-    init(clef: MusicClef, @MusicStaffViewElementGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
+    public init(clef: MusicClef, @MusicStaffViewElementGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
         self.clef = clef
         self.elements = elements()
     }
