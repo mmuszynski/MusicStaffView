@@ -22,7 +22,7 @@ extension MusicStaffView {
 
 @available(macOS 15, *)
 @available(iOS 15.0, *)
-struct MusicStaffView: View {
+public struct MusicStaffView: View {
     @Environment(\.debug) var debug
     var elements: [any MusicStaffViewElement]
     var ledgerLines: (above: Int, below: Int)?
@@ -73,7 +73,7 @@ struct MusicStaffView: View {
         render(masks: true)
     }
     
-    var body: some View {
+    public var body: some View {
         GeometryReader { g in
             ZStack {
                 StaffShapeView(ledgerLines: maxLedgerLines)
