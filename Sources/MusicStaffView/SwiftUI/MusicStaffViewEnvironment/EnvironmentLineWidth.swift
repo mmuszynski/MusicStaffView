@@ -28,7 +28,7 @@ struct LineWidthModifier: ViewModifier {
 }
 
 extension View {
-    func lineWidth(_ lineWidth: CGFloat) -> some View {
+    public func lineWidth(_ lineWidth: CGFloat) -> some View {
         modifier(LineWidthModifier(lineWidth: lineWidth))
     }
 }

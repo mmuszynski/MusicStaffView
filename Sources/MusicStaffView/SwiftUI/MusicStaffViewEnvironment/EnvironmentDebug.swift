@@ -28,7 +28,7 @@ struct DebugModifier: ViewModifier {
 }
 
 extension View {
-    func debug(_ debug: Bool) -> some View {
+    public func debug(_ debug: Bool) -> some View {
         modifier(DebugModifier(debug: debug))
     }
 }
