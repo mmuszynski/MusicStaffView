@@ -8,23 +8,44 @@
 import SwiftUI
 import Music
 
-@available(iOS 15.0, *)
-extension MusicStaffView {
-    struct Spacing: OptionSet {
-        let rawValue: Int
-        
-        static let leading = Spacing(rawValue: 1 << 0)
-        static let trailing = Spacing(rawValue: 1 << 1)
-        
-        static let all: Spacing = [.leading, .trailing]
-    }
-}
-
 @available(macOS 15, *)
 @available(iOS 15.0, *)
 public struct MusicStaffView: View {
+    ///Instructs the `MusicStaffView` to draw notes using the spacing set in `preferredHorizontalSpacing` or to fill all available space by dividing the space for notes into equal parts.
+    ///
+    /// **Values**
+    /// - *preferred*: Elements are drawn according to the `preferredHorizontalSpacing` attribute
+    /// - *uniformFullWidth*: Elements are drawn an equal width from each other, with no spacing at either margin
+    /// - *uniformTrailingSpace*: Elements are drawn an equal width from each other, with another equal space at the trailing edge
+    /// - *uniformLeadingAndTrailingSpace*: Elements are drawn an equal width from each other, with equal spacing at the leading and trailing edges
+    ///
+    ///For certain uses, notes on a staff should be drawn to maximize all available space. In other cases (for example, when the notes will take up more space than the visible area of the view itself), it makes sense to draw the notes as close together as possible. These scenarios are represented in `MusicStaffViewSpacingType` as `preferred`, which uses the `preferredHorizontalSpacing` property, or `uniform`, which discards the property in favor of spacing notes equally across the view.
+    ///
+    ///- Warning: There may be cases where using uniform spacing will still cause notes to be drawn outside the visible area of the `MusicStaffView`. Currently, the framework takes no position in these situations.
+    public enum Spacing {
+        //FIXME: What happens when spacing causes notes to draw past the bounds of the view?
+        case preferred
+        case uniformFullWidth
+        case uniformTrailingSpace
+        case uniformLeadingAndTrailingSpace
+        case explicit
+        
+        var isUniform: Bool {
+            self != .preferred && self != .explicit
+        }
+        
+        var isTrailing: Bool {
+            self == .uniformTrailingSpace || self == .uniformLeadingAndTrailingSpace
+        }
+        
+        var isLeading: Bool {
+            self == .uniformLeadingAndTrailingSpace
+        }
+    }
+    
     @Environment(\.debug) var debug
     @Environment(\.showNaturalAccidentals) var showsNaturalAccidentals
+    @Environment(\.spacingType) var spacing
     
     var elements: [any MusicStaffViewElement]
     var ledgerLines: (above: Int, below: Int)?
@@ -44,7 +65,7 @@ public struct MusicStaffView: View {
         }
         return geometry.size.height / (6.0 + CGFloat(lines))
     }
-        
+    
     
     /// The basic initializer for `MusicStaffView`. Specifies an optional starting clef.
     ///
@@ -68,7 +89,7 @@ public struct MusicStaffView: View {
         var currentGroup: [MusicStaffViewElement] = []
         var allGroups: [[MusicStaffViewElement]] = []
         
-        for element in elements {            
+        for element in elements {
             if let clef = element as? MusicClef {
                 if !currentGroup.isEmpty {
                     allGroups.append(currentGroup)
@@ -92,6 +113,10 @@ public struct MusicStaffView: View {
     @ViewBuilder
     func render(masks: Bool = false) -> some View {
         HStack {
+            if spacing.isLeading {
+                Spacer()
+            }
+            
             ForEach(groupedByClef.indices, id: \.self) { groupIndex in
                 let groupElements = groupedByClef[groupIndex]
                 let clef = groupElements.first?.unboxed as? MusicClef ?? self.startingClef
@@ -104,7 +129,13 @@ public struct MusicStaffView: View {
                         element.body
                             .clef(clef)
                     }
+                     
+                    if spacing.isUniform {
+                        Spacer()
+                    }
                 }
+                
+                Spacer()
             }
         }
     }
@@ -148,30 +179,50 @@ public struct MusicStaffView: View {
 }
 
 @available(macOS 12, *)
-@available(iOS 15.0, *)
-struct MusicStaffView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            MusicStaffView(clef: .treble) {
-                MusicPitch.c.octave(4).length(.quarter)
-                MusicPitch.d.octave(4).length(.quarter)
-                MusicPitch.e.octave(4).length(.quarter)
-                MusicPitch.f.accidental(.sharp).octave(4).length(.quarter)
-            }
-            .showNaturalAccidentals(true)
-            
-            MusicStaffView(clef: .bass) {
-                MusicPitch.c.octave(3).length(.quarter)
-            }
-            
-            MusicStaffView {
-                MusicClef.bass
-                MusicPitch.c.octave(3).quarter
-                MusicClef.treble
-                MusicPitch.c.octave(6).quarter
-            }
+@available(iOS 17.0, *)
+#Preview("No Clef", traits: .fixedLayout(width: 600, height: 400)) {
+    Group {
+        MusicStaffView(clef: .treble) {
+            MusicPitch.c.octave(4).length(.quarter)
+            MusicPitch.d.octave(4).length(.quarter)
+            MusicPitch.e.octave(4).length(.quarter)
+            MusicPitch.f.accidental(.sharp).octave(4).length(.quarter)
         }
-        .previewLayout(.fixed(width: 600, height: 400))
-        .debug(false)
+        .showNaturalAccidentals(true)
+    }
+    
+}
+
+@available(macOS 12, *)
+@available(iOS 17.0, *)
+#Preview("Uniform Trailing Spacing",
+         traits: .fixedLayout(width: 600, height: 400)) {
+    MusicStaffView {
+        MusicClef.bass
+        MusicPitch.c.octave(3).length(.quarter)
+    }
+    .spacing(.uniformTrailingSpace)
+}
+
+@available(macOS 12, *)
+@available(iOS 17.0, *)
+#Preview("Explicit Spacing",
+         traits: .fixedLayout(width: 600, height: 400)) {
+    MusicStaffView {
+        MusicClef.bass
+        MusicPitch.c.octave(3).length(.quarter)
+    }
+    .spacing(.explicit)
+}
+
+@available(macOS 12, *)
+@available(iOS 17.0, *)
+#Preview("Multiple Clefs",
+         traits: .fixedLayout(width: 600, height: 400)) {
+    MusicStaffView {
+        MusicClef.bass
+        MusicPitch.c.octave(3).quarter
+        MusicClef.treble
+        MusicPitch.c.octave(6).quarter
     }
 }
