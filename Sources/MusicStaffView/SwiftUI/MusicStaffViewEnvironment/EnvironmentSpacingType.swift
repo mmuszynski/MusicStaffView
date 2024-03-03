@@ -36,7 +36,7 @@ struct SpacingKeyModifier: ViewModifier {
 @available(macOS 15, *)
 @available(iOS 15.0, *)
 extension View {
-    func spacing(_ spacing: MusicStaffView.Spacing) -> some View {
+    public func spacing(_ spacing: MusicStaffView.Spacing) -> some View {
         modifier(SpacingKeyModifier(spacingType: spacing))
     }
 }
