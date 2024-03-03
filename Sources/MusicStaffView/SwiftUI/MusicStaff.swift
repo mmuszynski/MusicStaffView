@@ -48,6 +48,7 @@ struct MusicStaffViewElementStaffMask: View {
     @Environment(\.spaceWidth) var spaceWidth: CGFloat
     @Environment(\.clef) var clef: MusicClef
     @Environment(\.lineWidth) var lineWidth: CGFloat
+    @Environment(\.showNaturalAccidentals) var showsNaturalAccidentals
 
     var element: MusicStaffViewElement
     var parent: MusicStaffViewElement? = nil
@@ -57,9 +58,12 @@ struct MusicStaffViewElementStaffMask: View {
         //but actually, the anchor point sits on the offset line
         let actualOffset = -CGFloat(element.offset(in: clef)) * spaceWidth / 2
         let size = element.size(withSpaceWidth: spaceWidth)
+        let leadingAccessories = element.leadingAccessories.filter { acc in
+            !((acc.unboxed as? MusicAccidental == .natural) && !showsNaturalAccidentals)
+        }
 
         HStack(spacing: 0) {
-            ForEach(element.leadingAccessories) { accessory in
+            ForEach(leadingAccessories) { accessory in
                 MusicStaffViewElementStaffMask(element: accessory, parent: element)
             }
             Rectangle()

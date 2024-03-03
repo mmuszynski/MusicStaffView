@@ -49,15 +49,25 @@ struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
     
     @Environment(\.spaceWidth) var spaceWidth: CGFloat
     @Environment(\.clef) var clef: MusicClef
-    
+    @Environment(\.showNaturalAccidentals) var showsNaturalAccidentals
+    @Environment(\.debug) var debug: Bool
+
     var offset: CGFloat {
         CGFloat(parent?.offset(in: clef) ?? element.offset(in: clef))
+    }
+    
+    var shouldHide: Bool {
+        if let accidental = (element as? AnyMusicStaffViewElement)?.unboxed as? MusicAccidental {
+            return accidental == .natural && showsNaturalAccidentals == false
+        }
+        return false
     }
     
     var element: Element
     var body: some View {
         element
             .shape
+            .frame(width: shouldHide ? 0 : nil)
             .aspectRatio(element.aspectRatio, contentMode: .fit)
             .frame(height: element.heightInStaffSpace * spaceWidth)
             .offset(y: element.heightInStaffSpace * spaceWidth * (0.5 - element.anchorPoint.y))

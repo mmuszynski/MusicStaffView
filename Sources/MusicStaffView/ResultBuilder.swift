@@ -24,8 +24,16 @@ extension MusicStaffView {
 
 @resultBuilder
 public enum MusicStaffViewElementGroupBuilder {
-    public static func buildBlock(_ components: MusicStaffViewElement...) -> [MusicStaffViewElement] {
-        return components
+    public static func buildBlock(_ components: [MusicStaffViewElement]...) -> [MusicStaffViewElement] {
+        components.flatMap { $0 }
+    }
+    
+    public static func buildExpression(_ expression: MusicStaffViewElement) -> [MusicStaffViewElement] {
+        [expression]
+    }
+    
+    public static func buildExpression(_ expression: [MusicStaffViewElement]) -> [MusicStaffViewElement] {
+        buildBlock(expression)
     }
 }
 

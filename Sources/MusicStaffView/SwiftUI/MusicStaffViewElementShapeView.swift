@@ -52,13 +52,14 @@ struct ElementPreviews: PreviewProvider {
                     .length(.quarter)
                 MusicPitch.b
                     .octave(4)
-                    .length(.half)
-                MusicPitch.c.length(.whole)
+                    .length(.quarter)
+                MusicPitch.c.length(.quarter)
                 Group {
                     MusicPitch.c.length(.quarter)
-                    MusicPitch.c.length(.half)
-                    MusicPitch.c.length(.whole)
+                    MusicPitch.c.length(.quarter)
+                    MusicPitch.c.length(.quarter)
                 }
+                .showNaturalAccidentals(false)
             }
             .previewDisplayName("Notes")
             
