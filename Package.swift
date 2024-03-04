@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "MusicStaffView",
-    platforms: [.iOS(.v13), .macOS(.v10_15)],
+    platforms: [.iOS(.v15), .macOS(.v10_15)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -28,7 +28,8 @@ let package = Package(
                 .product(name: "Music", package: "Music"),
                 .product(name: "SVGParser", package: "svgparser")
             ],
-            resources: [.process("Music Fonts/")]),
+            resources: [.process("Music Fonts/"),
+                        .process("Images/")]),
         .testTarget(
             name: "MusicStaffViewTests",
             dependencies: ["MusicStaffView"]),

@@ -153,7 +153,7 @@ public struct MusicStaffView: View {
     public var body: some View {
         GeometryReader { g in
             ZStack {
-                StaffShapeView(ledgerLines: maxLedgerLines)
+                StaffShapeView()
                     .mask {
                         ZStack {
                             StaffMask()
@@ -225,4 +225,17 @@ public struct MusicStaffView: View {
         MusicClef.treble
         MusicPitch.c.octave(6).quarter
     }
+}
+
+@available(macOS 12, *)
+@available(iOS 17.0, *)
+#Preview("Colors",
+         traits: .fixedLayout(width: 600, height: 400)) {
+    MusicStaffView {
+        MusicClef.bass
+        MusicPitch.c.octave(3).quarter
+    }
+    .background(Color.black)
+    .elementStyle(ImagePaint(image: Image(.opaqueChalk)))
+    .staffStyle(ImagePaint(image: Image(.opaqueChalk)).secondary)
 }

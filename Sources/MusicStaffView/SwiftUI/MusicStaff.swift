@@ -19,16 +19,20 @@ struct StaffShape: Shape {
     }
 }
 
+@available(iOS 15, *)
 struct StaffShapeView: View {
     @Environment(\.spaceWidth) var spaceWidth: CGFloat
     @Environment(\.lineWidth) var lineWidth: CGFloat
-    var ledgerLines: Int
-    
+    @Environment(\.staffColor) var color
+    @Environment(\.staffStyle) var staffStyle
+    @Environment(\.maxLedgerLines) var ledgerLines
+        
     var body: some View {
         VStack(spacing: spaceWidth - lineWidth) {
             ForEach(0..<(5+ledgerLines*2), id: \.self) { _ in
                 Rectangle()
                     .frame(height: lineWidth)
+                    .foregroundStyle(staffStyle)
             }
         }
     }
@@ -74,9 +78,10 @@ struct MusicStaffViewElementStaffMask: View {
     }
 }
 
+@available(iOS 15, *)
 struct StaffShapePreview: PreviewProvider {
     static var previews: some View {
-        StaffShapeView(ledgerLines: 2)
+        StaffShapeView()
             .spaceWidth(30)
             .lineWidth(5)
             .previewLayout(.fixed(width: 600, height: 300))

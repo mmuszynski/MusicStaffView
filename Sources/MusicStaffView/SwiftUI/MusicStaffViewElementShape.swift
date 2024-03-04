@@ -51,6 +51,8 @@ struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
     @Environment(\.clef) var clef: MusicClef
     @Environment(\.showNaturalAccidentals) var showsNaturalAccidentals
     @Environment(\.debug) var debug: Bool
+    @Environment(\.elementColor) var elementColor
+    @Environment(\.elementStyle) var elementStyle
 
     var offset: CGFloat {
         CGFloat(parent?.offset(in: clef) ?? element.offset(in: clef))
@@ -67,6 +69,8 @@ struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
     var body: some View {
         element
             .shape
+            .foregroundStyle(elementStyle)
+            //.foregroundStyle(elementColor)
             .frame(width: shouldHide ? 0 : nil)
             .aspectRatio(element.aspectRatio, contentMode: .fit)
             .frame(height: element.heightInStaffSpace * spaceWidth)
