@@ -28,7 +28,7 @@ struct ShowNaturalAccidentalsKeyModifier: ViewModifier {
 }
 
 extension View {
-    func showNaturalAccidentals(_ showNaturalAccidentals: Bool) -> some View {
+    public func showNaturalAccidentals(_ showNaturalAccidentals: Bool) -> some View {
         modifier(ShowNaturalAccidentalsKeyModifier(showNaturalAccidentals: showNaturalAccidentals))
     }
 }

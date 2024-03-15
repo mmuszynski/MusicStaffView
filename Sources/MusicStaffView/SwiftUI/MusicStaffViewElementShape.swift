@@ -22,7 +22,7 @@ import Music
 /// Translates the `path` function of the `MusicStaffViewElement` into a specific, but generic `Shape` for use in SwiftUI
 ///
 /// 2022-05-01: I was creating a new shape for every element, and decided instead to try to implement it with a generic `Shape` that could take any type of `MusicStaffViewElement`
-struct MusicStaffViewElementShape<Element: MusicStaffViewElement>: Shape {
+struct MusicStaffViewElementShape<Element: MusicStaffViewElement & Sendable>: Shape {
     var element: Element
     init(_ element: Element) { self.element = element }
     func path(in rect: CGRect) -> Path {
