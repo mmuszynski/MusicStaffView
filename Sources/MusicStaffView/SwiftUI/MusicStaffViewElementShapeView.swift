@@ -22,9 +22,17 @@ extension MusicStaffViewElement {
     public var body: some View {
         return HStack(spacing: 0) {
             ForEach(leadingAccessories) { accessory in
-                MusicStaffViewElementShapeView(parent: self, element: accessory)
+                if #available(iOS 15.0, *) {
+                    MusicStaffViewElementShapeView(parent: self, element: accessory)
+                } else {
+                    LegacyMusicStaffViewElementShapeView(parent: self, element: accessory)
+                }
             }
-            MusicStaffViewElementShapeView(element: self)
+            if #available(iOS 15.0, *) {
+                MusicStaffViewElementShapeView(element: self)
+            } else {
+                LegacyMusicStaffViewElementShapeView(element: self)
+            }
         }
     }
 }

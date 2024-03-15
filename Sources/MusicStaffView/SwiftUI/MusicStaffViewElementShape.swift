@@ -43,6 +43,7 @@ extension MusicStaffViewElement {
     }
 }
 
+@available(iOS 15.0, *)
 @available(macOS 12, *)
 struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
     var parent: MusicStaffViewElement? = nil
@@ -71,6 +72,42 @@ struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
             .shape
             .foregroundStyle(elementStyle)
             //.foregroundStyle(elementColor)
+            .frame(width: shouldHide ? 0 : nil)
+            .aspectRatio(element.aspectRatio, contentMode: .fit)
+            .frame(height: element.heightInStaffSpace * spaceWidth)
+            .offset(y: element.heightInStaffSpace * spaceWidth * (0.5 - element.anchorPoint.y))
+            .rotationEffect(element.direction(in: clef) == .down ? .degrees(180) : .zero)
+            .offset(y: -offset * spaceWidth / 2)
+    }
+}
+
+@available(iOS 13.0, *)
+@available(macOS 12, *)
+struct LegacyMusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
+    var parent: MusicStaffViewElement? = nil
+    
+    @Environment(\.spaceWidth) var spaceWidth: CGFloat
+    @Environment(\.clef) var clef: MusicClef
+    @Environment(\.showNaturalAccidentals) var showsNaturalAccidentals
+    @Environment(\.debug) var debug: Bool
+    @Environment(\.elementColor) var elementColor
+
+    var offset: CGFloat {
+        CGFloat(parent?.offset(in: clef) ?? element.offset(in: clef))
+    }
+    
+    var shouldHide: Bool {
+        if let accidental = (element as? AnyMusicStaffViewElement)?.unboxed as? MusicAccidental {
+            return accidental == .natural && showsNaturalAccidentals == false
+        }
+        return false
+    }
+    
+    var element: Element
+    var body: some View {
+        element
+            .shape
+            .foregroundColor(elementColor)
             .frame(width: shouldHide ? 0 : nil)
             .aspectRatio(element.aspectRatio, contentMode: .fit)
             .frame(height: element.heightInStaffSpace * spaceWidth)
