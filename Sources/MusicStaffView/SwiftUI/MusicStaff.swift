@@ -20,6 +20,7 @@ struct StaffShape: Shape {
 }
 
 @available(iOS 15, *)
+@available(macOS 12.0, *)
 struct StaffShapeView: View {
     @Environment(\.spaceWidth) var spaceWidth: CGFloat
     @Environment(\.lineWidth) var lineWidth: CGFloat
@@ -48,6 +49,7 @@ struct StaffMask: View {
     }
 }
 
+@available(macOS 12.0, *)
 struct MusicStaffViewElementStaffMask: View {
     @Environment(\.spaceWidth) var spaceWidth: CGFloat
     @Environment(\.clef) var clef: MusicClef
@@ -78,12 +80,10 @@ struct MusicStaffViewElementStaffMask: View {
     }
 }
 
-@available(iOS 15, *)
-struct StaffShapePreview: PreviewProvider {
-    static var previews: some View {
-        StaffShapeView()
-            .spaceWidth(30)
-            .lineWidth(5)
-            .previewLayout(.fixed(width: 600, height: 300))
-    }
+@available(iOS 17, *)
+@available(macOS 14.0, *)
+#Preview(traits: .fixedLayout(width: 600, height: 300)) {
+    StaffShapeView()
+        //.spaceWidth(30)
+        //.lineWidth(5)
 }

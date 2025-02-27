@@ -8,13 +8,13 @@
 import Foundation
 import SwiftUI
 
-@available(macOS 15, *)
+@available(macOS 12, *)
 @available(iOS 15.0, *)
 struct MaxLedgerLinesKey: EnvironmentKey {
     static var defaultValue: Int = 2
 }
 
-@available(macOS 15, *)
+@available(macOS 12, *)
 @available(iOS 15.0, *)
 extension EnvironmentValues {
     var maxLedgerLines: Int {
@@ -23,7 +23,7 @@ extension EnvironmentValues {
     }
 }
 
-@available(macOS 15, *)
+@available(macOS 12, *)
 @available(iOS 15.0, *)
 struct MaxLedgerLinesKeyModifier: ViewModifier {
     var maxLedgerLines: Int
@@ -33,7 +33,7 @@ struct MaxLedgerLinesKeyModifier: ViewModifier {
     }
 }
 
-@available(macOS 15, *)
+@available(macOS 12, *)
 @available(iOS 15.0, *)
 extension View {
     public func maxLedgerLines(_ num: Int) -> some View {

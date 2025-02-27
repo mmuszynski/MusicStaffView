@@ -1,12 +1,13 @@
 {
+  "originHash" : "987aa8d0e9598072ccca34daa042570788277e8d5d3725768d82ec50b07b76da",
   "pins" : [
     {
       "identity" : "music",
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:mmuszynski/Music.git",
       "state" : {
-        "revision" : "0391c6cab39a203cf9cb21e75997a99628a43718",
-        "version" : "1.0.3"
+        "revision" : "b799ebda47b53441986ecf5d5abbcf26b26f5da8",
+        "version" : "1.0.4"
       }
     },
     {
@@ -14,10 +15,10 @@
       "kind" : "remoteSourceControl",
       "location" : "git@bitbucket.org:mmuszynski/svgparser.git",
       "state" : {
-        "revision" : "4149a695039ade6ac878af33dcc8d8b335ace731",
-        "version" : "0.0.12"
+        "revision" : "12b6b760392726906bb1d2b3a36e4a544959a775",
+        "version" : "0.0.13"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

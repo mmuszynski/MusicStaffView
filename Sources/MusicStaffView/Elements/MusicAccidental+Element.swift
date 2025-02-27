@@ -40,6 +40,7 @@ extension MusicAccidental: MusicStaffViewAccessory {
             return 16.0 / 45.0
             //return MusicAccidental.naturalPath.boundingBox.size.width / MusicAccidental.naturalPath.boundingBox.size.height
         case .flat:
+            //return MusicAccidental.opusFlat.boundingBoxOfPath.size.width / MusicAccidental.opusFlat.boundingBoxOfPath.size.height
             return 16.0 / 45.0
         case .sharp:
             return 16.0 / 45.0
@@ -61,23 +62,30 @@ extension MusicAccidental: MusicStaffViewAccessory {
         case .sharp:
             return CGPoint(x: 0.5, y: 0.475)
         default:
-            fatalError()
+            fatalError("not yet implemented")
         }
     }
     
-//    static let naturalPath: CGPath = try! SVGSingleElementContent(forResource: "opusNatural", withExtenstion: "svg").path!
+    static let naturalPath: CGPath = try! SVGSingleElementContent(forResource: "opusNatural", withExtenstion: "svg").path!
+    static let opusFlat: CGPath = try! SVGSingleElementContent(forResource: "opusFlat", withExtenstion: "svg").path!
 
     func naturalPath(in frame: CGRect) -> CGPath {
-//        let path = MusicAccidental.naturalPath
-//        
-//        let originalBox = path.boundingBox
-//        let finalBox = frame
-//  
-//        var transform = CGAffineTransform(translationX: finalBox.minX, y: finalBox.minY)
-//        transform = transform.scaledBy(x: finalBox.width / originalBox.width, y: finalBox.height / originalBox.height)
-//        transform = transform.translatedBy(x: -originalBox.minX, y: -originalBox.minY)
-//        
-//        return path.copy(using: &transform)!
+//        do {
+//            guard let path = try SVGSingleElementContent(forResource: "opusNatural", withExtenstion: "svg").path else {
+//                fatalError("Couldn't get path")
+//            }
+//            
+//            let originalBox = path.boundingBox
+//            let finalBox = frame
+//            
+//            var transform = CGAffineTransform(translationX: finalBox.minX, y: finalBox.minY)
+//            transform = transform.scaledBy(x: finalBox.width / originalBox.width, y: finalBox.height / originalBox.height)
+//            transform = transform.translatedBy(x: -originalBox.minX, y: -originalBox.minY)
+//            
+//            return path.copy(using: &transform)!
+//        } catch {
+//            fatalError("\(error)")
+//        }
         
         let naturalPath = CGMutablePath()
 
@@ -144,6 +152,21 @@ extension MusicAccidental: MusicStaffViewAccessory {
     }
     
     func flatPath(in frame: CGRect) -> CGPath {
+//        do {
+//            let path = MusicAccidental.opusFlat
+//            
+//            let originalBox = path.boundingBox
+//            let finalBox = frame
+//            
+//            var transform = CGAffineTransform(translationX: finalBox.minX, y: finalBox.minY)
+//            transform = transform.scaledBy(x: finalBox.width / originalBox.width, y: finalBox.height / originalBox.height)
+//            transform = transform.translatedBy(x: -originalBox.minX, y: -originalBox.minY)
+//            
+//            return path.copy(using: &transform)!
+//        } catch {
+//            fatalError("\(error)")
+//        }
+        
         let flatPath = CGMutablePath()
         flatPath.move(to: CGPoint(x: frame.minX + 0.57727 * frame.width, y: frame.minY + 0.77042 * frame.height))
         flatPath.addCurve( to: CGPoint(x: frame.minX + 0.14863 * frame.width, y: frame.minY + 0.91469 * frame.height), control1: CGPoint(x: frame.minX + 0.43202 * frame.width, y: frame.minY + 0.83467 * frame.height), control2: CGPoint(x: frame.minX + 0.30975 * frame.width, y: frame.minY + 0.87145 * frame.height))

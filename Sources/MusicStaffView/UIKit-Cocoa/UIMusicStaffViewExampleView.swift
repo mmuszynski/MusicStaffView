@@ -8,6 +8,7 @@
 import SwiftUI
 import Music
 
+#if os(iOS)
 struct UIMusicStaffViewExampleView: UIViewRepresentable {
     let staffView: UIMusicStaffView
     init(@MusicStaffViewElementGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
@@ -33,3 +34,31 @@ struct UIMusicStaffViewExampleView: UIViewRepresentable {
     }
     .padding()
 }
+#elseif os(macOS)
+
+struct NSMusicStaffViewExampleView: NSViewRepresentable {
+    let staffView: UIMusicStaffView
+    init(@MusicStaffViewElementGroupBuilder _ elements: () -> [any MusicStaffViewElement]) {
+        staffView = UIMusicStaffView(frame: .zero, elements)
+        staffView.shouldDrawNaturals = false
+    }
+    
+    func makeNSView(context: Context) -> UIMusicStaffView {
+        staffView.maxLedgerLines = 3
+        staffView.spacing = .preferred
+        return staffView
+    }
+    
+    func updateNSView(_ uiView: UIMusicStaffView, context: Context) {
+        
+    }
+}
+
+#Preview {
+    NSMusicStaffViewExampleView {
+        MusicClef.treble
+        MusicPitch.c.quarter
+    }
+    .padding()
+}
+#endif

@@ -8,13 +8,13 @@
 import Foundation
 import SwiftUI
 
-@available(macOS 15, *)
+@available(macOS 12, *)
 @available(iOS 15.0, *)
 struct SpacingKey: EnvironmentKey {
     static var defaultValue: MusicStaffView.Spacing = .uniformLeadingAndTrailingSpace
 }
 
-@available(macOS 15, *)
+@available(macOS 12, *)
 @available(iOS 15.0, *)
 extension EnvironmentValues {
     var spacingType: MusicStaffView.Spacing {
@@ -23,7 +23,7 @@ extension EnvironmentValues {
     }
 }
 
-@available(macOS 15, *)
+@available(macOS 12, *)
 @available(iOS 15.0, *)
 struct SpacingKeyModifier: ViewModifier {
     var spacingType: MusicStaffView.Spacing
@@ -33,7 +33,7 @@ struct SpacingKeyModifier: ViewModifier {
     }
 }
 
-@available(macOS 15, *)
+@available(macOS 12, *)
 @available(iOS 15.0, *)
 extension View {
     public func spacing(_ spacing: MusicStaffView.Spacing) -> some View {

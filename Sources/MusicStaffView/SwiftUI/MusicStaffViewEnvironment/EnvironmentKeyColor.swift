@@ -47,11 +47,13 @@ extension View {
  */
 
 @available(iOS 15.0, *)
+@available(macOS 12.0, *)
 struct ElementStyleKey: EnvironmentKey {
     static var defaultValue: AnyShapeStyle = AnyShapeStyle(.primary)
 }
 
 @available(iOS 15.0, *)
+@available(macOS 12.0, *)
 extension EnvironmentValues {
     var elementStyle: AnyShapeStyle {
         get { self[ElementStyleKey.self] }
@@ -60,6 +62,7 @@ extension EnvironmentValues {
 }
 
 @available(iOS 15.0, *)
+@available(macOS 12.0, *)
 struct ElementStyleModifier: ViewModifier {
     var style: AnyShapeStyle
     func body(content: Content) -> some View {
@@ -69,6 +72,7 @@ struct ElementStyleModifier: ViewModifier {
 }
 
 @available(iOS 15.0, *)
+@available(macOS 12.0, *)
 extension View {
     public func elementStyle<S: ShapeStyle>(_ style: S) -> some View {
         modifier(ElementStyleModifier(style: AnyShapeStyle(style)))
@@ -115,11 +119,13 @@ extension View {
  */
 
 @available(iOS 15, *)
+@available(macOS 12.0, *)
 struct StaffStyleKey: EnvironmentKey {
-    static var defaultValue: AnyShapeStyle = AnyShapeStyle(.primary)
+    static var defaultValue: AnyShapeStyle = AnyShapeStyle(.secondary)
 }
 
 @available(iOS 15, *)
+@available(macOS 12.0, *)
 extension EnvironmentValues {
     var staffStyle: AnyShapeStyle {
         get { self[StaffStyleKey.self] }
@@ -128,6 +134,7 @@ extension EnvironmentValues {
 }
 
 @available(iOS 15, *)
+@available(macOS 12.0, *)
 struct StaffStyleModifier: ViewModifier {
     var style: AnyShapeStyle
     func body(content: Content) -> some View {
@@ -137,6 +144,7 @@ struct StaffStyleModifier: ViewModifier {
 }
 
 @available(iOS 15, *)
+@available(macOS 12.0, *)
 extension View {
     public func staffStyle<S>(_ style: S) -> some View where S: ShapeStyle {
         modifier(StaffStyleModifier(style: AnyShapeStyle(style)))

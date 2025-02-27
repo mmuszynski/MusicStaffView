@@ -8,7 +8,7 @@
 import SwiftUI
 import Music
 
-@available(macOS 15, *)
+@available(macOS 12, *)
 @available(iOS 15.0, *)
 public struct MusicStaffView: View {
     ///Instructs the `MusicStaffView` to draw notes using the spacing set in `preferredHorizontalSpacing` or to fill all available space by dividing the space for notes into equal parts.
@@ -178,7 +178,7 @@ public struct MusicStaffView: View {
     }
 }
 
-@available(macOS 12, *)
+@available(macOS 14, *)
 @available(iOS 17.0, *)
 #Preview("No Clef", traits: .fixedLayout(width: 600, height: 400)) {
     Group {
@@ -193,7 +193,7 @@ public struct MusicStaffView: View {
     
 }
 
-@available(macOS 12, *)
+@available(macOS 14, *)
 @available(iOS 17.0, *)
 #Preview("Uniform Trailing Spacing",
          traits: .fixedLayout(width: 600, height: 400)) {
@@ -204,7 +204,7 @@ public struct MusicStaffView: View {
     .spacing(.uniformTrailingSpace)
 }
 
-@available(macOS 12, *)
+@available(macOS 14, *)
 @available(iOS 17.0, *)
 #Preview("Explicit Spacing",
          traits: .fixedLayout(width: 600, height: 400)) {
@@ -215,7 +215,7 @@ public struct MusicStaffView: View {
     .spacing(.explicit)
 }
 
-@available(macOS 12, *)
+@available(macOS 14, *)
 @available(iOS 17.0, *)
 #Preview("Multiple Clefs",
          traits: .fixedLayout(width: 600, height: 400)) {
@@ -227,7 +227,7 @@ public struct MusicStaffView: View {
     }
 }
 
-@available(macOS 12, *)
+@available(macOS 14, *)
 @available(iOS 17.0, *)
 #Preview("Colors",
          traits: .fixedLayout(width: 600, height: 400)) {

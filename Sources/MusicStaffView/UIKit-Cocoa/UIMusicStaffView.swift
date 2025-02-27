@@ -207,8 +207,13 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
     var elementDisplayLayer = CALayer()
     
     /// The color that the staff should be drawn
+    #if os(iOS)
     public var staffColor: ColorType = .secondaryLabel
     public var elementColor: ColorType = .label
+    #elseif os(macOS)
+    public var staffColor: ColorType = .secondaryLabelColor
+    public var elementColor: ColorType = .labelColor
+    #endif
     
     ///Redraws all elements of the `MusicStaffView`, first removing them if they are already drawn.
     ///
@@ -522,9 +527,22 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
     override open func prepareForInterfaceBuilder() {
         self.setupLayers()
     }
- 
+    
+    #if os(macOS)
+    open override func resizeSubviews(withOldSize oldSize: NSSize) {
+        super.resizeSubviews(withOldSize: oldSize)
+        self.setupLayers()
+    }
+    
+    open override func resize(withOldSuperviewSize oldSize: NSSize) {
+        super.resize(withOldSuperviewSize: oldSize)
+        self.setupLayers()
+    }
+    
+    #elseif os(iOS)
     open override func layoutSubviews() {
         super.layoutSubviews()
         self.setupLayers()
     }
+    #endif
 }
