@@ -23,7 +23,7 @@ extension MusicStaffViewElement {
         return HStack(spacing: 0) {
             ForEach(leadingAccessories) { accessory in
                 if #available(iOS 15.0, *) {
-                    MusicStaffViewElementShapeView(parent: self, element: accessory)
+                    MusicStaffViewElementShapeView(element: accessory, parent: self)
                 } else {
                     LegacyMusicStaffViewElementShapeView(parent: self, element: accessory)
                 }

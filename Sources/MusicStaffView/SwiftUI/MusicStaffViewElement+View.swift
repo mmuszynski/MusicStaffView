@@ -15,16 +15,16 @@ import Music
 
 @available(macOS 12, *)
 @available(iOS 13, *)
-extension MusicClef: View {}
+extension MusicClef: @retroactive View {}
 
 @available(macOS 12, *)
 @available(iOS 13, *)
-extension MusicNote: View {}
+extension MusicNote: @retroactive View {}
 
 @available(macOS 12, *)
 @available(iOS 13, *)
-extension MusicAccidental: View {}
+extension MusicAccidental: @retroactive View {}
 
 @available(macOS 12, *)
 @available(iOS 13, *)
-extension MusicPitchAccidental: View {}
+extension MusicPitchAccidental: @retroactive View {}

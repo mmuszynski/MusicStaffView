@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import CoreGraphics
+@preconcurrency import CoreGraphics
 import Music
 import CoreGraphics
 import SVGParser

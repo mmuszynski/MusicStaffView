@@ -8,27 +8,37 @@
 import Foundation
 import SwiftUI
 
-struct LineWidthKey: EnvironmentKey {
-    static var defaultValue: CGFloat = 10
-}
+//struct LineWidthKey: EnvironmentKey {
+//    static var defaultValue: CGFloat = 10
+//}
+//
+//extension EnvironmentValues {
+//    var lineWidth: CGFloat {
+//        get { self[LineWidthKey.self] }
+//        set { self[LineWidthKey.self] = newValue }
+//    }
+//}
+//
+//struct LineWidthModifier: ViewModifier {
+//    var lineWidth: CGFloat
+//    func body(content: Content) -> some View {
+//        content
+//            .environment(\.lineWidth, lineWidth)
+//    }
+//}
+//
+//extension View {
+//    public func lineWidth(_ lineWidth: CGFloat) -> some View {
+//        modifier(LineWidthModifier(lineWidth: lineWidth))
+//    }
+//}
 
 extension EnvironmentValues {
-    var lineWidth: CGFloat {
-        get { self[LineWidthKey.self] }
-        set { self[LineWidthKey.self] = newValue }
-    }
-}
-
-struct LineWidthModifier: ViewModifier {
-    var lineWidth: CGFloat
-    func body(content: Content) -> some View {
-        content
-            .environment(\.lineWidth, lineWidth)
-    }
+    @Entry var lineWidth: CGFloat = 10
 }
 
 extension View {
-    public func lineWidth(_ lineWidth: CGFloat) -> some View {
-        modifier(LineWidthModifier(lineWidth: lineWidth))
+    func lineWidth(_ lineWidth: CGFloat) -> some View {
+        environment(\.lineWidth, lineWidth)
     }
 }

@@ -16,7 +16,7 @@ import Cocoa
 import UIKit
 #endif
 
-internal protocol _MusicStaffViewElementBox {
+internal protocol _MusicStaffViewElementBox: Sendable {
     var unboxed: MusicStaffViewElement { get }
     
     /// The path that describes the shape of the element in the element's bounding box. This should be used in concert with `aspectRatio` and `heightInStaffSpace` to determine the actual shape and size of the bounding box when drawing.
@@ -76,7 +76,7 @@ internal protocol _MusicStaffViewElementBox {
     
 }
 
-struct ConcreteAnyMusicStaffViewElementBox<Base: MusicStaffViewElement>: _MusicStaffViewElementBox {
+struct ConcreteAnyMusicStaffViewElementBox<Base: MusicStaffViewElement & Sendable>: _MusicStaffViewElementBox {
     
     let base: Base
     
@@ -130,11 +130,11 @@ struct ConcreteAnyMusicStaffViewElementBox<Base: MusicStaffViewElement>: _MusicS
     
 }
 
-struct AnyMusicStaffViewElement: MusicStaffViewElement {
+struct AnyMusicStaffViewElement: MusicStaffViewElement, Sendable {
     private let box: _MusicStaffViewElementBox
     let uuid = UUID()
     
-    init<T: MusicStaffViewElement>(_ object: T) {
+    init<T: MusicStaffViewElement & Sendable>(_ object: T) {
         box = ConcreteAnyMusicStaffViewElementBox(base: object)
     }
     
@@ -171,7 +171,7 @@ struct AnyMusicStaffViewElement: MusicStaffViewElement {
     }
 }
 
-extension MusicStaffViewElement {
+extension MusicStaffViewElement where Self: Sendable {
     var asAnyMusicStaffViewElement: AnyMusicStaffViewElement {
         AnyMusicStaffViewElement(self)
     }

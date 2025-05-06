@@ -8,27 +8,37 @@
 import Foundation
 import SwiftUI
 
-struct SpaceWidthKey: EnvironmentKey {
-    static var defaultValue: CGFloat = 100
-}
+//struct SpaceWidthKey: EnvironmentKey {
+//    static var defaultValue: CGFloat = 100
+//}
+//
+//extension EnvironmentValues {
+//    var spaceWidth: CGFloat {
+//        get { self[SpaceWidthKey.self] }
+//        set { self[SpaceWidthKey.self] = newValue }
+//    }
+//}
+//
+//struct SpaceWidthModifier: ViewModifier {
+//    var spaceWidth: CGFloat
+//    func body(content: Content) -> some View {
+//        content
+//            .environment(\.spaceWidth, spaceWidth)
+//    }
+//}
+//
+//extension View {
+//    func spaceWidth(_ spaceWidth: CGFloat) -> some View {
+//        modifier(SpaceWidthModifier(spaceWidth: spaceWidth))
+//    }
+//}
 
 extension EnvironmentValues {
-    var spaceWidth: CGFloat {
-        get { self[SpaceWidthKey.self] }
-        set { self[SpaceWidthKey.self] = newValue }
-    }
-}
-
-struct SpaceWidthModifier: ViewModifier {
-    var spaceWidth: CGFloat
-    func body(content: Content) -> some View {
-        content
-            .environment(\.spaceWidth, spaceWidth)
-    }
+    @Entry var spaceWidth: CGFloat = 100
 }
 
 extension View {
     func spaceWidth(_ spaceWidth: CGFloat) -> some View {
-        modifier(SpaceWidthModifier(spaceWidth: spaceWidth))
+        environment(\.spaceWidth, spaceWidth)
     }
 }

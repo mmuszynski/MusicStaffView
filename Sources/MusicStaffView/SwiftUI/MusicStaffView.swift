@@ -45,11 +45,11 @@ public struct MusicStaffView: View {
     
     @Environment(\.debug) var debug
     @Environment(\.showNaturalAccidentals) var showsNaturalAccidentals
-    @Environment(\.spacingType) var spacing
+    @Environment(\.staffViewElementSpacing) var spacing
     
     var elements: [any MusicStaffViewElement]
     var ledgerLines: (above: Int, below: Int)?
-    var maxLedgerLines: Int = 2
+    @Environment(\.maxLedgerLines) var maxLedgerLines
     
     @available(*, unavailable)
     var clef: MusicClef { fatalError() }
@@ -238,4 +238,18 @@ public struct MusicStaffView: View {
     .background(Color.black)
     .elementStyle(ImagePaint(image: Image(.opaqueChalk)))
     .staffStyle(ImagePaint(image: Image(.opaqueChalk)).secondary)
+}
+
+@available(macOS 14, *)
+@available(iOS 17.0, *)
+#Preview("No Ledger Lines",
+         traits: .fixedLayout(width: 600, height: 400)) {
+    MusicStaffView {
+        MusicClef.bass
+        MusicPitch.c.octave(3).quarter
+    }
+    .background(Color.black)
+    .elementStyle(ImagePaint(image: Image(.opaqueChalk)))
+    .staffStyle(ImagePaint(image: Image(.opaqueChalk)).secondary)
+    .maxLedgerLines(0)
 }

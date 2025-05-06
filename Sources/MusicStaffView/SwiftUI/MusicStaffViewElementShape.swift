@@ -32,7 +32,7 @@ struct MusicStaffViewElementShape<Element: MusicStaffViewElement & Sendable>: Sh
 
 @available(macOS 12, *)
 @available(iOS 13, *)
-extension MusicStaffViewElement {
+extension MusicStaffViewElement where Self: Sendable {
     /// Returns the generic `Shape` struct to be drawn in SwiftUI
     ///
     /// For more information, see `MusicStaffViewElementShape<Element>` above.
@@ -45,8 +45,15 @@ extension MusicStaffViewElement {
 
 @available(iOS 15.0, *)
 @available(macOS 12, *)
-struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
-    var parent: MusicStaffViewElement? = nil
+struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement & Sendable>: View {
+    typealias Parent = MusicStaffViewElement & Sendable
+    
+    nonisolated init(element: Element, parent: Parent? = nil) {
+        self.parent = parent
+        self.element = element
+    }
+    
+    let parent: Parent?
     
     @Environment(\.spaceWidth) var spaceWidth: CGFloat
     @Environment(\.clef) var clef: MusicClef
@@ -66,7 +73,7 @@ struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
         return false
     }
     
-    var element: Element
+    let element: Element
     var body: some View {
         element
             .shape
@@ -83,7 +90,7 @@ struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
 
 @available(iOS 13.0, *)
 @available(macOS 12, *)
-struct LegacyMusicStaffViewElementShapeView<Element: MusicStaffViewElement>: View {
+struct LegacyMusicStaffViewElementShapeView<Element: MusicStaffViewElement & Sendable>: View {
     var parent: MusicStaffViewElement? = nil
     
     @Environment(\.spaceWidth) var spaceWidth: CGFloat

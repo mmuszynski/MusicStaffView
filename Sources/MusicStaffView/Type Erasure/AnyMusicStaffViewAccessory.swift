@@ -16,7 +16,7 @@ import Cocoa
 import UIKit
 #endif
 
-internal protocol _MusicStaffViewAccessoryBox {
+internal protocol _MusicStaffViewAccessoryBox: Sendable {
     var unboxed: MusicStaffViewAccessory { get }
     
     var placement: MusicStaffViewAccessoryPlacement { get }

@@ -8,27 +8,37 @@
 import Foundation
 import SwiftUI
 
-struct ShowNaturalAccidentalsKey: EnvironmentKey {
-    static var defaultValue: Bool = false
-}
+//struct ShowNaturalAccidentalsKey: EnvironmentKey {
+//    static var defaultValue: Bool = false
+//}
+//
+//extension EnvironmentValues {
+//    var showNaturalAccidentals: Bool {
+//        get { self[ShowNaturalAccidentalsKey.self] }
+//        set { self[ShowNaturalAccidentalsKey.self] = newValue }
+//    }
+//}
+//
+//struct ShowNaturalAccidentalsKeyModifier: ViewModifier {
+//    var showNaturalAccidentals: Bool
+//    func body(content: Content) -> some View {
+//        content
+//            .environment(\.showNaturalAccidentals, showNaturalAccidentals)
+//    }
+//}
+//
+//extension View {
+//    public func showNaturalAccidentals(_ showNaturalAccidentals: Bool) -> some View {
+//        modifier(ShowNaturalAccidentalsKeyModifier(showNaturalAccidentals: showNaturalAccidentals))
+//    }
+//}
 
 extension EnvironmentValues {
-    var showNaturalAccidentals: Bool {
-        get { self[ShowNaturalAccidentalsKey.self] }
-        set { self[ShowNaturalAccidentalsKey.self] = newValue }
-    }
-}
-
-struct ShowNaturalAccidentalsKeyModifier: ViewModifier {
-    var showNaturalAccidentals: Bool
-    func body(content: Content) -> some View {
-        content
-            .environment(\.showNaturalAccidentals, showNaturalAccidentals)
-    }
+    @Entry var showNaturalAccidentals: Bool = false
 }
 
 extension View {
-    public func showNaturalAccidentals(_ showNaturalAccidentals: Bool) -> some View {
-        modifier(ShowNaturalAccidentalsKeyModifier(showNaturalAccidentals: showNaturalAccidentals))
+    func showNaturalAccidentals(_ showNaturalAccidentals: Bool) -> some View {
+        environment(\.showNaturalAccidentals, showNaturalAccidentals)
     }
 }

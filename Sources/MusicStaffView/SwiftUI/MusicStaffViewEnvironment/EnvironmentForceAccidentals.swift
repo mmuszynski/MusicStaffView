@@ -8,14 +8,17 @@
 import Foundation
 import SwiftUI
 
-struct ForceAccidentalsEnvironmentKey: EnvironmentKey {
-    static var defaultValue: Bool = false
-}
+//struct ForceAccidentalsEnvironmentKey: EnvironmentKey {
+//    static var defaultValue: Bool = false
+//}
+//
+//extension EnvironmentValues {
+//    var forceAccidentals: Bool {
+//        get { self[ForceAccidentalsEnvironmentKey.self] }
+//        set { self[ForceAccidentalsEnvironmentKey.self] = newValue }
+//    }
+//}
 
 extension EnvironmentValues {
-    var forceAccidentals: Bool {
-        get { self[ForceAccidentalsEnvironmentKey.self] }
-        set { self[ForceAccidentalsEnvironmentKey.self] = newValue }
-    }
+    @Entry var forceAccidentals: Bool = false
 }
-

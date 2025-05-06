@@ -525,7 +525,9 @@ fileprivate struct AccessoryElementWithParent: MusicStaffViewElement {
     }
     
     override open func prepareForInterfaceBuilder() {
-        self.setupLayers()
+        Task {
+            await self.setupLayers()
+        }
     }
     
     #if os(macOS)

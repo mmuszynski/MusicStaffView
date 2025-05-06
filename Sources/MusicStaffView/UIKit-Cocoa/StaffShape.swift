@@ -9,14 +9,14 @@ import Foundation
 import CoreGraphics
 
 extension UIMusicStaffView {
-    class func spaceWidth(in rect: CGRect, ledgerLines: Int = 0) -> CGFloat {
+    nonisolated class func spaceWidth(in rect: CGRect, ledgerLines: Int = 0) -> CGFloat {
         return rect.size.height / (6.0 + CGFloat(ledgerLines))
     }
     
     /// The path to draw. The five lines of the staff plus as many ledger lines as will fit in the view (just don't stop drawing ledger lines until you run out of room).
     ///
     /// - Returns: A CGPath representing the potential lines on the staff
-    class func staffPath(in rect: CGRect, spaceWidth: CGFloat? = nil, ledgerLines: Int = 0) -> CGPath {
+    nonisolated class func staffPath(in rect: CGRect, spaceWidth: CGFloat? = nil, ledgerLines: Int = 0) -> CGPath {
         let staffLines = CGMutablePath()
         //self.lineWidth = spaceWidth / 10.0
         let spaceWidth = spaceWidth ?? UIMusicStaffView.spaceWidth(in: rect, ledgerLines: ledgerLines)

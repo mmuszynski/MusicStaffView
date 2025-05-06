@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:mmuszynski/Music.git",
       "state" : {
-        "revision" : "b799ebda47b53441986ecf5d5abbcf26b26f5da8",
-        "version" : "1.0.4"
+        "revision" : "cd8fffed39fb1be03364f6148b637de119e95a33",
+        "version" : "1.0.5"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@bitbucket.org:mmuszynski/svgparser.git",
       "state" : {
-        "revision" : "12b6b760392726906bb1d2b3a36e4a544959a775",
-        "version" : "0.0.13"
+        "revision" : "f352a65061f3363d5f4ad60b58dae81df4d20830",
+        "version" : "0.0.15"
       }
     }
   ],

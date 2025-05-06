@@ -34,6 +34,10 @@ extension NSBezierPath {
                 case .closePath:
                     path.closeSubpath()
                     didClosePath = true
+                case .cubicCurveTo:
+                    fallthrough
+                case .quadraticCurveTo:
+                    fallthrough
                 @unknown default:
                     break
                 }

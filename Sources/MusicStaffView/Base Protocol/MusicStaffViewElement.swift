@@ -19,7 +19,7 @@ public enum MusicStaffViewElementDirection {
     case down
 }
 
-public protocol MusicStaffViewElement {
+public protocol MusicStaffViewElement: Sendable {
     /// The path that describes the shape of the element in the element's bounding box. This should be used in concert with `aspectRatio` and `heightInStaffSpace` to determine the actual shape and size of the bounding box when drawing.
     func path(in frame: CGRect) -> CGPath
     
