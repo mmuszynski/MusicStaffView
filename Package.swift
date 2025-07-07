@@ -15,8 +15,8 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "git@github.com:mmuszynski/Music.git", from: "1.0.0"),
-        .package(url: "git@bitbucket.org:mmuszynski/svgparser.git", from: "0.0.0")
+        .package(url: "https://github.com/mmuszynski/Music.git", from: "1.0.0"),
+        .package(url: "https://github.com/mmuszynski/SVGParser.git", from: "0.0.0")
         //.package(name: "Music", url: "git@github.com:mmuszynski/Music.git", from: Version("1.0.0"))
     ],
     targets: [
