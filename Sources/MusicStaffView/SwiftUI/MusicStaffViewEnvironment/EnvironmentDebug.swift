@@ -34,5 +34,5 @@ import SwiftUI
 //}
 
 extension EnvironmentValues {
-    @Entry var debug: Bool = false
+    @Entry public var debug: Bool = false
 }
