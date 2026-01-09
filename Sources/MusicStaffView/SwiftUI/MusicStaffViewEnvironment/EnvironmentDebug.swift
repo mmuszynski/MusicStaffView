@@ -13,7 +13,7 @@ extension EnvironmentValues {
 }
 
 extension View {
-    func debug(_ debug: Bool = true) -> some View {
+    public func debug(_ debug: Bool = true) -> some View {
         environment(\.debug, debug)
     }
 }
