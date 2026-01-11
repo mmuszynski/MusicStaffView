@@ -8,7 +8,7 @@
 import SwiftUI
 import Music
 
-@available(macOS 12, *)
+@available(macOS 14, *)
 @available(iOS 15.0, *)
 public struct MusicStaffView: View {
     ///Instructs the `MusicStaffView` to draw notes using the spacing set in `preferredHorizontalSpacing` or to fill all available space by dividing the space for notes into equal parts.
@@ -129,13 +129,12 @@ public struct MusicStaffView: View {
                         element.body
                             .clef(clef)
                     }
-                     
+                    
                     if spacing.isUniform {
                         Spacer()
                     }
                 }
                 
-                Spacer()
             }
         }
     }
@@ -248,6 +247,21 @@ public struct MusicStaffView: View {
         MusicClef.bass
         MusicPitch.c.octave(3).quarter
     }
+    .background(Color.black)
+    .elementStyle(ImagePaint(image: Image(.opaqueChalk)))
+    .staffStyle(ImagePaint(image: Image(.opaqueChalk)).secondary)
+    .maxLedgerLines(0)
+}
+
+@available(macOS 14, *)
+@available(iOS 17.0, *)
+#Preview("Centered",
+         traits: .fixedLayout(width: 600, height: 400)) {
+    MusicStaffView {
+        MusicPitch.c.octave(5).quarter
+    }
+    .debug()
+    .spacing(.uniformLeadingAndTrailingSpace)
     .background(Color.black)
     .elementStyle(ImagePaint(image: Image(.opaqueChalk)))
     .staffStyle(ImagePaint(image: Image(.opaqueChalk)).secondary)
