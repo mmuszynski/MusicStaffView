@@ -32,7 +32,7 @@ Using `MusicStaffView` in UIKit and Cocoa requires the use of the class `UIMusic
 Note that many properties of the view can be customized. See the documentation for more details.
 
 ### SwiftUI ###
-`MusicStaffView` can also be used in SwiftUI with the class `MusicStaffView`, which uses the SwiftUI `View` protocol to display the staff and its elements. **This is the current focus of development, and as such, many features that exist in the UIKit/Cocoa version are not complete.** However, SwiftUI allows `MusicStaffView` to be deployed in a simpler fashion, thanks to the inclusion of a class that leverages Swift result bulders to create a [domain-specific language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language) for building staff views:
+Musical expressions can also be used in SwiftUI with the class `MusicStaffView`, which uses the SwiftUI `View` protocol to display the staff and its elements. **This is the current focus of development, and as such, many features that exist in the UIKit/Cocoa version are not complete.** However, SwiftUI allows `MusicStaffView` to be deployed in a simpler fashion, thanks to the inclusion of a class that leverages Swift result bulders to create a [domain-specific language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language) for building staff views:
 
     MusicStaffView(clef: .treble) {
         MusicPitch.c.octave(4).quarter
@@ -41,7 +41,7 @@ Note that many properties of the view can be customized. See the documentation f
         MusicPitch.f.accidental(.sharp).octave(4).quarter
     }
     
-    *Image coming eventually.*
+![Image of MusicStaffView output](https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/MusicStaffViewExample.png?raw=true)
     
 This allows for idiomatic description of staff view elements, and hopefully a more readable description of music than can be achieved using array-based assignment.
 
