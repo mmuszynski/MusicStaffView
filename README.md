@@ -34,11 +34,11 @@ Note that many properties of the view can be customized. See the documentation f
 ### SwiftUI ###
 Musical expressions can also be used in SwiftUI with the class `MusicStaffView`, which uses the SwiftUI `View` protocol to display the staff and its elements. **This is the current focus of development, and as such, many features that exist in the UIKit/Cocoa version are not complete.** However, SwiftUI allows `MusicStaffView` to be deployed in a simpler fashion, thanks to the inclusion of a class that leverages Swift result bulders to create a [domain-specific language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language) for building staff views:
 
-    MusicStaffView(clef: .treble) {
-        MusicPitch.c.octave(4).quarter
-        MusicPitch.d.octave(4).quarter
-        MusicPitch.e.octave(4).quarter
-        MusicPitch.f.accidental(.sharp).octave(4).quarter
+    MusicStaffView {
+        MusicClef.bass
+        MusicPitch.c.octave(3).quarter
+        MusicClef.treble
+        MusicPitch.c.octave(6).quarter
     }
     
 ![Image of MusicStaffView output](https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/MusicStaffViewExample.png?raw=true)
