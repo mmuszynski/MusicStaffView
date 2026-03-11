@@ -27,7 +27,9 @@ Using `MusicStaffView` in UIKit and Cocoa requires the use of the class `UIMusic
     staffView.spacing = .preferred
     staffView.elementArray = [MusicClef.treble, MusicPitch.c.octave(4).quarter]
         
-![Image of UIMusicStaffView output](https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/uimusicstaffviewexample.png?raw=true)
+<p align="center">
+    <img src="https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/uimusicstaffviewexample.png?raw=true" width=400>
+</p>
 
 Note that many properties of the view can be customized. See the documentation for more details.
 
@@ -41,8 +43,10 @@ Musical expressions can also be used in SwiftUI with the class `MusicStaffView`,
         MusicPitch.c.octave(6).quarter
     }
 
-<img src="https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/MultipleClefsExample.png?raw=true" width=400>
-    
+<p align="center">
+    <img src="https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/MultipleClefsExample.png?raw=true" width=400>
+</p>
+
 This allows for idiomatic description of staff view elements, and hopefully a more readable description of music than can be achieved using array-based assignment.
 
 Further, in SwiftUI, various properties of the staff view have been moved into Environment values, allowing for much clearer descriptions of their function:
