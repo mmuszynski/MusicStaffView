@@ -13,6 +13,7 @@ import UIKit
 #endif
 
 import Music
+import SwiftUI
 
 public enum MusicStaffViewElementDirection {
     case up
@@ -76,6 +77,8 @@ public protocol MusicStaffViewElement: Sendable {
  
     /// Minimum spacing in terms of percentage of the size of the element
     var minimumSpacing: (leading: CGFloat, trailing: CGFloat) { get }
+    
+    var style: AnyShapeStyle? { get }
 }
 
 extension MusicStaffViewElement {
@@ -134,4 +137,6 @@ extension MusicStaffViewElement {
     public var color: ColorType {
         return .black
     }
+    
+    public var style: AnyShapeStyle? { nil }
 }

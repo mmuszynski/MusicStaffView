@@ -77,8 +77,7 @@ struct MusicStaffViewElementShapeView<Element: MusicStaffViewElement & Sendable>
     var body: some View {
         element
             .shape
-            .foregroundStyle(elementStyle)
-            //.foregroundStyle(elementColor)
+            .foregroundStyle(element.style ?? elementStyle)
             .frame(width: shouldHide ? 0 : nil)
             .aspectRatio(element.aspectRatio, contentMode: .fit)
             .frame(height: element.heightInStaffSpace * spaceWidth)

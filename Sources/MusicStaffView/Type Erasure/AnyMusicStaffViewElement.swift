@@ -15,6 +15,7 @@ import Cocoa
 #elseif os(iOS)
 import UIKit
 #endif
+import SwiftUI
 
 internal protocol _MusicStaffViewElementBox: Sendable {
     var unboxed: MusicStaffViewElement { get }
@@ -74,6 +75,7 @@ internal protocol _MusicStaffViewElementBox: Sendable {
     /// Minimum spacing in terms of percentage of the size of the element
     var minimumSpacing: (leading: CGFloat, trailing: CGFloat) { get }
     
+    var style: AnyShapeStyle? { get }
 }
 
 struct ConcreteAnyMusicStaffViewElementBox<Base: MusicStaffViewElement & Sendable>: _MusicStaffViewElementBox {
@@ -128,6 +130,10 @@ struct ConcreteAnyMusicStaffViewElementBox<Base: MusicStaffViewElement & Sendabl
         return base.requiresLedgerLines(in: clef)
     }
     
+    var style: AnyShapeStyle? {
+        base.style
+    }
+    
 }
 
 struct AnyMusicStaffViewElement: MusicStaffViewElement, Sendable {
@@ -169,6 +175,8 @@ struct AnyMusicStaffViewElement: MusicStaffViewElement, Sendable {
     var accessoryElements: [MusicStaffViewAccessory] {
         return box.accessoryElements
     }
+    
+    var style: AnyShapeStyle? { return box.style }
 }
 
 extension MusicStaffViewElement where Self: Sendable {
