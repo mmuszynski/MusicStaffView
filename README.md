@@ -83,3 +83,29 @@ A wide range of styles are available, as elements are drawn using the SwiftUI `S
 <p align="center">
     <img src="https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/ImagePaintExample.png?raw=true" width=400>
 </p>    
+
+Further, individual elements can be styled using `foregroundStyle` to create complext visual effects.
+
+     MusicStaffView(clef: .bass) {
+        MusicPitch.c.octave(3).quarter
+            .foregroundStyle(.purple)
+        MusicPitch.d.octave(3).quarter
+            .foregroundStyle(.indigo)
+        MusicPitch.e.octave(3).quarter
+            .foregroundStyle(.blue)
+        MusicPitch.f.octave(3).quarter
+            .foregroundStyle(.green)
+        MusicPitch.g.octave(3).quarter
+            .foregroundStyle(.yellow)
+        MusicPitch.a.octave(3).quarter
+            .foregroundStyle(.orange)
+        MusicPitch.b.octave(3).quarter
+            .foregroundStyle(.red)
+    }
+    .staffStyle(.primary)
+    
+<p align="center">
+    <img src="https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/RainbowEffect.png?raw=true" width=400>
+</p>
+
+This library is a work in progress, so there are likely to be more features added as they are needed in my projects.
