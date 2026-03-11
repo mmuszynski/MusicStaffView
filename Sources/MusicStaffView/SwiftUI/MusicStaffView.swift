@@ -228,7 +228,7 @@ public struct MusicStaffView: View {
 
 @available(macOS 14, *)
 @available(iOS 17.0, *)
-#Preview("Colors",
+#Preview("Image Paint",
          traits: .fixedLayout(width: 600, height: 400)) {
     MusicStaffView {
         MusicClef.bass

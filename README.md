@@ -69,3 +69,17 @@ Further, in SwiftUI, various properties of the staff view have been moved into E
 </p>
     
 This descriptive language model should lead to more fluent, understandable code.
+
+A wide range of styles are available, as elements are drawn using the SwiftUI `Shape` protocol. Modifiers such as `staffStyle` and `elementStyle` can be used to create appealing visual effects.
+
+    MusicStaffView {
+        MusicClef.bass
+        MusicPitch.c.octave(3).quarter
+    }
+    .background(Color.black)
+    .elementStyle(ImagePaint(image: Image(.opaqueChalk)))
+    .staffStyle(ImagePaint(image: Image(.opaqueChalk)).secondary)
+    
+<p align="center">
+    <img src="https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/ImagePaintExample.png?raw=true" width=400>
+</p>    
