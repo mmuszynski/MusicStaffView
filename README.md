@@ -52,13 +52,20 @@ This allows for idiomatic description of staff view elements, and hopefully a mo
 Further, in SwiftUI, various properties of the staff view have been moved into Environment values, allowing for much clearer descriptions of their function:
 
     MusicStaffView {
-        MusicPitch.c.octave(4).quarter
-        MusicPitch.d.octave(4).quarter
-        MusicPitch.e.octave(4).quarter
-        MusicPitch.f.accidental(.sharp).octave(4).quarter
+        MusicClef.bass
+        MusicPitch.c.octave(3).quarter
+        MusicClef.treble
+        MusicPitch.c.octave(6).quarter
     }
     .clef(.treble)
-    .showNaturalAccidentals(false)
+    .showNaturalAccidentals(true)
     .lineWidth(10.0)
+    .maxLedgerLines(3)
+    .staffStyle(.black)
+    .elementStyle(.black)
+    
+<p align="center">
+    <img src="https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/GithubExample2.png?raw=true" width=400>
+</p>
     
 This descriptive language model should lead to more fluent, understandable code.
