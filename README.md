@@ -25,7 +25,7 @@ Using `MusicStaffView` in UIKit and Cocoa requires the use of the class `UIMusic
     let staffView = UIMusicStaffView(frame: CGRect(x: 0, y: 0, width: 500, height: 200))
     staffView.maxLedgerLines = 3
     staffView.spacing = .preferred
-    staffView.elementArray = [MusicClef.treble, MusicPitch.c.octave(4).note(with: .quarter)]
+    staffView.elementArray = [MusicClef.treble, MusicPitch.c.octave(4).quarter]
         
 ![Image of UIMusicStaffView output](/Example Images/uimusicstaffviewexample.png "Example UIMusicStaffView output")
 
@@ -35,10 +35,10 @@ Note that many properties of the view can be customized. See the documentation f
 `MusicStaffView` can also be used in SwiftUI with the class `MusicStaffView`, which uses the SwiftUI `View` protocol to display the staff and its elements. **This is the current focus of development, and as such, many features that exist in the UIKit/Cocoa version are not complete.** However, SwiftUI allows `MusicStaffView` to be deployed in a simpler fashion, thanks to the inclusion of a class that leverages Swift result bulders to create a [domain-specific language (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language) for building staff views:
 
     MusicStaffView(clef: .treble) {
-        MusicPitch.c.octave(4).length(.quarter)
-        MusicPitch.d.octave(4).length(.quarter)
-        MusicPitch.e.octave(4).length(.quarter)
-        MusicPitch.f.accidental(.sharp).octave(4).length(.quarter)
+        MusicPitch.c.octave(4).quarter
+        MusicPitch.d.octave(4).quarter
+        MusicPitch.e.octave(4).quarter
+        MusicPitch.f.accidental(.sharp).octave(4).quarter
     }
     
     *Image coming eventually.*
@@ -48,13 +48,13 @@ This allows for idiomatic description of staff view elements, and hopefully a mo
 Further, in SwiftUI, various properties of the staff view have been moved into Environment values, allowing for much clearer descriptions of their function:
 
     MusicStaffView {
-        MusicPitch.c.octave(4).length(.quarter)
-        MusicPitch.d.octave(4).length(.quarter)
-        MusicPitch.e.octave(4).length(.quarter)
-        MusicPitch.f.accidental(.sharp).octave(4).length(.quarter)
+        MusicPitch.c.octave(4).quarter
+        MusicPitch.d.octave(4).quarter
+        MusicPitch.e.octave(4).quarter
+        MusicPitch.f.accidental(.sharp).octave(4).quarter
     }
     .clef(.treble)
     .showNaturalAccidentals(false)
     .lineWidth(10.0)
     
-Hopefully, this descriptive language model will lead to more fluent, understandable code.
+This descriptive language model should lead to more fluent, understandable code.
