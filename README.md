@@ -40,8 +40,8 @@ Musical expressions can also be used in SwiftUI with the class `MusicStaffView`,
         MusicClef.treble
         MusicPitch.c.octave(6).quarter
     }
-    
-![Image of MusicStaffView output](https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/MultipleClefsExample.png?raw=true)
+
+<img src="https://github.com/mmuszynski/MusicStaffView/blob/master/Example%20Images/MultipleClefsExample.png?raw=true" width=400>
     
 This allows for idiomatic description of staff view elements, and hopefully a more readable description of music than can be achieved using array-based assignment.
 
