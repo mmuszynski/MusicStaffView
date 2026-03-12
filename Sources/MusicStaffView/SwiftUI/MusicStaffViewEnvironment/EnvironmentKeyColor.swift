@@ -86,7 +86,7 @@ extension EnvironmentValues {
 @available(iOS 15, *)
 @available(macOS 12.0, *)
 extension EnvironmentValues {
-    @Entry var elementStyle: AnyShapeStyle = AnyShapeStyle(.primary)
+    @Entry var elementStyle: AnyShapeStyle = AnyShapeStyle(.black)
 }
 
 @available(iOS 15, *)
@@ -143,7 +143,7 @@ extension EnvironmentValues {
 @available(iOS 15, *)
 @available(macOS 12.0, *)
 extension EnvironmentValues {
-    @Entry var staffStyle: AnyShapeStyle = AnyShapeStyle(.secondary)
+    @Entry var staffStyle: AnyShapeStyle = AnyShapeStyle(.primary)
 }
 
 //@available(iOS 15, *)

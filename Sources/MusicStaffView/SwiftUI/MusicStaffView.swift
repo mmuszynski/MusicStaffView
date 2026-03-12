@@ -85,25 +85,47 @@ public struct MusicStaffView: View {
         elements.map { AnyMusicStaffViewElement($0) }
     }
     
+    /// Reduces the element array into groups starting with each clef
+    ///
+    /// In order to change the offset location for items drawn in the staff space when clefs change, elements are formed into groups with the clef as the initial element of the group. For example, if the bass clef begins the group, elements will be drawn as they should in bass clef. If for some reason, a clef change is indicated, offsets need to be recalculated.
+    ///
+    /// As of 2026-03-12, the framework was updated to include individually styled elements. As this required a wrapper, it was no longer possible to use the type of the element, and instead, a bit more convoluted introspection to the class was necessary (see the note below).
     var groupedByClef: [[AnyMusicStaffViewElement]] {
+        //Placeholder group that is added once the group is finalized
         var currentGroup: [MusicStaffViewElement] = []
+        
+        //The return value
         var allGroups: [[MusicStaffViewElement]] = []
         
+        //Iterate over all elements in the array as AnyMusicStaffViewElement
         for element in elements {
-            if let clef = element as? MusicClef {
+            /*This is the convoluted part. If the element is stylized individually, its type will be a wrapper that contains a base element. The base element should be evaluated, but non-styled elements can be evaluated without unwrapping.
+             
+             MusicStaffViewStyledElement has a recursive unwrapping function (in case of elements that are wrapped in multiple ways, which is currently not necessary but may be?) and this is indicated with the initial code
+             
+             (element as? (any MusicStaffViewStyledElement))?.base()
+             
+             If this returns nil, the coalescing operator will return the element, indicating that the element was not wrapped.
+             */
+            let base = (element as? (any MusicStaffViewStyledElement))?.base() ?? element
+            
+            //If the element is a clef, start a new group. If it's not, append it to the current group.
+            if base is MusicClef {
                 if !currentGroup.isEmpty {
                     allGroups.append(currentGroup)
                 }
-                currentGroup = [clef]
+                currentGroup = [element]
             } else {
                 currentGroup.append(element)
             }
         }
         
+        //Add the last group to the groups array
         if !currentGroup.isEmpty {
             allGroups.append(currentGroup)
         }
         
+        //Finally, return the groups, type-erased
         return allGroups.map { $0.map { AnyMusicStaffViewElement($0) }}
     }
     
@@ -176,113 +198,3 @@ public struct MusicStaffView: View {
         }
     }
 }
-
-@available(macOS 14, *)
-@available(iOS 17.0, *)
-#Preview("No Clef", traits: .fixedLayout(width: 600, height: 400)) {
-    Group {
-        MusicStaffView(clef: .treble) {
-            MusicPitch.c.octave(4).length(.quarter)
-            MusicPitch.d.octave(4).length(.quarter)
-            MusicPitch.e.octave(4).length(.quarter)
-            MusicPitch.f.accidental(.sharp).octave(4).length(.quarter)
-        }
-        .showNaturalAccidentals(true)
-    }
-    
-}
-
-@available(macOS 14, *)
-@available(iOS 17.0, *)
-#Preview("Uniform Trailing Spacing",
-         traits: .fixedLayout(width: 600, height: 400)) {
-    MusicStaffView {
-        MusicClef.bass
-        MusicPitch.c.octave(3).length(.quarter)
-    }
-    .spacing(.uniformTrailingSpace)
-}
-
-@available(macOS 14, *)
-@available(iOS 17.0, *)
-#Preview("Explicit Spacing",
-         traits: .fixedLayout(width: 600, height: 400)) {
-    MusicStaffView {
-        MusicClef.bass
-        MusicPitch.c.octave(3).length(.quarter)
-    }
-    .spacing(.explicit)
-}
-
-@available(macOS 14, *)
-@available(iOS 17.0, *)
-#Preview("Multiple Clefs",
-         traits: .fixedLayout(width: 600, height: 400)) {
-    MusicStaffView {
-        MusicClef.bass
-        MusicPitch.c.octave(3).quarter
-        MusicClef.treble
-        MusicPitch.c.octave(6).quarter
-    }
-}
-
-@available(macOS 14, *)
-@available(iOS 17.0, *)
-#Preview("Image Paint",
-         traits: .fixedLayout(width: 600, height: 400)) {
-    MusicStaffView {
-        MusicClef.bass
-        MusicPitch.c.octave(3).quarter
-    }
-    .background(Color.black)
-    .elementStyle(ImagePaint(image: Image(.opaqueChalk)))
-    .staffStyle(ImagePaint(image: Image(.opaqueChalk)).secondary)
-}
-
-@available(macOS 14, *)
-@available(iOS 17.0, *)
-#Preview("No Ledger Lines",
-         traits: .fixedLayout(width: 600, height: 400)) {
-    MusicStaffView {
-        MusicClef.bass
-        MusicPitch.c.octave(3).quarter
-    }
-    .background(Color.black)
-    .elementStyle(ImagePaint(image: Image(.opaqueChalk)))
-    .staffStyle(ImagePaint(image: Image(.opaqueChalk)).secondary)
-    .maxLedgerLines(0)
-}
-
-@available(macOS 14, *)
-@available(iOS 17.0, *)
-#Preview("Centered",
-         traits: .fixedLayout(width: 600, height: 400)) {
-    MusicStaffView {
-        MusicPitch.c.octave(5).quarter
-    }
-    .debug()
-    .spacing(.uniformLeadingAndTrailingSpace)
-    .background(Color.black)
-    .elementStyle(ImagePaint(image: Image(.opaqueChalk)))
-    .staffStyle(ImagePaint(image: Image(.opaqueChalk)).secondary)
-    .maxLedgerLines(0)
-}
-
-@available(macOS 14, *)
-@available(iOS 17.0, *)
-#Preview("github example 2",
-         traits: .fixedLayout(width: 600, height: 400)) {
-    MusicStaffView {
-        MusicClef.bass
-        MusicPitch.c.octave(3).quarter
-        MusicClef.treble
-        MusicPitch.c.octave(6).quarter
-    }
-    .clef(.treble)
-    .showNaturalAccidentals(true)
-    .lineWidth(10.0)
-    .maxLedgerLines(3)
-    .staffStyle(.black)
-    .elementStyle(.black)
-}
-

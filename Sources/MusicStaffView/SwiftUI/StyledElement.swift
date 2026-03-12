@@ -10,7 +10,7 @@ import CoreGraphics
 import SwiftUI
 import Music
 
-public struct MusicStaffViewStyledElement<E: MusicStaffViewElement>: MusicStaffViewElement {
+public struct MusicStaffViewTintedElement<E: MusicStaffViewElement>: MusicStaffViewStyledElement {
     let element: E
     public let style: AnyShapeStyle?
     
@@ -32,8 +32,11 @@ public struct MusicStaffViewStyledElement<E: MusicStaffViewElement>: MusicStaffV
 }
 
 extension MusicStaffViewElement {
-    public func foregroundStyle(_ style: any ShapeStyle) -> MusicStaffViewStyledElement<Self> {
-        MusicStaffViewStyledElement(element: self, style: AnyShapeStyle(style))
+    public func foregroundStyle(_ style: any ShapeStyle) -> MusicStaffViewTintedElement<Self> {
+        MusicStaffViewTintedElement(element: self, style: AnyShapeStyle(style))
+    }
+    public func tint(_ style: any ShapeStyle) -> MusicStaffViewTintedElement<Self> {
+        MusicStaffViewTintedElement(element: self, style: AnyShapeStyle(style))
     }
 }
 
@@ -52,7 +55,7 @@ extension MusicStaffViewElement {
         MusicPitch.a.octave(3).quarter
             .foregroundStyle(.orange)
         MusicPitch.b.octave(3).quarter
-            .foregroundStyle(.red)
+            .tint(.red)
     }
     .staffStyle(.primary)
 }
