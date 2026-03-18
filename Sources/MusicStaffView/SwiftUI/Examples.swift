@@ -112,23 +112,3 @@ import Music
     .staffStyle(ImagePaint(image: Image(.opaqueChalk)).secondary)
     .maxLedgerLines(0)
 }
-
-@available(macOS 14, *)
-@available(iOS 17.0, *)
-#Preview("github example 2",
-         traits: .fixedLayout(width: 600, height: 400)) {
-    MusicStaffView {
-        MusicClef.bass
-        MusicPitch.c.octave(3).quarter
-        MusicClef.treble
-            .tint(.blue)
-        MusicPitch.c.octave(6).quarter
-    }
-    .clef(.treble)
-    .showNaturalAccidentals(true)
-    .lineWidth(10.0)
-    .maxLedgerLines(3)
-    .staffStyle(.black)
-    .elementStyle(.black)
-}
-

@@ -29,6 +29,9 @@ public struct MusicStaffViewTintedElement<E: MusicStaffViewElement>: MusicStaffV
     public var anchorPoint: CGPoint {
         element.anchorPoint
     }
+    public var accessoryElements: [any MusicStaffViewAccessory] {
+        element.accessoryElements
+    }
 }
 
 extension MusicStaffViewElement {
